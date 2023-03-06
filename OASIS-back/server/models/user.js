@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
     },
     club: {
       type: String,
-      required: true,
+      required: false,
     },
     approved: {
       type: Boolean,

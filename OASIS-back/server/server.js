@@ -8,6 +8,7 @@ const getusers = require("./routes/user/getUsers");
 const update = require("./routes/user/update");
 const ban = require("./routes/user/banUser");
 const approve = require("./routes/user/approveUser");
+const passwordReset = require("./routes/user/resetPassword");
 
 const app = express();
 require("dotenv").config();
@@ -38,3 +39,5 @@ app.put("/users/:id", update);
 app.put("/users/ban/:id", ban);
 
 app.put("/users/approve/:id", approve);
+
+app.use("/users/password-reset", passwordReset);
