@@ -8,9 +8,7 @@ module.exports = async (req, res) => {
     if (!dbUser) {
       res.status(400).send("User not found");
     }
-    if (dbUser.banned) {
-      res.status(400).send("User is banned");
-    }
+
     if (dbUser.approved === false) {
       res
         .status(400)

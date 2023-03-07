@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Roles = {
-  Admin: "Admin",
+  SuperAdmin: "SuperAdmin",
+  Governor: "Governor",
   Member: "Member",
   President: "President",
 };
@@ -11,6 +12,10 @@ const userSchema = new mongoose.Schema(
     username: {
       type: String,
       required: true,
+    },
+    image: {
+      type: String,
+      required: false,
     },
     firstname: {
       type: String,
