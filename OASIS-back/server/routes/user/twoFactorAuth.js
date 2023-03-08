@@ -25,7 +25,8 @@ router.route('/send').post(sendOTP);
 
 const verifyOTP = async (req, res , next) => {
 
-    const { phonenumber , otpcode } = req.query;
+    const { phonenumber } = req.query;
+    const { otpcode } = req.body;
     try {
         const verifiedResponse = await client.verify.v2.services(process.env.SERVICE_ID)
             .verificationChecks

@@ -38,6 +38,7 @@ module.exports = async (req, res) => {
       username: user.username,
       firstname: user.firstname,
       lastname: user.lastname,
+      phonenumber: user.phonenumber,
       email: user.email,
       password: user.password,
       club: user.club,
