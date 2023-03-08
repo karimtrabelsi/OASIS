@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-
+var cors = require("cors");
 const register = require("./routes/user/register");
 const login = require("./routes/user/login");
 const getusers = require("./routes/user/getUsers");
@@ -10,8 +10,10 @@ const ban = require("./routes/user/banUser");
 const approve = require("./routes/user/approveUser");
 const passwordReset = require("./routes/user/resetPassword");
 const twoFactorAuth = require("./routes/user/twoFactorAuth");
+const verifyJWt = require("./middleware/verifyJWT");
 
 const app = express();
+app.use(cors());
 require("dotenv").config();
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -37,10 +39,14 @@ app.get("/users", getusers);
 
 app.put("/users/:id", update);
 
-app.put("/users/ban/:id", ban);
+app.post("/users/ban/:id", ban);
 
-app.put("/users/approve/:id", approve);
+app.post("/users/approve/:id", approve);
 
 app.use("/users/password-reset", passwordReset);
 
 app.use("/users/twoFactorAuth", twoFactorAuth);
+
+app.get("/getUsername", verifyJWt, (req, res) => {
+  res.json({ isLoggedIn: true, username: req.user.username });
+});

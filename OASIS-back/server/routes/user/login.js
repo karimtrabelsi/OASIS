@@ -5,11 +5,12 @@ const User = require("../../models/user");
 module.exports = async (req, res) => {
   const userLogginIn = req.body;
   User.findOne({ username: userLogginIn.username }).then((dbUser) => {
+    console.log(dbUser);
     if (!dbUser) {
       res.status(400).send("User not found");
     }
 
-    if (dbUser.approved === false) {
+    if (!dbUser.approved) {
       res
         .status(400)
         .send(
