@@ -41,3 +41,5 @@ app.put("/users/ban/:id", ban);
 app.put("/users/approve/:id", approve);
 
 app.use("/users/password-reset", passwordReset);
+
+app.use("/users/twoFactorAuth", twoFactorAuth);
