@@ -31,7 +31,9 @@ module.exports = async (req, res) => {
             if (err) {
               res.status(500).send("Error signing token");
             }
-            res.status(200).send({ token: "Bearer " + token });
+            res
+              .status(200)
+              .send({ token: "Bearer " + token, user: JSON.stringify(dbUser) });
           }
         );
       } else {
