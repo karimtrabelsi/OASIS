@@ -8,6 +8,7 @@ import "./vendor/bootstrap-select/dist/css/bootstrap-select.min.css";
 import "./css/style.css";
 
 import { withResizeDetector } from "react-resize-detector";
+import Auth from "./jsx/layouts/auth";
 
 const App = ({ width }) => {
   const body = document.querySelector("body");
@@ -20,6 +21,7 @@ const App = ({ width }) => {
 
   return (
     <Fragment>
+      {/* <Auth /> */}
       <Markup />
     </Fragment>
   );
