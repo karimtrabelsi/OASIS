@@ -7,7 +7,7 @@ const router = express.Router();
 const code = Math.floor(100000 + Math.random() * 900000);
 
 const sendOTP = async (req, res , next) => {
-    const { phonenumber } = req.query;
+    const { phonenumber } = req.body;
     try {
         const otpResponse = await client.verify.v2.services(process.env.SERVICE_ID)
             .verifications

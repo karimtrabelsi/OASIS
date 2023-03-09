@@ -180,7 +180,13 @@ const BootstrapTable = () => {
                               )
                               }
                               >
-                              Ban
+
+                              {user.banned ? (
+                                  <span>Unban</span>
+                              ) : (
+                                  <span>Ban</span>
+                              )}
+
                             </Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown>
