@@ -52,8 +52,17 @@ const StepTwo = () => {
         </div>
         <div className="col-lg-12 mb-2">
           <div className="form-group">
-            <label className="text-label">Your position in Company*</label>
-            <input type="text" name="place" className="form-control" required />
+            <div className="custom-file">
+              <input
+                type="file"
+                accept=".png, .jpg, .jpeg"
+                name="photo"
+                //  onChange={handlePhoto}
+                className="custom-file-input"
+                //test
+              />
+              <label className="custom-file-label">Choose file</label>
+            </div>
           </div>
         </div>
       </div>
