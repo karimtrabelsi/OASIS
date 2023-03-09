@@ -43,7 +43,6 @@ const Invoice = () => {
 							<div className="row align-items-center">
 								<div className="col-sm-9"> 
 									<div className="brand-logo mb-3">
-										<img className="logo-abbr mr-2" src={Logo} alt=""/>
 										<img claclassNamess="logo-compact" src={LogoText} alt=""/>
 									</div>
 									<span>Please send exact amount: <strong class="d-block">0.15050000 BTC</strong>
