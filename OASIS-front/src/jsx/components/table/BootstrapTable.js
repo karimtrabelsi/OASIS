@@ -1,5 +1,8 @@
 import React, { Fragment, useEffect, useState } from "react";
 import PageTitle from "../../layouts/PageTitle";
+import swal from "sweetalert";
+import swalMessage from "@sweetalert/with-react";
+
 import {
   Row,
   Col,
@@ -43,10 +46,18 @@ const BootstrapTable = () => {
   }, [users]);
 
   const handleApprove = (id) => {
-    axios.post("http://localhost:3000/users/approve/" + { id });
+    axios.post("http://localhost:3000/users/approve/" + id ).catch((err) => {
+      console.log(err);
+    });
   };
   const handleBan = (id) => {
-    axios.post("http://localhost:3000/users/ban/" + { id });
+    axios.post("http://localhost:3000/users/ban/" +  id ).then((res) => {
+      console.log(res);
+    }).catch((err) => {
+      console.log(err);
+    }
+    );
+
   };
 
   return (
@@ -90,7 +101,7 @@ const BootstrapTable = () => {
                       <td>
                         <strong>{user._id}</strong>
                       </td>
-                      <td>{user.firstname + user.lastname}</td>
+                      <td>{user.firstname + " " + user.lastname}</td>
                       <td>{user.username}</td>
                       <td>{user.email}</td>
                       <td>
@@ -99,7 +110,29 @@ const BootstrapTable = () => {
                         ) : (
                           <Badge
                             variant="warning light"
-                            //  onClick={() => handleApprove(user._id)}
+                            onClick={ () =>
+                              swal({
+                                 title: "Are you sure?",
+                                 text:
+                                    "Once Approved, user will be able to login !",
+                                 icon: "warning",
+                                 buttons: true,
+                                 dangerMode: true,
+                              }).then( () => axios.post("http://localhost:3000/users/approve/" +  user._id ).then((res) => {
+                               // console.log(res)
+                               if (res.respone=200) {
+                                 swal(
+                                    "User has been approved!",
+                                    {
+                                       icon: "success",
+                                    }
+                                 );
+                              } else {
+                                 swal("Nothing changed !");
+                              }
+                           })
+                           )
+                           }
                           >
                             Pending
                           </Badge>
@@ -122,8 +155,31 @@ const BootstrapTable = () => {
                           <Dropdown.Menu>
                             <Dropdown.Item
                               as={Button}
-                              // onClick={handleBan(user._id)}
-                            >
+                              // onClick={() => handleBan(user._id)}
+                              onClick={ () =>
+                                 swal({
+                                    title: "Are you sure?",
+                                    text:
+                                       "Once Banned, user will not be able to login !",
+                                    icon: "warning",
+                                    buttons: true,
+                                    dangerMode: true,
+                                 }).then( () => axios.post("http://localhost:3000/users/ban/" +  user._id ).then((res) => {
+                                  // console.log(res)
+                                  if (res.respone=200) {
+                                    swal(
+                                       "User Banned !",
+                                       {
+                                          icon: "success",
+                                       }
+                                    );
+                                 } else {
+                                    swal("Nothing changed !");
+                                 }
+                              })
+                              )
+                              }
+                              >
                               Ban
                             </Dropdown.Item>
                           </Dropdown.Menu>
