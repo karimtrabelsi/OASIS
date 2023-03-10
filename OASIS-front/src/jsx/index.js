@@ -183,13 +183,16 @@ const Markup = () => {
     { url: "page-error-503", component: Error503 },
   ];
 
+  let path = window.location.pathname;
+  path = path.split("/");
+  path = path[path.length - 1];
+  let pagePath = path.split("-").includes("page");
+
   return (
     <>
-    
-
       <Router basename="/react">
         <div id="main-wrapper" className="show">
-          <Nav />
+          {!pagePath && <Nav />}
 
           <div className="content-body">
             <div className="container-fluid">
@@ -206,7 +209,7 @@ const Markup = () => {
             </div>
           </div>
 
-          <Footer />
+          {!pagePath && <Footer />}
         </div>
       </Router>
     </>
