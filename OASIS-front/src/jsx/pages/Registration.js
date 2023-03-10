@@ -13,12 +13,12 @@ const Register = () => {
     const submitRegister = { ...registrationData };
   };
   return (
-    <div className="authincation">
+    <div className="authincation ">
       <div className="container p-0">
         <div className="row justify-content-center align-items-center authincation-page-area">
-          <div className="col-lg-6 col-md-9">
+          <div className="col-lg-9 col-md-9">
             <div className="authincation-content">
-              <div className="row no-gutters">
+              <div className="row ">
                 <div className="col-xl-12">
                   <div className="auth-form">
                     <h4 className="text-center mb-4">Sign up your account</h4>
@@ -26,18 +26,6 @@ const Register = () => {
                       action=""
                       onSubmit={(e) => e.preventDefault(submitHandler)}
                     >
-                      <div className="form-group">
-                        <label className="mb-1">
-                          <strong>Username</strong>
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="username"
-                          name="name"
-                          onChange={handleBlur}
-                        />
-                      </div>
                       <div className="form-group">
                         <label className="mb-1">
                           <strong>Email</strong>

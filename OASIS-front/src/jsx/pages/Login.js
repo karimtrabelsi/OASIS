@@ -13,9 +13,10 @@ const Login = () => {
     };
 
     console.log(user);
-    axios
-      .post("http://localhost:3000/login", user)
-      .then((res) => localStorage.setItem("token", res.data.token));
+    axios.post("http://localhost:3000/login", user).then((res) => {
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("connectedUser", res.data.user);
+    });
   }
 
   useEffect(() => {
