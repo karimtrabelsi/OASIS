@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
+import logo from "../../images/logo.png";
 
 const Login = () => {
   const history = useHistory();
@@ -36,86 +38,62 @@ const Login = () => {
   }, []);
 
   return (
-    <div className="authincation">
-      <div className="container p-0">
-        <div className="row justify-content-center align-items-center authincation-page-area">
-          <div className="col-lg-6 col-md-9">
-            <div className="authincation-content">
-              <div className="row no-gutters">
-                <div className="col-xl-12">
-                  <div className="auth-form">
-                    <h4 className="text-center mb-4">Sign in your account</h4>
-                    <form action="" onSubmit={(e) => handleLogin(e)}>
-                      <div className="form-group">
-                        <label className="mb-1">
-                          <strong>Username</strong>
-                        </label>
-                        <input
+    <div>
+      <Container>
+        <Row className="vh-100 d-flex justify-content-center align-items-center">
+          <Col md={8} lg={6} xs={12}>
+            <div className="border border-2 border-primary"></div>
+            <Card className="shadow px-4">
+              <Card.Body>
+                <div className="mb-3 mt-md-4">
+                  <div className="fw-bold mb-2 text-center text-uppercase ">
+                    <img className="logo-compact" scr={logo} alt="logo" />
+                  </div>
+                  <div className="mb-3">
+                    <Form>
+                      <Form.Group className="mb-3">
+                        <Form.Label className="text-center">
+                          Username
+                        </Form.Label>
+                        <Form.Control
                           type="text"
-                          className="form-control"
-                          name="username"
-                          //   onChange={handleBlur}
+                          placeholder="Enter username"
                         />
+                      </Form.Group>
+
+                      <Form.Group
+                        className="mb-3"
+                        controlId="formBasicPassword"
+                      >
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control type="password" placeholder="Password" />
+                      </Form.Group>
+
+                      <Form.Group
+                        className="mb-3"
+                        controlId="formBasicCheckbox"
+                      ></Form.Group>
+                      <div className="d-flex justify-content-center">
+                        <Button variant="primary" type="submit">
+                          Login
+                        </Button>
                       </div>
-                      <div className="form-group">
-                        <label className="mb-1">
-                          <strong>Password</strong>
-                        </label>
-                        <input
-                          type="password"
-                          className="form-control"
-                          defaultValue="Password"
-                          name="password"
-                          // onChange={handleBlur}
-                        />
-                      </div>
-                      <div className="form-row d-flex justify-content-between mt-4 mb-2">
-                        <div className="form-group">
-                          <div className="custom-control custom-checkbox ml-1">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id="basic_checkbox_1"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="basic_checkbox_1"
-                            >
-                              Remember my preference
-                            </label>
-                          </div>
-                        </div>
-                        <div className="form-group">
-                          <Link to="/page-forgot-password">
-                            Forgot Password?
-                          </Link>
-                        </div>
-                      </div>
-                      <div className="text-center">
-                        <button
-                          type="submit"
-                          className="btn btn-primary btn-block"
-                          // onClick={() => submitHandler}
-                        >
-                          Sign Me In
-                        </button>
-                      </div>
-                    </form>
-                    <div className="new-account mt-3">
-                      <p>
-                        Don't have an account?{" "}
-                        <Link className="text-primary" to="/page-register">
-                          Sign up
-                        </Link>
+                    </Form>
+                    <div className="mt-3">
+                      <p className="mb-0  text-center">
+                        Forgot Password??{" "}
+                        <a href="{''}" className="text-primary fw-bold">
+                          Reset Password
+                        </a>
                       </p>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 };

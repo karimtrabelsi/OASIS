@@ -11,7 +11,6 @@ const approve = require("./routes/user/approveUser");
 const passwordReset = require("./routes/user/resetPassword");
 const twoFactorAuth = require("./routes/user/twoFactorAuth");
 const verifyJWt = require("./middleware/verifyJWT");
-
 const app = express();
 app.use(cors());
 require("dotenv").config();
@@ -30,7 +29,32 @@ mongoose
     });
   })
   .catch((err) => console.log(err));
-app.post("/register", register);
+
+const multer = require("multer");
+const { v4: uuidv4 } = require("uuid");
+let path = require("path");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images");
+  },
+  filename: function (req, file, cb) {
+    cb(null, "userImage-" + req.body._id + path.extname(file.originalname));
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
+  if (allowedFileTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+let upload = multer({ storage, fileFilter });
+
+app.post("/register", upload.single("image"), register);
 
 app.post("/login", login);
 

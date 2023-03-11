@@ -194,7 +194,7 @@ const Markup = () => {
         <div id="main-wrapper" className="show">
           {!pagePath && <Nav />}
 
-          <div className="content-body">
+          <div className={!pagePath && "content-body"}>
             <div className="container-fluid">
               <Switch>
                 {routes.map((data, i) => (

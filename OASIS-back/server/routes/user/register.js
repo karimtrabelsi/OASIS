@@ -43,6 +43,8 @@ module.exports = async (req, res) => {
       email: user.email,
       password: user.password,
       club: user.club,
+      role: user.role,
+      image: req.file.filename,
     });
     dbUser.save();
     res.status(200).send("User created");
