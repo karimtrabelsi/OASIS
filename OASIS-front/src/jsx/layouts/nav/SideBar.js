@@ -480,7 +480,7 @@ class SideBar extends Component {
                            </ul>
                         </li>
                         <li>
-                           <Link to="/page-lock-screen">Lock Screen</Link>
+                           <Link to="/page-reset-password">Reset Password</Link>
                         </li>
                      </ul>
                   </li>

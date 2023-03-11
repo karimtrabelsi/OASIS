@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
       }).save();
     }
 
-    const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`;
+    const link = `http://localhost:3001/react/page-new-password?id=${user._id}&token=${token.token}`;
     await sendEmail(user.email, "Password reset", link);
 
     res.send("password reset link sent to your email account");
