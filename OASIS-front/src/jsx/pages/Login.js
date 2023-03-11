@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
 import logo from "../../images/logo.png";
+import swal from "sweetalert";
 
 const Login = () => {
   const history = useHistory();
@@ -15,11 +16,25 @@ const Login = () => {
     };
 
     console.log(user);
-    axios.post("http://localhost:3000/login", user).then((res) => {
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("connectedUser", res.data.user);
-      history.push("/dashboard");
-    });
+    axios
+      .post("http://localhost:3000/login", user)
+      .then((res) => {
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("connectedUser", res.data.user);
+
+        history.push("/dashboard");
+      })
+      .catch((err) => {
+        console.log(err);
+        if (
+          err.response.data ===
+          "User is not approved,please wait for an admin to approve your account"
+        ) {
+          swal("Oops", "Your account is not approved yet!", "error");
+        } else if (err.response.data === "User is banned") {
+          swal("Oops", "Your account is banned !", "error");
+        }
+      });
   }
 
   useEffect(() => {

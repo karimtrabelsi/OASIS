@@ -16,7 +16,10 @@ module.exports = async (req, res) => {
         .send(
           "User is not approved,please wait for an admin to approve your account"
         );
+    } else if (dbUser.banned) {
+      res.status(400).send("User is banned");
     }
+
     bcrypt.compare(userLogginIn.password, dbUser.password).then((isCorrect) => {
       if (isCorrect) {
         const payload = {
