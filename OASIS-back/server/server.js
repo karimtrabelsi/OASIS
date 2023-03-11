@@ -36,7 +36,7 @@ let path = require("path");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "images");
+    cb(null, "../../OASIS-front/src/images/users");
   },
   filename: function (req, file, cb) {
     cb(null, "userImage-" + req.body._id + path.extname(file.originalname));

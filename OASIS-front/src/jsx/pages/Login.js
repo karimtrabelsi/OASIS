@@ -50,13 +50,14 @@ const Login = () => {
                     <img className="logo-compact" scr={logo} alt="logo" />
                   </div>
                   <div className="mb-3">
-                    <Form>
+                    <Form onSubmit={(e) => handleLogin(e)}>
                       <Form.Group className="mb-3">
                         <Form.Label className="text-center">
                           Username
                         </Form.Label>
                         <Form.Control
                           type="text"
+                          name="username"
                           placeholder="Enter username"
                         />
                       </Form.Group>
@@ -66,7 +67,11 @@ const Login = () => {
                         controlId="formBasicPassword"
                       >
                         <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" />
+                        <Form.Control
+                          type="password"
+                          placeholder="Password"
+                          name="password"
+                        />
                       </Form.Group>
 
                       <Form.Group
