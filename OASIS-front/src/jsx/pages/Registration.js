@@ -39,6 +39,7 @@ const Register = () => {
           "success"
         );
         history.push("/page-login");
+        //
       })
       .catch((err) => {
         console.log("err");
