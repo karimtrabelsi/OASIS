@@ -16,6 +16,8 @@ const TwoFactorAuth = () => {
         console.log(res);
       })
       .catch((err) => {
+        console.log(phonenumber);
+    console.log(code);
         console.log(err);
       });
   };
