@@ -5,6 +5,8 @@ import logo from "../../images/logo.png";
 import logoText from "../../images/logo-text.png";
 import axios from "axios";
 import swal from "sweetalert";
+import {  useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const Register = () => {
   const [ip, setIP] = useState("");
@@ -33,7 +35,8 @@ const Register = () => {
       image: form.image.files[0],
       ip: ip,
     };
-    // console.log(formUser);
+    console.log("ezzzzzzzzzzzz")
+     console.log(form);
     axios
       .post("http://localhost:3000/register", formUser, {
         headers: {
@@ -55,6 +58,85 @@ const Register = () => {
         swal("Oops", "Username or Email are already taken!", "error");
       });
   }
+  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+  const formik = useFormik({
+    initialValues: {
+      cin:'',
+      firstName:'',
+      lastName:'',
+      username: '',
+      email:'',
+      password: '',
+      // phonenumber:'',
+      club:'',
+      image:'',
+      
+      
+    },  
+    validationSchema: Yup.object({
+      cin: Yup.string()
+      .max(8,'Must be 8 characters or less')
+      .required('Required'),
+      firstName: Yup.string()
+      .max(8,'Must be 8 characters or less')
+      .required('Required'),
+      lastName: Yup.string()
+      .max(8,'Must be 8 characters or less')
+      .required('Required'),
+      username: Yup.string()
+        .max(7, 'Must be 7 characters or less')
+        .required('Required'),  
+      email: Yup.string()
+        .max(20,'Must be 20 characters or less')
+        .required('Required'),
+      password: Yup.string()
+        .max(4, 'Must be 4 characters or less')
+        .required('Required'),
+      phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid').max(8, 'Must be 8 characters or less')
+      .required('Required'),
+      club: Yup.string()
+        .max(4, 'Must be 4 characters or less')
+        .required('Required'),
+    }),
+    onSubmit: (values) => {
+      console.log("aaaaaaaaaaaaaaaaa")
+      console.log(values);
+      getData();
+      const formUser = {
+        _id: values.cin,
+        firstname: values.firstName,
+        lastname: values.lastName,
+        username: values.username,
+        email: values.email,
+        phonenumber: values.phoneNumber,
+        club: values.club,
+        password: values.password,
+        role: values.role,
+         image: values.image,
+        ip: ip,
+      };
+     
+      axios
+        .post("http://localhost:3000/register", formUser, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          swal(
+            "Thanks for signing up!",
+            "Please wait untill an admin approves your account! We will notify you with an Email",
+            "success"
+          );
+          history.push("/page-login");
+        })
+        .catch((err) => {
+          console.log("err");
+          swal("Oops", "Username or Email are already taken!", "error");
+        });
+    },
+    
+});
 
   return (
     <div>
@@ -73,17 +155,26 @@ const Register = () => {
                     {/* <img className="brand-title" src={logoText} alt="" /> */}
                   </div>
                   <div className="mb-3">
-                    <Form onSubmit={(e) => handleRegister(e)}>
-                      <Form.Group className="mb-3 ">
+                    <Form onSubmit={formik.handleSubmit}>
+                      <Form.Group className="mb-3 " hasValidation>
                         <Form.Label className="text-center">Cin</Form.Label>
                         <Form.Control
                           as="input"
                           type="number"
                           name="cin"
                           placeholder="Enter Cin"
+                          onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values.cin}
+                              isInvalid={!!formik.touched.cin && !!formik.errors.cin}
                         />
+                         {formik.touched.cin && formik.errors.cin ? (
+                        <Form.Control.Feedback className="invalid-feedback" >
+                           {formik.errors.cin}
+                        </Form.Control.Feedback >
+                        ) : null} 
                       </Form.Group>
-                      <Form.Group className="mb-3 ">
+                      <Form.Group className="mb-3 " hasValidation>
                         <Row>
                           <Col>
                             <Form.Label className="text-center">
@@ -93,8 +184,17 @@ const Register = () => {
                               as="input"
                               type="text"
                               name="firstName"
-                              placeholder="Enter Name"
+                              placeholder="Enter First Name"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values.firstName}
+                              isInvalid={!!formik.touched.firstName && !!formik.errors.firstName}
                             />
+                            {formik.touched.firstName && formik.errors.firstName ? (
+                        <Form.Control.Feedback className="invalid-feedback" >
+                           {formik.errors.firstName}
+                        </Form.Control.Feedback >
+                        ) : null} 
                           </Col>
                           <Col>
                             <Form.Label className="text-center ">
@@ -104,12 +204,21 @@ const Register = () => {
                               as="input"
                               type="text"
                               name="lastName"
-                              placeholder="Enter Name"
+                              placeholder="Enter Last Name"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values.lastName}
+                              isInvalid={!!formik.touched.lastName && !!formik.errors.lastName}
                             />
+                             {formik.touched.lastName && formik.errors.lastName ? (
+                        <Form.Control.Feedback className="invalid-feedback" >
+                           {formik.errors.lastName}
+                        </Form.Control.Feedback >
+                        ) : null} 
                           </Col>
                         </Row>
                       </Form.Group>
-                      <Form.Group className="mb-3">
+                      <Form.Group className="mb-3" hasValidation>
                         <Row>
                           <Col>
                             <Form.Label className="text-center">
@@ -119,9 +228,18 @@ const Register = () => {
                               as="input"
                               type="text"
                               name="username"
-                              placeholder="Enter Name"
+                              placeholder="Enter Username"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values.username}
+                              isInvalid={!!formik.touched.username && !!formik.errors.username}
                             />
-                          </Col>
+                              {formik.touched.username && formik.errors.username ? (
+                        <Form.Control.Feedback className="invalid-feedback" >
+                           {formik.errors.username}
+                        </Form.Control.Feedback >
+                        ) : null} 
+                          </Col>                       
                           <Col>
                             <Form.Label className="text-center ">
                               Email
@@ -130,12 +248,21 @@ const Register = () => {
                               as="input"
                               type="email"
                               name="email"
-                              placeholder="Enter Name"
+                              placeholder="Enter Email"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values.email}
+                              isInvalid={!!formik.touched.email && !!formik.errors.email}
                             />
-                          </Col>
+                            {formik.touched.email && formik.errors.email ? (
+                        <Form.Control.Feedback className="invalid-feedback" >
+                           {formik.errors.email}
+                        </Form.Control.Feedback >
+                        ) : null} 
+                          </Col>                         
                         </Row>
                       </Form.Group>
-                      <Form.Group>
+                      <Form.Group className="mb-3 " hasValidation >
                         <Row>
                           <Col>
                             <Form.Label className="text-center">
@@ -145,8 +272,17 @@ const Register = () => {
                               as="input"
                               type="text"
                               name="phoneNumber"
-                              placeholder="Enter Name"
+                              placeholder="Enter Phone Number"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values.phoneNumber}
+                              isInvalid={!!formik.touched.phoneNumber && !!formik.errors.phoneNumber}
                             />
+                            {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
+                        <Form.Control.Feedback className="invalid-feedback" >
+                           {formik.errors.phoneNumber}
+                        </Form.Control.Feedback >
+                        ) : null} 
                           </Col>
                           <Col>
                             <Form.Label className="text-center ">
@@ -156,12 +292,21 @@ const Register = () => {
                               as="input"
                               type="text"
                               name="club"
-                              placeholder="Enter Name"
+                              placeholder="Enter Club"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values.club}
+                              isInvalid={!!formik.touched.club && !!formik.errors.club}
                             />
+                             {formik.touched.club && formik.errors.club ? (
+                        <Form.Control.Feedback className="invalid-feedback" >
+                           {formik.errors.club}
+                        </Form.Control.Feedback >
+                        ) : null} 
                           </Col>
                         </Row>
                       </Form.Group>
-                      <Form.Group className="mb-3">
+                      <Form.Group className="mb-3" hasValidation>
                         <Row>
                           <Col>
                             <Form.Label className="text-center ">
@@ -171,7 +316,7 @@ const Register = () => {
                               as="input"
                               type="text"
                               name="role"
-                              placeholder="Enter Name"
+                              placeholder="Enter Your Role"
                             />
                           </Col>
                           <Col>
@@ -181,7 +326,16 @@ const Register = () => {
                               name="password"
                               type="password"
                               placeholder="Password"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values.password}
+                              isInvalid={!!formik.touched.password && !!formik.errors.password}
                             />
+                            {formik.touched.password && formik.errors.password ? (
+                              <Form.Control.Feedback className="invalid-feedback" >
+                              {formik.errors.password}
+                           </Form.Control.Feedback >
+                          ) : null} 
                           </Col>
                         </Row>
                       </Form.Group>
@@ -191,6 +345,9 @@ const Register = () => {
                             type="file"
                             className="custom-file-input"
                             name="image"
+                            onChange={(e) =>
+                              formik.setFieldValue('image', e.currentTarget.files[0])
+                            }
                           />
                           <label className="custom-file-label">
                             Profile Picture
@@ -202,7 +359,6 @@ const Register = () => {
                         <Button
                           variant="primary"
                           type="submit"
-                          // onClick={(e) => handleRegister(e)}
                         >
                           Create Account
                         </Button>
