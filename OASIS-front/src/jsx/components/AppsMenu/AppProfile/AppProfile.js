@@ -35,16 +35,22 @@ function handleRegister(e) {
    const form = e.target;
    // console.log(form.email.value);
    const formUser = {  
+      _id: user._id,
      firstname: form.firstname.value,
      lastname: form.lastname.value,
      username: form.username.value,
      email: form.email.value,
      phonenumber: form.phonenumber.value,
      club: form.club.value,
+     image: form.image.files[0],
    };
    console.log(formUser);
    axios
-   .post("http://localhost:3000/users/"+user._id, {formUser: formUser})
+   .post("http://localhost:3000/users/"+user._id,formUser, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
    .then((res) => {
       console.log(res);
    }
@@ -994,6 +1000,16 @@ function handleRegister(e) {
                                                 name = "club"
                                              />
                                           </div>
+                                          <div className="custom-file">
+                          <input
+                            type="file"
+                            className="custom-file-input"
+                            name="image"
+                          />
+                          <label className="custom-file-label" name="image">
+                            Profile Picture
+                          </label>
+                        </div>
                                           <button
                                          
                                              className="btn btn-primary"
