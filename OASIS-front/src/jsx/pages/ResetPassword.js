@@ -2,12 +2,6 @@ import axios from "axios";
 import React, { useState } from "react";
 
 const ResetPassword = () => {
-   const [lockScreenData, setLockScreenData] = useState({});
-   const handleBlur = (e) => {
-      const newLockScreenData = { ...lockScreenData };
-      newLockScreenData[e.target.name] = e.target.value;
-      setLockScreenData(newLockScreenData);
-   };
    const submitHandler = (e) => {
       e.preventDefault();
      const form = e.target;
@@ -45,7 +39,6 @@ const ResetPassword = () => {
                                        className="form-control"
                                        placeholder="email"
                                        name="email"
-                                       onChange={handleBlur}
                                     />
                                  </div>
                                  <div className="text-center">
