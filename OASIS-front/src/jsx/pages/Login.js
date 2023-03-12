@@ -112,7 +112,8 @@ const Login = () => {
           swal("Oops", "Your account is not approved yet!", "error");
         } else if (err.response.data === "User is banned") {
           swal("Oops", "Your account is banned !", "error");
-        } else if (
+        } 
+        else if (
           err.response.data.msg === "User is not allowed to login from this IP"
         ) {
           console.log(err.response.data.number);
