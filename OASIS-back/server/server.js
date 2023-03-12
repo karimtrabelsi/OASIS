@@ -30,7 +30,6 @@ mongoose
     });
   })
   .catch((err) => console.log(err));
-
 app.post("/register", register);
 
 app.post("/login", login);

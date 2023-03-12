@@ -16,7 +16,6 @@ import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import LockScreen from "./pages/LockScreen";
-import TwoFactor from "./pages/TwoFactor";
 import Error400 from "./pages/Error400";
 import Error403 from "./pages/Error403";
 import Error404 from "./pages/Error404";
@@ -175,7 +174,6 @@ const Markup = () => {
 
     { url: "page-register", component: Registration },
     { url: "page-lock-screen", component: LockScreen },
-    { url: "page-twofactor-screen", component: TwoFactor },
     { url: "page-login", component: Login },
     { url: "page-forgot-password", component: ForgotPassword },
     { url: "page-error-400", component: Error400 },
@@ -185,13 +183,16 @@ const Markup = () => {
     { url: "page-error-503", component: Error503 },
   ];
 
+  let path = window.location.pathname;
+  path = path.split("/");
+  path = path[path.length - 1];
+  let pagePath = path.split("-").includes("page");
+
   return (
     <>
-    
-
       <Router basename="/react">
         <div id="main-wrapper" className="show">
-          <Nav />
+          {!pagePath && <Nav />}
 
           <div className="content-body">
             <div className="container-fluid">
@@ -208,7 +209,7 @@ const Markup = () => {
             </div>
           </div>
 
-          <Footer />
+          {!pagePath && <Footer />}
         </div>
       </Router>
     </>
