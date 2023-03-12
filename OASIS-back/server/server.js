@@ -60,7 +60,7 @@ app.post("/login", login);
 
 app.get("/users", getusers);
 
-app.put("/users/:id", update);
+app.post("/users/:id", update);
 
 app.post("/users/ban/:id", ban);
 

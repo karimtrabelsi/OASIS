@@ -9,6 +9,7 @@ import logoText from "../../../images/logo-text.png";
 
 const NavHader = () => {
    const [toggle, setToggle] = useState(false);
+   
    return (
       <div className="nav-header">
          <Link to="/" className="brand-logo">
