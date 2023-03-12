@@ -34,6 +34,8 @@
       "create-react-class": "^15.7.0",
       "date-fns": "^2.16.1",
       "draft-js": "^0.11.7",
+      "file-loader": "^6.2.0",
+      "formik": "^2.2.9",
       "html-to-draftjs": "^1.5.0",
       "material-ui-color-picker": "^3.5.1",
       "metismenujs": "^1.2.1",
@@ -74,7 +76,9 @@
       "slick-carousel": "^1.8.1",
       "sweetalert": "^2.1.2",
       "sweetalert2": "^10.10.4",
-      "web-vitals": "^0.2.4"
+      "url-loader": "^4.1.1",
+      "web-vitals": "^0.2.4",
+      "yup": "^1.0.2"
    },
    "scripts": {
       "start": "react-scripts start",
