@@ -43,19 +43,24 @@ const Login = () => {
         } else if (err.response.data === "User is banned") {
           swal("Oops", "Your account is banned !", "error");
         } else if (
-          err.response.daa === "User is not allowed to login from this IP"
+          err.response.data.msg === "User is not allowed to login from this IP"
         ) {
-          const number = localStorage.getItem("number");
+          console.log(err.response.data.number);
+          // let number = err.respone.data.number;
+          console.log("sssssss");
+          console.log(err.response.data);
           axios
             .post("http://localhost:3000/users/twoFactorAuth/send", {
-              number: number,
+              number: err.response.data.number,
             })
             .then((res) => {
               swal(
                 "Please verify yourself",
-                "Weve sent you an sms to the number : " + number.slice(-3),
+                "Weve sent you an sms to the number : " +
+                  err.response.data.number,
                 "error"
               );
+              localStorage.setItem("number", err.response.data.number);
               history.push("/page-twofactor-auth");
             });
         }
