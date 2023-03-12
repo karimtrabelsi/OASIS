@@ -1,15 +1,14 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
 
-const NewPassword = () => {
+const TwoFactorAuth = () => { 
    const submitHandler = (e) => {
       e.preventDefault();
      const form = e.target;
-     const password = form.password.value;
-     const searchParams = new URLSearchParams(document.location.search)
-     const id = searchParams.get("id");
-     const token = searchParams.get("token");
-    axios.post("http://localhost:3000/users/password-reset/"+id+"/"+token, {password : password} ).then((res) => {
+     const code = form.code.value;
+     const connectedUser = JSON.parse(localStorage.getItem("connectedUser"));
+     const phonenumber = connectedUser.phonenumber;
+    axios.post("http://localhost:3000/verify/", {code : code,number: phonenumber} ).then((res) => {
     
       console.log(res);    
     } ).catch((err) => {
@@ -26,7 +25,7 @@ const NewPassword = () => {
                         <div className="col-xl-12">
                            <div className="auth-form">
                               <h4 className="text-center mb-4">
-                              New Password
+                              Enter Code
                               </h4>
                               <form
                                  action=""
@@ -36,13 +35,14 @@ const NewPassword = () => {
                               >
                                  <div className="form-group">
                                     <label>
-                                       <strong>Password</strong>
+                                       <strong>Code</strong>
                                     </label>
                                     <input
                                        type="password"
                                        className="form-control"
-                                       placeholder="password"
+                                       placeholder="Code"
                                        name="password"
+                                       
                                     />
                                  </div>
                                  <div className="text-center">
@@ -66,4 +66,4 @@ const NewPassword = () => {
    );
 };
 
-export default NewPassword;
+export default TwoFactorAuth;

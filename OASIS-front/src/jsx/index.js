@@ -16,6 +16,7 @@ import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import NewPassword from "./pages/NewPassword";
+import TwoFactorAuth from "./pages/TwoFactorAuth";
 import Error400 from "./pages/Error400";
 import Error403 from "./pages/Error403";
 import Error404 from "./pages/Error404";
@@ -175,6 +176,7 @@ const Markup = () => {
     { url: "page-register", component: Registration },
     { url: "page-reset-password", component: ResetPassword },
     { url: "page-new-password", component: NewPassword },
+    { url: "page-twofactor-auth", component: TwoFactorAuth },
     { url: "page-login", component: Login },
     { url: "page-error-400", component: Error400 },
     { url: "page-error-403", component: Error403 },
