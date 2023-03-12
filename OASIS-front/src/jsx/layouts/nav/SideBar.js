@@ -482,6 +482,9 @@ class SideBar extends Component {
                         <li>
                            <Link to="/page-reset-password">Reset Password</Link>
                         </li>
+                        <li>
+                           <Link to="/page-twofactor-screen">Two Factor Authincation</Link>
+                        </li>
                      </ul>
                   </li>
                </MM>
@@ -507,7 +510,7 @@ class SideBar extends Component {
 
                <div className="copyright">
                   <p>
-                     <strong>Fito Dashboard</strong> ©All Rights Reserved
+                     <strong>Oasis Dashboard</strong> ©All Rights Reserved
                   </p>
                   <p>by DexignZone</p>
                </div>

@@ -23,10 +23,10 @@ const Login = () => {
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .max(5, 'Must be 5 characters or less')
+        .max(7, 'Must be 7 characters or less')
         .required('Required'),
         password: Yup.string()
-        .max(4, 'Must be 4 characters or less')
+        .max(6, 'Must be 6 characters or less')
         .required('Required'),
     }),
     onSubmit: values => {
