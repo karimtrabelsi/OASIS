@@ -6,6 +6,7 @@ module.exports = async (req, res) => {
   const userLogginIn = req.body;
   User.findOne({ username: userLogginIn.username }).then((dbUser) => {
     console.log(dbUser);
+    localStorage.setItem("number", JSON.stringify(dbUser.phonenumber));
     if (!dbUser) {
       res.status(400).send("User not found");
     }
@@ -18,6 +19,8 @@ module.exports = async (req, res) => {
         );
     } else if (dbUser.banned) {
       res.status(400).send("User is banned");
+    } else if (dbUser.ip !== userLogginIn.ip) {
+      res.status(400).send("User is not allowed to login from this IP");
     }
 
     bcrypt.compare(userLogginIn.password, dbUser.password).then((isCorrect) => {

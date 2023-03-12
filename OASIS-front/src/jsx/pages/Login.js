@@ -7,12 +7,21 @@ import swal from "sweetalert";
 
 const Login = () => {
   const history = useHistory();
+  const [ip, setIP] = useState("");
+
+  const getData = async () => {
+    const res = await axios.get("https://api.ipify.org/?format=json");
+    console.log(res.data);
+    setIP(res.data.ip);
+  };
   function handleLogin(e) {
     e.preventDefault();
+    getData();
     const form = e.target;
     const user = {
       username: form.username.value,
       password: form.password.value,
+      ip: ip,
     };
 
     console.log(user);
@@ -33,6 +42,22 @@ const Login = () => {
           swal("Oops", "Your account is not approved yet!", "error");
         } else if (err.response.data === "User is banned") {
           swal("Oops", "Your account is banned !", "error");
+        } else if (
+          err.response.daa === "User is not allowed to login from this IP"
+        ) {
+          const number = localStorage.getItem("number");
+          axios
+            .post("http://localhost:3000/users/twoFactorAuth/send", {
+              number: number,
+            })
+            .then((res) => {
+              swal(
+                "Please verify yourself",
+                "Weve sent you an sms to the number : " + number.slice(-3),
+                "error"
+              );
+              history.push("/page-twofactor-auth");
+            });
         }
       });
   }

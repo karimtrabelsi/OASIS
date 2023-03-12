@@ -7,9 +7,17 @@ import axios from "axios";
 import swal from "sweetalert";
 
 const Register = () => {
+  const [ip, setIP] = useState("");
+
+  const getData = async () => {
+    const res = await axios.get("https://api.ipify.org/?format=json");
+    console.log(res.data);
+    setIP(res.data.ip);
+  };
   const history = useHistory();
   function handleRegister(e) {
     e.preventDefault();
+    getData();
     const form = e.target;
     // console.log(form.email.value);
     const formUser = {
@@ -23,6 +31,7 @@ const Register = () => {
       password: form.password.value,
       role: form.role.value,
       image: form.image.files[0],
+      ip: ip,
     };
     // console.log(formUser);
     axios
