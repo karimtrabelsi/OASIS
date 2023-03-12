@@ -1,6 +1,18 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 
-const ForgotPassword = () => {
+const ResetPassword = () => {
+   const submitHandler = (e) => {
+      e.preventDefault();
+     const form = e.target;
+     const   email = form.email.value;
+    axios.post("http://localhost:3000/users/password-reset",  {email : email}).then((res) => {
+    
+      console.log(res);    
+    } ).catch((err) => {
+      console.log("err");
+    });
+   };
    return (
       <div className="authincation">
          <div className="container p-0">
@@ -11,25 +23,31 @@ const ForgotPassword = () => {
                         <div className="col-xl-12">
                            <div className="auth-form">
                               <h4 className="text-center mb-4">
-                                 Forgot Password
+                              Reset Password
                               </h4>
-                              <form onSubmit={(e) => e.preventDefault()}>
+                              <form
+                                 action=""
+                                 onSubmit={(e) =>
+                                    submitHandler(e)                                 }
+                              >
                                  <div className="form-group">
                                     <label>
-                                       <strong>Email</strong>
+                                       <strong>E-mail</strong>
                                     </label>
                                     <input
-                                       type="email"
+                                       type="text"
                                        className="form-control"
-                                       placeholder="hello@example.com"
+                                       placeholder="email"
+                                       name="email"
                                     />
                                  </div>
                                  <div className="text-center">
                                     <button
                                        type="submit"
                                        className="btn btn-primary btn-block"
+                                       onClick={() => submitHandler}
                                     >
-                                       SUBMIT
+                                       Send
                                     </button>
                                  </div>
                               </form>
@@ -44,4 +62,4 @@ const ForgotPassword = () => {
    );
 };
 
-export default ForgotPassword;
+export default ResetPassword;

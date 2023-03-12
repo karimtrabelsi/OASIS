@@ -14,8 +14,9 @@ import Footer from "./layouts/Footer";
 /// Pages
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
-import ForgotPassword from "./pages/ForgotPassword";
-import LockScreen from "./pages/LockScreen";
+import ResetPassword from "./pages/ResetPassword";
+import NewPassword from "./pages/NewPassword";
+import TwoFactorAuth from "./pages/TwoFactorAuth";
 import Error400 from "./pages/Error400";
 import Error403 from "./pages/Error403";
 import Error404 from "./pages/Error404";
@@ -173,9 +174,10 @@ const Markup = () => {
     { url: "widget-basic", component: Widget },
 
     { url: "page-register", component: Registration },
-    { url: "page-lock-screen", component: LockScreen },
+    { url: "page-reset-password", component: ResetPassword },
+    { url: "page-new-password", component: NewPassword },
+    { url: "page-twofactor-auth", component: TwoFactorAuth },
     { url: "page-login", component: Login },
-    { url: "page-forgot-password", component: ForgotPassword },
     { url: "page-error-400", component: Error400 },
     { url: "page-error-403", component: Error403 },
     { url: "page-error-404", component: Error404 },
@@ -194,7 +196,7 @@ const Markup = () => {
         <div id="main-wrapper" className="show">
           {!pagePath && <Nav />}
 
-          <div className="content-body">
+          <div className={!pagePath && "content-body"}>
             <div className="container-fluid">
               <Switch>
                 {routes.map((data, i) => (

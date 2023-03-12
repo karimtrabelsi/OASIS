@@ -1,15 +1,20 @@
+import axios from "axios";
 import React, { useState } from "react";
 
-const LockScreen = () => {
-   const [lockScreenData, setLockScreenData] = useState({});
-   const handleBlur = (e) => {
-      const newLockScreenData = { ...lockScreenData };
-      newLockScreenData[e.target.name] = e.target.value;
-      setLockScreenData(newLockScreenData);
-   };
+const NewPassword = () => {
    const submitHandler = (e) => {
       e.preventDefault();
-      const unlock = { ...lockScreenData };
+     const form = e.target;
+     const password = form.password.value;
+     const searchParams = new URLSearchParams(document.location.search)
+     const id = searchParams.get("id");
+     const token = searchParams.get("token");
+    axios.post("http://localhost:3000/users/password-reset/"+id+"/"+token, {password : password} ).then((res) => {
+    
+      console.log(res);    
+    } ).catch((err) => {
+      console.log("err");
+    });
    };
    return (
       <div className="authincation">
@@ -21,12 +26,12 @@ const LockScreen = () => {
                         <div className="col-xl-12">
                            <div className="auth-form">
                               <h4 className="text-center mb-4">
-                                 Account Locked
+                              New Password
                               </h4>
                               <form
                                  action=""
                                  onSubmit={(e) =>
-                                    e.preventDefault(submitHandler)
+                                    submitHandler(e)
                                  }
                               >
                                  <div className="form-group">
@@ -36,9 +41,8 @@ const LockScreen = () => {
                                     <input
                                        type="password"
                                        className="form-control"
-                                       defaultValue="Password"
+                                       placeholder="password"
                                        name="password"
-                                       onChange={handleBlur}
                                     />
                                  </div>
                                  <div className="text-center">
@@ -47,7 +51,7 @@ const LockScreen = () => {
                                        className="btn btn-primary btn-block"
                                        onClick={() => submitHandler}
                                     >
-                                       Unlock
+                                       Send
                                     </button>
                                  </div>
                               </form>
@@ -62,4 +66,4 @@ const LockScreen = () => {
    );
 };
 
-export default LockScreen;
+export default NewPassword;
