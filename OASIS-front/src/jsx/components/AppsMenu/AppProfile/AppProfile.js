@@ -43,7 +43,11 @@ const notifyBottomCenter = () => {
 };
 
 useEffect(() => {
- setuser(JSON.parse(localStorage.getItem("connectedUser")));
+   const userr=JSON.parse(localStorage.getItem("connectedUser"))
+   console.log(userr)
+   axios.get("http://localhost:3000/users/"+userr._id).then((res) => {
+      setuser(res.data);
+});
 }, []);
 function handleRegister(e) {
    e.preventDefault();
@@ -69,7 +73,9 @@ function handleRegister(e) {
    .then(() => {
       notifyBottomCenter();
       console.log("user updated");
+   
    }
+
    )
    .catch((err) => {
       console.log("err");
