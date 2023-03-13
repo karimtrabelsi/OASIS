@@ -2,6 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const User = require("../../models/user");
+const localIpAddress = require("local-ip-address");
+
 const client = require("twilio")(
   process.env.ACCOUNT_SID,
   process.env.AUTH_TOKEN
@@ -19,6 +21,7 @@ const sendOTP = async (req, res, next) => {
         to: `+216${phonenumber}`,
         channel: "sms",
       });
+
     res
       .status(200)
       .send(`OTP sent successfully : ${JSON.stringify(otpResponse)}`);
@@ -34,12 +37,21 @@ const verifyOTP = async (req, res, next) => {
   const otpcode = req.body.code;
   const phonenumber = req.body.number;
   try {
+    console.log("bbbb");
+    console.log(otpcode);
+    console.log(phonenumber);
+
     const verifiedResponse = await client.verify.v2
       .services(process.env.SERVICE_ID)
       .verificationChecks.create({
         to: `+216${phonenumber}`,
         code: otpcode,
       });
+    console.log("aaa");
+    const ip = localIpAddress();
+    const user = await User.findOne({ phonenumber: phonenumber });
+    user.ip = [...user.ip, ip];
+    user.save();
     res
       .status(200)
       .send(`OTP verified successfully : ${JSON.stringify(verifiedResponse)}`);

@@ -1,9 +1,11 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../../models/user");
-
+const localIpAddress = require("local-ip-address");
 module.exports = async (req, res) => {
   const userLogginIn = req.body;
+  console.log(localIpAddress());
+  const ip = localIpAddress();
   User.findOne({ username: userLogginIn.username }).then((dbUser) => {
     console.log(dbUser);
     if (!dbUser) {
@@ -18,13 +20,11 @@ module.exports = async (req, res) => {
         );
     } else if (dbUser.banned) {
       res.status(400).send("User is banned");
-    } else if (dbUser.ip !== userLogginIn.ip) {
-      res
-        .status(400)
-        .send({
-          msg: "User is not allowed to login from this IP",
-          number: dbUser.phonenumber,
-        });
+    } else if (!dbUser.ip.includes(ip)) {
+      res.status(400).send({
+        msg: "User is not allowed to login from this IP",
+        number: dbUser.phonenumber,
+      });
     }
 
     bcrypt.compare(userLogginIn.password, dbUser.password).then((isCorrect) => {

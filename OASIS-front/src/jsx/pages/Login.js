@@ -14,9 +14,9 @@ const Login = () => {
     console.log(res.data);
     setIP(res.data.ip);
   };
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
-    getData();
+    await getData();
     const form = e.target;
     const user = {
       username: form.username.value,
@@ -24,8 +24,8 @@ const Login = () => {
       ip: ip,
     };
 
-    console.log(user);
-    axios
+    localStorage.setItem("userLogginIn", JSON.stringify(user));
+    await axios
       .post("http://localhost:3000/login", user)
       .then((res) => {
         localStorage.setItem("token", res.data.token);
@@ -48,7 +48,7 @@ const Login = () => {
           console.log(err.response.data.number);
           // let number = err.respone.data.number;
           console.log("sssssss");
-          console.log(err.response.data);
+          console.log(err.response.data);  
           axios
             .post("http://localhost:3000/users/twoFactorAuth/send", {
               number: err.response.data.number,

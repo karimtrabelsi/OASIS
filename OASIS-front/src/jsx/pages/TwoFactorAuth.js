@@ -1,7 +1,10 @@
 import axios from "axios";
 import React from "react";
+import { useHistory } from "react-router-dom";
+import swal from "sweetalert";
 
 const TwoFactorAuth = () => {
+  const history = useHistory();
   const submitHandler = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -13,7 +16,22 @@ const TwoFactorAuth = () => {
         number: phonenumber,
       })
       .then((res) => {
-        console.log(res);
+        if (res.data === "Code is not correct") {
+          swal("Oops", "Code is not correct !", "error");
+        } else {
+          console.log(res);
+          const user = localStorage.getItem("userLogginIn");
+          console.log(JSON.parse(user));
+          axios
+            .post("http://localhost:3000/login", JSON.parse(user))
+            .then((res) => {
+              localStorage.setItem("token", res.data.token);
+              localStorage.setItem("connectedUser", res.data.user);
+
+              history.push("/dashboard");
+            });
+          history.push("/dashboard");
+        }
       })
       .catch((err) => {
         console.log(err);

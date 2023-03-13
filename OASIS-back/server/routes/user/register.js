@@ -1,5 +1,6 @@
 const User = require("../../models/user");
 const bcrypt = require("bcrypt");
+const localIpAddress = require("local-ip-address");
 
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
@@ -30,6 +31,8 @@ module.exports = async (req, res) => {
   const user = req.body;
   const takenUsername = await User.findOne({ username: req.body.username });
   const takenEmail = await User.findOne({ email: req.body.email });
+  const ip = localIpAddress();
+
   if (takenUsername || takenEmail) {
     res.status(400).send("Username or email already taken");
   } else {
@@ -45,7 +48,7 @@ module.exports = async (req, res) => {
       club: user.club,
       role: user.role,
       image: req.file.filename,
-      ip: user.ip,
+      ip: ip,
     });
     dbUser.save();
     res.status(200).send("User created");
