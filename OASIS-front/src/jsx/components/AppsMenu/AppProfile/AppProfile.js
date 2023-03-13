@@ -316,7 +316,7 @@ function handleRegister(e) {
                            show={replay}
                         >
                            <div className="modal-header">
-                              <h5 className="modal-title">Post Reply</h5>
+                              <h5 className="modal-title">Po st Reply</h5>
                               <button
                                  type="button"
                                  className="close"

@@ -10,7 +10,10 @@ import * as Yup from 'yup';
 
 const Register = () => {
   const [ip, setIP] = useState("");
-
+  const imgStyle = {
+    width: '220px',
+    height: '130px'
+  };
   const getData = async () => {
     const res = await axios.get("https://api.ipify.org/?format=json");
     console.log(res.data);
@@ -148,9 +151,7 @@ const Register = () => {
                 <div className="mb-3 mt-md-4">
                   <div className="fw-bold mb-2 text-center text-uppercase ">
                     <img
-                      className="logo-compact"
-                      src="../../images/logo-text.png"
-                      alt="logo"
+                     style={imgStyle} src={logoText} alt="logo" 
                     />
                     {/* <img className="brand-title" src={logoText} alt="" /> */}
                   </div>
