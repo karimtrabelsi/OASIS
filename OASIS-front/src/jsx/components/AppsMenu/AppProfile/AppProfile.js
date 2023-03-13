@@ -12,6 +12,8 @@ import profile08 from "../../../../images/profile/8.jpg";
 import profile09 from "../../../../images/profile/9.jpg";
 import { Dropdown, Button, Modal } from "react-bootstrap";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 import PageTitle from "../../../layouts/PageTitle";
@@ -27,6 +29,18 @@ const AppProfile = () => {
    
 // user update 
 const [user, setuser] = useState([]);
+
+const notifyBottomCenter = () => {
+   toast.warn("✅ User Updated !", {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+   });
+};
 
 useEffect(() => {
  setuser(JSON.parse(localStorage.getItem("connectedUser")));
@@ -52,8 +66,9 @@ function handleRegister(e) {
         "Content-Type": "multipart/form-data",
       },
     })
-   .then((res) => {
-      console.log(res);
+   .then(() => {
+      notifyBottomCenter();
+      console.log("user updated");
    }
    )
    .catch((err) => {
@@ -85,9 +100,9 @@ function handleRegister(e) {
                            <img
                               className="img-fluid rounded-circle"
                               alt="profile"
-                              src={`../../../../images/users/${user.image}`}
-                           />
-                          
+                              src={("../../../../images/users/" + user.image)} key={user.image} 
+                              />
+                   
                         </div>
                         <div className="profile-details">
                            <div className="profile-name px-3 pt-2">
@@ -1010,14 +1025,30 @@ function handleRegister(e) {
                           <label className="custom-file-label" name="image">
                             Profile Picture
                           </label>
+                          <br></br>
+                           <br></br>
+                                 
                         </div>
                                           <button
                                          
                                              className="btn btn-primary"
                                              type="submit"
+                                             
                                           >
-                                            Send
+                                             <ToastContainer
+                           position="bottom-center"
+                           autoClose={5000}
+                           hideProgressBar={false}
+                           newestOnTop
+                           closeOnClick
+                           rtl={false}
+                           pauseOnFocusLoss
+                           draggable
+                           pauseOnHover
+                        />
+                                            Update
                                           </button>
+                                          
                                        </form>
                                     </div>
                                  </div>
