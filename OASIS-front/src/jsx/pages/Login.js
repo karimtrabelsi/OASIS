@@ -16,6 +16,10 @@ const Login = () => {
     console.log(res.data);
     setIP(res.data.ip);
   };
+  const imgStyle = {
+    width: '220px',
+    height: '200px'
+  };
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -112,7 +116,8 @@ const Login = () => {
           swal("Oops", "Your account is not approved yet!", "error");
         } else if (err.response.data === "User is banned") {
           swal("Oops", "Your account is banned !", "error");
-        } else if (
+        } 
+        else if (
           err.response.data.msg === "User is not allowed to login from this IP"
         ) {
           console.log(err.response.data.number);
@@ -162,11 +167,12 @@ const Login = () => {
               <Card.Body>
                 <div className="mb-3 mt-md-4">
                   <div className="fw-bold mb-2 text-center text-uppercase ">
-                    <img className="logo-compact" scr={logo} alt="logo" />
+                  <img style={imgStyle} src={logo} alt="logo" /> 
+
                   </div>
                   <div className="mb-3">
                     <Form noValidate onSubmit={formik.handleSubmit}>
-                      <Form.Group className="mb-3 " hasValidation >
+                      <Form.Group className="mb-3 " >
                         <Form.Label className="text-center">
                           Username
                         </Form.Label>
@@ -178,13 +184,15 @@ const Login = () => {
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.username}
-                          isInvalid={!!formik.touched.username && !!formik.errors.username}
+                          isValid={formik.touched.username && !formik.errors.username}
+                          isInvalid={formik.touched.username && !!formik.errors.username}
                         />
                         {formik.touched.username && formik.errors.username ? (
                         <Form.Control.Feedback className="invalid-feedback" >
                            {formik.errors.username}
                         </Form.Control.Feedback >
                         ) : null} 
+                        
                       </Form.Group>
 
                       <Form.Group
@@ -199,7 +207,8 @@ const Login = () => {
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.password}
-                          isInvalid={!!formik.touched.password && !!formik.errors.password}
+                          isValid={formik.touched.password && !formik.errors.password}
+                          isInvalid={formik.touched.password && !!formik.errors.password}
                         />
                           {formik.touched.password && formik.errors.password ? (
                               <Form.Control.Feedback className="invalid-feedback" >
