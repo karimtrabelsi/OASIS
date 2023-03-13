@@ -8,7 +8,7 @@ import swal from "sweetalert";
 import {  useFormik } from 'formik';
 import * as Yup from 'yup';
 
-const Register = () => {
+
   const [ip, setIP] = useState("");
   const imgStyle = {
     width: '170px',
@@ -19,10 +19,10 @@ const Register = () => {
     console.log(res.data);
     setIP(res.data.ip);
   };
+
   const history = useHistory();
   function handleRegister(e) {
     e.preventDefault();
-    getData();
     const form = e.target;
     // console.log(form.email.value);
     const formUser = {
@@ -36,7 +36,6 @@ const Register = () => {
       password: form.password.value,
       role: form.role.value,
       image: form.image.files[0],
-      ip: ip,
     };
     console.log("ezzzzzzzzzzzz")
      console.log(form);

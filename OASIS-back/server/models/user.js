@@ -55,7 +55,7 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
     ip: {
-      type: String,
+      type: [String],
       required: false,
     },
   },
