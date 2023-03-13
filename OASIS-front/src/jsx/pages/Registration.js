@@ -11,8 +11,13 @@ import * as Yup from 'yup';
 const Register = () => {
   const [ip, setIP] = useState("");
   const imgStyle = {
+<<<<<<< HEAD
     width: '220px',
     height: '120px'
+=======
+    width: '170px',
+    height: '130px'
+>>>>>>> 34fa6cfe582511e99ce94a93997ea76afc14a5de
   };
   const getData = async () => {
     const res = await axios.get("https://api.ipify.org/?format=json");
@@ -142,12 +147,17 @@ const Register = () => {
 });
 
   return (
-    <div>
+    <div className="overflow-auto">
       <Container>
         <Row className="vh-100 d-flex justify-content-center align-items-center">
           <Col md={8} lg={6} xs={12}>
+<<<<<<< HEAD
             <Card className="shadow px-4 border border-2 border-primary">
               <Card.Body >
+=======
+            <Card className="shadow px-4 border border-2 border-primary ">
+              <Card.Body>
+>>>>>>> 34fa6cfe582511e99ce94a93997ea76afc14a5de
                 <div className="mb-3 mt-md-4">
                   <div className="fw-bold mb-2 text-center text-uppercase ">
                     <img
