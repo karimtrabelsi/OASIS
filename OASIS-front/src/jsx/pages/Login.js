@@ -235,6 +235,14 @@ const Login = () => {
                         </a>
                       </p>
                     </div>
+                    <div className="mt-3">
+                      <p className="mb-0  text-center">
+                        Don't have an account ?{" "}
+                        <a href="{''}" className="text-primary fw-bold">
+                          Signup Here !
+                        </a>
+                      </p>
+                    </div>
                   </div>
                 </div>
               </Card.Body>
