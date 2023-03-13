@@ -137,7 +137,7 @@ class SideBar extends Component {
                         <li>
                            <Link to="/">Dashboard</Link>
                         </li>
-                        <li>
+                        {/* <li>
                            <Link to="/workout-statistic">
                               Workout Statistic
                            </Link>
@@ -153,10 +153,10 @@ class SideBar extends Component {
                         </li>
                         <li>
                            <Link to="/personal-record">Personal Record</Link>
-                        </li>
+                        </li> */}
                      </ul>
                   </li>
-                  <li
+                  {/* <li
                      className={`${
                         app.includes(path.slice(1)) ? "mm-active" : ""
                      }`}
@@ -235,8 +235,8 @@ class SideBar extends Component {
                            </ul>
                         </li>
                      </ul>
-                  </li>
-                  <li
+                  </li> */}
+                  {/* <li
                      className={`${
                         charts.includes(path.slice(1)) ? "mm-active" : ""
                      }`}
@@ -266,8 +266,8 @@ class SideBar extends Component {
                            <Link to="/chart-apexchart">Apexchart</Link>
                         </li>
                      </ul>
-                  </li>
-                  <li
+                  </li> */}
+                  {/* <li
                      className={`${
                         bootstrap.includes(path.slice(1)) ? "mm-active" : ""
                      }`}
@@ -333,8 +333,8 @@ class SideBar extends Component {
                            <Link to="/ui-grid">Grid</Link>
                         </li>
                      </ul>
-                  </li>
-                  <li
+                  </li> */}
+                  {/* <li
                      className={`${
                         plugins.includes(path.slice(1)) ? "mm-active" : ""
                      }`}
@@ -367,8 +367,8 @@ class SideBar extends Component {
                            <Link to="/map-jqvmap">Jqv Map</Link>
                         </li>
                      </ul>
-                  </li>
-                  <li
+                  </li> */}
+                  {/* <li
                      className={`${
                         widget.includes(path.slice(1)) ? "mm-active" : ""
                      }`}
@@ -381,8 +381,8 @@ class SideBar extends Component {
                         <i className="flaticon-381-settings-2"></i>
                         <span className="nav-text">Widget</span>
                      </Link>
-                  </li>
-                  <li
+                  </li> */}
+                  {/* <li
                      className={`${
                         forms.includes(path.slice(1)) ? "mm-active" : ""
                      }`}
@@ -414,7 +414,7 @@ class SideBar extends Component {
                            </Link>
                         </li>
                      </ul>
-                  </li>
+                  </li>  */}
                   <li
                      className={`${
                         table.includes(path.slice(1)) ? "mm-active" : ""
@@ -426,11 +426,11 @@ class SideBar extends Component {
                         aria-expanded="false"
                      >
                         <i className="flaticon-381-network"></i>
-                        <span className="nav-text">Table</span>
+                        <span className="nav-text">Tables</span>
                      </Link>
                      <ul aria-expanded="false">
                         <li>
-                           <Link to="table-bootstrap-basic">Bootstrap</Link>
+                           <Link to="table-bootstrap-basic">User Management</Link>
                         </li>
                         <li>
                            <Link to="table-datatable-basic">Datatable</Link>
@@ -488,25 +488,7 @@ class SideBar extends Component {
                      </ul>
                   </li>
                </MM>
-               <div className="drum-box mt-5">
-                  <img src={drump} alt="" />
-                  <p className="fs-18 font-w500 mb-4">
-                     Start Plan Your Workout
-                  </p>
-                  <Link className to={"./personal-record"}>
-                     Check schedule
-                     <svg
-                        className="ml-3"
-                        width={6}
-                        height={12}
-                        viewBox="0 0 6 12"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                     >
-                        <path d="M0 12L6 6L0 0" fill="#BCD7FF" />
-                     </svg>
-                  </Link>
-               </div>
+               
 
                <div className="copyright">
                   <p>

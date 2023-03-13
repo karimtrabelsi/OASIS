@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 //** Import Image */
 import profile01 from "../../../../images/profile/1.jpg";
 import profile02 from "../../../../images/profile/2.jpg";
@@ -33,7 +33,7 @@ const [user, setuser] = useState([]);
 const notifyBottomCenter = () => {
    toast.warn("✅ User Updated !", {
       position: "bottom-center",
-      autoClose: 5000,
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -100,7 +100,7 @@ function handleRegister(e) {
                            <img
                               className="img-fluid rounded-circle"
                               alt="profile"
-                              src={("../../../../images/users/" + user.image)} key={user.image} 
+                              //src={require("../../../../images/users/" + user.image)} key={user.image} 
                               />
                    
                         </div>
