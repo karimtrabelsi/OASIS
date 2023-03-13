@@ -11,7 +11,7 @@ import * as Yup from 'yup';
 const Register = () => {
   const [ip, setIP] = useState("");
   const imgStyle = {
-    width: '220px',
+    width: '170px',
     height: '130px'
   };
   const getData = async () => {
@@ -142,11 +142,11 @@ const Register = () => {
 });
 
   return (
-    <div>
+    <div className="overflow-auto">
       <Container>
         <Row className="vh-100 d-flex justify-content-center align-items-center">
           <Col md={8} lg={6} xs={12}>
-            <Card className="shadow px-4 border border-2 border-primary">
+            <Card className="shadow px-4 border border-2 border-primary ">
               <Card.Body>
                 <div className="mb-3 mt-md-4">
                   <div className="fw-bold mb-2 text-center text-uppercase ">

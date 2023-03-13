@@ -24,6 +24,7 @@ const AppProfile = () => {
 
    const [replay, setReplay] = useState(false);
  
+   
 // user update 
 const [user, setuser] = useState([]);
 
@@ -84,7 +85,7 @@ function handleRegister(e) {
                            <img
                               className="img-fluid rounded-circle"
                               alt="profile"
-                              src={"../../../../images/users/" + user.image}
+                              src={`../../../../images/users/${user.image}`}
                            />
                           
                         </div>
