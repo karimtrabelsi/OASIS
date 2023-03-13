@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 //** Import Image */
 import profile01 from "../../../../images/profile/1.jpg";
@@ -10,8 +10,9 @@ import profile06 from "../../../../images/profile/6.jpg";
 import profile07 from "../../../../images/profile/7.jpg";
 import profile08 from "../../../../images/profile/8.jpg";
 import profile09 from "../../../../images/profile/9.jpg";
-import profile from "../../../../images/profile/profile.png";
 import { Dropdown, Button, Modal } from "react-bootstrap";
+import axios from "axios";
+
 
 import PageTitle from "../../../layouts/PageTitle";
 
@@ -22,12 +23,52 @@ const AppProfile = () => {
    const [sendMessage, setSendMessage] = useState(false);
 
    const [replay, setReplay] = useState(false);
+ 
+   
+// user update 
+const [user, setuser] = useState([]);
 
+useEffect(() => {
+ setuser(JSON.parse(localStorage.getItem("connectedUser")));
+}, []);
+function handleRegister(e) {
+   e.preventDefault();
+   const form = e.target;
+   // console.log(form.email.value);
+   const formUser = {  
+      _id: user._id,
+     firstname: form.firstname.value,
+     lastname: form.lastname.value,
+     username: form.username.value,
+     email: form.email.value,
+     phonenumber: form.phonenumber.value,
+     club: form.club.value,
+     image: form.image.files[0],
+   };
+   console.log(formUser);
+   axios
+   .post("http://localhost:3000/users/"+user._id,formUser, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+   .then((res) => {
+      console.log(res);
+   }
+   )
+   .catch((err) => {
+      console.log("err");
+   }
+   );
+   
+}
    const options = {
       settings: {
          overlayColor: "#000000",
-      },
+   },
    };
+
+
    return (
       <Fragment>
          <PageTitle activeMenu="Profile" motherMenu="App" />
@@ -42,21 +83,22 @@ const AppProfile = () => {
                      <div className="profile-info">
                         <div className="profile-photo">
                            <img
-                              src={profile}
                               className="img-fluid rounded-circle"
                               alt="profile"
+                              src={`../../../../images/users/${user.image}`}
                            />
+                          
                         </div>
                         <div className="profile-details">
                            <div className="profile-name px-3 pt-2">
                               <h4 className="text-primary mb-0">
-                                 Mitchell C. Shay
+                              {user.firstname}
                               </h4>
-                              <p>UX / UI Designer</p>
+                              <p>{user.role}</p>
                            </div>
                            <div className="profile-email px-2 pt-2">
                               <h4 className="text-muted mb-0">
-                                 hello@email.com
+                              {user.email}
                               </h4>
                               <p>Email</p>
                            </div>
@@ -275,7 +317,7 @@ const AppProfile = () => {
                            show={replay}
                         >
                            <div className="modal-header">
-                              <h5 className="modal-title">Post Reply</h5>
+                              <h5 className="modal-title">Po st Reply</h5>
                               <button
                                  type="button"
                                  className="close"
@@ -894,7 +936,7 @@ const AppProfile = () => {
                                           Account Setting
                                        </h4>
                                        <form
-                                          onSubmit={(e) => e.preventDefault()}
+                                          onSubmit={(e) => handleRegister(e)}
                                        >
                                           <div className="form-row">
                                              <div className="form-group col-md-6">
@@ -902,91 +944,79 @@ const AppProfile = () => {
                                                 <input
                                                    type="email"
                                                    placeholder="Email"
+                                                   defaultValue={user.email}
                                                    className="form-control"
-                                                />
-                                             </div>
-                                             <div className="form-group col-md-6">
-                                                <label>Password</label>
-                                                <input
-                                                   type="password"
-                                                   placeholder="Password"
-                                                   className="form-control"
+                                                   name="email"
                                                 />
                                              </div>
                                           </div>
                                           <div className="form-group">
-                                             <label>Address</label>
+                                             <label>First Name</label>
                                              <input
                                                 type="text"
-                                                placeholder="1234 Main St"
+                                                placeholder="first name"
+                                                defaultValue={user.firstname}
                                                 className="form-control"
+                                                name="firstname"
                                              />
                                           </div>
                                           <div className="form-group">
-                                             <label>Address 2</label>
+                                             <label>Last Name</label>
                                              <input
                                                 type="text"
-                                                placeholder="Apartment, studio, or floor"
+                                                placeholder="last name"
+                                                defaultValue={user.lastname}
                                                 className="form-control"
+                                                name="lastname"
                                              />
                                           </div>
-                                          <div className="form-row">
-                                             <div className="form-group col-md-6">
-                                                <label>City</label>
-                                                <input
-                                                   type="text"
-                                                   className="form-control"
-                                                />
-                                             </div>
-                                             <div className="form-group col-md-4">
-                                                <label>State</label>
-                                                <select
-                                                   className="form-control"
-                                                   id="inputState"
-                                                   defaultValue="option-1"
-                                                >
-                                                   <option value="option-1">
-                                                      Choose...
-                                                   </option>
-                                                   <option value="option-2">
-                                                      Option 1
-                                                   </option>
-                                                   <option value="option-3">
-                                                      Option 2
-                                                   </option>
-                                                   <option value="option-4">
-                                                      Option 3
-                                                   </option>
-                                                </select>
-                                             </div>
-                                             <div className="form-group col-md-2">
-                                                <label>Zip</label>
-                                                <input
-                                                   type="text"
-                                                   className="form-control"
-                                                />
-                                             </div>
+                                          <div className="form-group">
+                                             <label>Username
+                                             </label>
+                                             <input
+                                                type="text"
+                                                placeholder="username"
+                                                defaultValue={user.username}
+                                                className="form-control"
+                                                name="username"
+                                             />
                                           </div>
                                           <div className="form-group">
-                                             <div className="custom-control custom-checkbox">
-                                                <input
-                                                   type="checkbox"
-                                                   className="custom-control-input"
-                                                   id="gridCheck"
-                                                />
-                                                <label
-                                                   className="custom-control-label"
-                                                   htmlFor="gridCheck"
-                                                >
-                                                   Check me out
-                                                </label>
-                                             </div>
+                                             <label>Phone Number</label>
+                                             <input
+                                                type="text"
+                                                placeholder="phone number"
+                                                defaultValue={user.phonenumber}
+                                                className="form-control"
+                                                name = "phonenumber"
+                                             />
                                           </div>
+                                          <div className="form-group">
+                                             <label>Club</label>
+                                             <input
+                                                type="text"
+                                                placeholder="club"
+                                                defaultValue={user.club}
+                                                className="form-control"
+                                                name = "club"
+                                             />
+                                          </div>
+                                          <div className="custom-file">
+                          <input
+                            type="file"
+                            className="custom-file-input"
+                            name="image"
+                          />
+                          <label className="custom-file-label" name="image">
+                            Profile Picture
+                          </label>
+                        </div>
                                           <button
+                                         
                                              className="btn btn-primary"
                                              type="submit"
                                           >
-                                             Sign in
+                                            Send
                                           </button>
                                        </form>
                                     </div>
