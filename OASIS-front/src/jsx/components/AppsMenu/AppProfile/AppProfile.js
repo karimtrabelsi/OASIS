@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 //** Import Image */
 import profile01 from "../../../../images/profile/1.jpg";
 import profile02 from "../../../../images/profile/2.jpg";
@@ -43,7 +43,11 @@ const notifyBottomCenter = () => {
 };
 
 useEffect(() => {
- setuser(JSON.parse(localStorage.getItem("connectedUser")));
+   const userr=JSON.parse(localStorage.getItem("connectedUser"))
+   console.log(userr)
+   axios.get("http://localhost:3000/users/"+userr._id).then((res) => {
+      setuser(res.data);
+});
 }, []);
 function handleRegister(e) {
    e.preventDefault();
@@ -69,7 +73,9 @@ function handleRegister(e) {
    .then(() => {
       notifyBottomCenter();
       console.log("user updated");
+   
    }
+
    )
    .catch((err) => {
       console.log("err");
