@@ -1,11 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Col, Button, Row, Container, Card,Form } from "react-bootstrap";
+import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
 import logo from "../../images/logo.png";
 import swal from "sweetalert";
-import {  useFormik } from 'formik';
-import * as Yup from 'yup';
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const Login = () => {
   const history = useHistory();
@@ -18,23 +18,23 @@ const Login = () => {
   };
 
   const imgStyle = {
-    width: '220px',
-    height: '200px'
+    width: "220px",
+    height: "200px",
   };
   const formik = useFormik({
     initialValues: {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .max(7, 'Must be 7 characters or less')
-        .required('Required'),
-        password: Yup.string()
-        .max(6, 'Must be 6 characters or less')
-        .required('Required'),
+        .max(7, "Must be 7 characters or less")
+        .required("Required"),
+      password: Yup.string()
+        .max(6, "Must be 6 characters or less")
+        .required("Required"),
     }),
-    onSubmit: values => {
+    onSubmit: (values) => {
       // alert(JSON.stringify(values, null, 2));
       getData();
       const user = {
@@ -42,14 +42,14 @@ const Login = () => {
         password: values.password,
         ip: ip,
       };
-  
+
       console.log(user);
       axios
         .post("http://localhost:3000/login", user)
         .then((res) => {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("connectedUser", res.data.user);
-  
+
           history.push("/dashboard");
         })
         .catch((err) => {
@@ -62,7 +62,8 @@ const Login = () => {
           } else if (err.response.data === "User is banned") {
             swal("Oops", "Your account is banned !", "error");
           } else if (
-            err.response.data.msg === "User is not allowed to login from this IP"
+            err.response.data.msg ===
+            "User is not allowed to login from this IP"
           ) {
             console.log(err.response.data.number);
             // let number = err.respone.data.number;
@@ -84,65 +85,8 @@ const Login = () => {
               });
           }
         });
-
     },
   });
-
-
-  function handleLogin(e) {
-
-    e.preventDefault();
-    await getData();
-    const form = e.target;
-    const user = {
-      username: form.username.value,
-      password: form.password.value,
-      ip: ip,
-    };
-
-    localStorage.setItem("userLogginIn", JSON.stringify(user));
-    await axios
-      .post("http://localhost:3000/login", user)
-      .then((res) => {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("connectedUser", res.data.user);
-
-        history.push("/dashboard");
-      })
-      .catch((err) => {
-        console.log(err);
-        if (
-          err.response.data ===
-          "User is not approved,please wait for an admin to approve your account"
-        ) {
-          swal("Oops", "Your account is not approved yet!", "error");
-        } else if (err.response.data === "User is banned") {
-          swal("Oops", "Your account is banned !", "error");
-        } 
-        else if (
-          err.response.data.msg === "User is not allowed to login from this IP"
-        ) {
-          console.log(err.response.data.number);
-          // let number = err.respone.data.number;
-          console.log("sssssss");
-          console.log(err.response.data);  
-          axios
-            .post("http://localhost:3000/users/twoFactorAuth/send", {
-              number: err.response.data.number,
-            })
-            .then((res) => {
-              swal(
-                "Please verify yourself",
-                "Weve sent you an sms to the number : " +
-                  err.response.data.number,
-                "error"
-              );
-              localStorage.setItem("number", err.response.data.number);
-              history.push("/page-twofactor-auth");
-            });
-        }
-      });
-  }
 
   useEffect(() => {
     axios
@@ -169,37 +113,37 @@ const Login = () => {
               <Card.Body>
                 <div className="mb-3 mt-md-4">
                   <div className="fw-bold mb-2 text-center text-uppercase ">
-                  <img style={imgStyle} src={logo} alt="logo" /> 
-
+                    <img style={imgStyle} src={logo} alt="logo" />
                   </div>
                   <div className="mb-3">
                     <Form noValidate onSubmit={formik.handleSubmit}>
-                      <Form.Group className="mb-3 " >
+                      <Form.Group className="mb-3 ">
                         <Form.Label className="text-center">
                           Username
                         </Form.Label>
-                        <Form.Control  
-                          id= "username"
-                          type="text" 
+                        <Form.Control
+                          id="username"
+                          type="text"
                           name="username"
                           placeholder="Enter username"
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.username}
-                          isValid={formik.touched.username && !formik.errors.username}
-                          isInvalid={formik.touched.username && !!formik.errors.username}
+                          isValid={
+                            formik.touched.username && !formik.errors.username
+                          }
+                          isInvalid={
+                            formik.touched.username && !!formik.errors.username
+                          }
                         />
                         {formik.touched.username && formik.errors.username ? (
-                        <Form.Control.Feedback className="invalid-feedback" >
-                           {formik.errors.username}
-                        </Form.Control.Feedback >
-                        ) : null} 
-                        
+                          <Form.Control.Feedback className="invalid-feedback">
+                            {formik.errors.username}
+                          </Form.Control.Feedback>
+                        ) : null}
                       </Form.Group>
 
-                      <Form.Group
-                        className="mb-3"
-                      >
+                      <Form.Group className="mb-3">
                         <Form.Label>Password</Form.Label>
                         <Form.Control
                           id="password"
@@ -209,14 +153,18 @@ const Login = () => {
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.password}
-                          isValid={formik.touched.password && !formik.errors.password}
-                          isInvalid={formik.touched.password && !!formik.errors.password}
+                          isValid={
+                            formik.touched.password && !formik.errors.password
+                          }
+                          isInvalid={
+                            formik.touched.password && !!formik.errors.password
+                          }
                         />
-                          {formik.touched.password && formik.errors.password ? (
-                              <Form.Control.Feedback className="invalid-feedback" >
-                              {formik.errors.password}
-                           </Form.Control.Feedback >
-                          ) : null} 
+                        {formik.touched.password && formik.errors.password ? (
+                          <Form.Control.Feedback className="invalid-feedback">
+                            {formik.errors.password}
+                          </Form.Control.Feedback>
+                        ) : null}
                       </Form.Group>
 
                       <Form.Group
