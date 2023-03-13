@@ -98,7 +98,7 @@ const BootstrapTable = () => {
                 >
                   New Users{" "}
                 </Badge>
-                <div className="input-group search-area d-lg-inline-flex d-none mr-5">
+                <div className="input-group search-area d-lg-inline-flex d-none mr-5 ">
                   <input
                     type="text"
                     className="form-control"

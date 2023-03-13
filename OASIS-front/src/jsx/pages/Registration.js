@@ -12,7 +12,7 @@ const Register = () => {
   const [ip, setIP] = useState("");
   const imgStyle = {
     width: '220px',
-    height: '130px'
+    height: '120px'
   };
   const getData = async () => {
     const res = await axios.get("https://api.ipify.org/?format=json");
@@ -147,7 +147,7 @@ const Register = () => {
         <Row className="vh-100 d-flex justify-content-center align-items-center">
           <Col md={8} lg={6} xs={12}>
             <Card className="shadow px-4 border border-2 border-primary">
-              <Card.Body>
+              <Card.Body >
                 <div className="mb-3 mt-md-4">
                   <div className="fw-bold mb-2 text-center text-uppercase ">
                     <img
