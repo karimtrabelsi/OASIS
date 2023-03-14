@@ -4,11 +4,13 @@ import App from "./App";
 
 import SimpleReactLightbox from "simple-react-lightbox";
 
+import { QueryClient, QueryClientProvider } from "react-query";
+
 ReactDOM.render(
-   <React.StrictMode>
-      <SimpleReactLightbox>
-         <App />
-      </SimpleReactLightbox>
-   </React.StrictMode>,
-   document.getElementById("root")
+  <React.StrictMode>
+    <SimpleReactLightbox>
+      <App />
+    </SimpleReactLightbox>
+  </React.StrictMode>,
+  document.getElementById("root")
 );

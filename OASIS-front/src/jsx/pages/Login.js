@@ -20,10 +20,8 @@ const Login = () => {
       password: "",
     },
     validationSchema: Yup.object({
-      username: Yup.string()
-        .required("Please enter your username"),
-      password: Yup.string()
-        .required("Please enter your password"),
+      username: Yup.string().required("Please enter your username"),
+      password: Yup.string().required("Please enter your password"),
     }),
     onSubmit: (values) => {
       // alert(JSON.stringify(values, null, 2));
@@ -39,7 +37,8 @@ const Login = () => {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("connectedUser", res.data.user);
 
-          history.push("/dashboard");
+          history.push("");
+          history.go();
         })
         .catch((err) => {
           console.log(err);
@@ -107,12 +106,11 @@ const Login = () => {
                   <div className="mb-3 input_wrap ">
                     <Form noValidate onSubmit={formik.handleSubmit}>
                       <Form.Group className="mb-3  input_wrap ">
-                       
-                        <Form.Control 
+                        <Form.Control
                           id="username"
-                          type="text" required
+                          type="text"
+                          required
                           name="username"
-                          
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.username}
@@ -123,21 +121,19 @@ const Login = () => {
                             formik.touched.username && !!formik.errors.username
                           }
                         />
-                         <Form.Label>
-                          Username
-                        </Form.Label>
+                        <Form.Label>Username</Form.Label>
                         {formik.touched.username && formik.errors.username ? (
                           <Form.Control.Feedback className="invalid-feedback ">
                             {formik.errors.username}
                           </Form.Control.Feedback>
                         ) : null}
-                        
                       </Form.Group>
 
                       <Form.Group className="mb-3 input_wrap">
                         <Form.Control
                           id="password"
-                          type="password" required
+                          type="password"
+                          required
                           name="password"
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
@@ -149,14 +145,13 @@ const Login = () => {
                             formik.touched.password && !!formik.errors.password
                           }
                         />
-                        <Form.Label >Password</Form.Label>
+                        <Form.Label>Password</Form.Label>
 
                         {formik.touched.password && formik.errors.password ? (
                           <Form.Control.Feedback className="invalid-feedback">
                             {formik.errors.password}
                           </Form.Control.Feedback>
                         ) : null}
-
                       </Form.Group>
 
                       <Form.Group
