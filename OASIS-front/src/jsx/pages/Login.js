@@ -9,13 +9,6 @@ import * as Yup from "yup";
 
 const Login = () => {
   const history = useHistory();
-  const [ip, setIP] = useState("");
-
-  const getData = async () => {
-    const res = await axios.get("https://api.ipify.org/?format=json");
-    console.log(res.data);
-    setIP(res.data.ip);
-  };
 
   const imgStyle = {
     width: "220px",
@@ -34,11 +27,9 @@ const Login = () => {
     }),
     onSubmit: (values) => {
       // alert(JSON.stringify(values, null, 2));
-      getData();
       const user = {
         username: values.username,
         password: values.password,
-        ip: ip,
       };
 
       console.log(user);
@@ -96,7 +87,7 @@ const Login = () => {
       .then((res) =>
         res.data.isLoggedIn
           ? history.push("/dashboard")
-          : history.push("/login")
+          : history.push("/page-login")
       )
       .catch((err) => console.log(err));
   }, []);
@@ -181,17 +172,23 @@ const Login = () => {
                     <div className="mt-3">
                       <p className="mb-0  text-center">
                         Forgot Password??{" "}
-                        <a href="{''}" className="text-primary fw-bold">
-                          Reset Password
-                        </a>
+                        <Link
+                          to="/page-reset-password"
+                          className="text-primary fw-bold"
+                        >
+                          Reset password
+                        </Link>
                       </p>
                     </div>
                     <div className="mt-3">
                       <p className="mb-0  text-center">
                         Don't have an account ?{" "}
-                        <a href="{''}" className="text-primary fw-bold">
+                        <Link
+                          to="/page-register"
+                          className="text-primary fw-bold"
+                        >
                           Signup Here !
-                        </a>
+                        </Link>
                       </p>
                     </div>
                   </div>
