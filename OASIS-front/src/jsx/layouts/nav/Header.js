@@ -388,7 +388,7 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                     onClick={() => {
                       localStorage.removeItem("token");
                       localStorage.removeItem("user");
-                      history.push("/page-login");
+                      history.push("/react/page-login");
                     }}
                   >
                     <svg

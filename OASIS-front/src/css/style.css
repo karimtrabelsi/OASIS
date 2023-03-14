@@ -13185,7 +13185,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
         padding-left: 1.25rem;
         padding-right: 1.25rem; }
       [data-sidebar-style="icon-hover"][data-layout="vertical"] .nav-header .brand-logo .logo-abbr {
-        display: block; }
+        display: none; }
       [data-sidebar-style="icon-hover"][data-layout="vertical"] .nav-header .brand-logo .brand-title {
         display: none; }
     [data-sidebar-style="icon-hover"][data-layout="vertical"] .nav-header .nav-control {
@@ -30723,5 +30723,11 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
       input[type="password"]:focus {outline:none;}
       input[type="email"]:focus {outline:none;}
       input[type="number"]:focus {outline:none;}
+
+      @media screen and (min-width: 769px) {
+        .logo-abbr {
+          display: none;
+        }
+      }
 
 /*# sourceMappingURL=style.css.map */

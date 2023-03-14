@@ -123,7 +123,7 @@ const BootstrapTable = () => {
                       <td>{users.email}</td>
                       <td>
                         {users.approved ? (
-                          <Badge variant="success light">Accepted</Badge>
+                          <Badge variant="success light">Member</Badge>
                         ) : (
                           <Badge
                             variant="warning light"
