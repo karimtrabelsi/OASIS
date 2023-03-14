@@ -112,20 +112,18 @@ const Login = () => {
             <Card className="shadow px-4">
               <Card.Body>
                 <div className="mb-3 mt-md-4">
-                  <div className="fw-bold mb-2 text-center text-uppercase ">
+                  <div className="fw-bold mb-2 text-center text-uppercase">
                     <img style={imgStyle} src={logo} alt="logo" />
                   </div>
-                  <div className="mb-3">
+                  <div className="mb-3 input_wrap ">
                     <Form noValidate onSubmit={formik.handleSubmit}>
-                      <Form.Group className="mb-3 ">
-                        <Form.Label className="text-center">
-                          Username
-                        </Form.Label>
-                        <Form.Control
+                      <Form.Group className="mb-3  input_wrap ">
+                       
+                        <Form.Control 
                           id="username"
-                          type="text"
+                          type="text" required
                           name="username"
-                          placeholder="Enter username"
+                          
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.username}
@@ -137,18 +135,19 @@ const Login = () => {
                           }
                         />
                         {formik.touched.username && formik.errors.username ? (
-                          <Form.Control.Feedback className="invalid-feedback">
+                          <Form.Control.Feedback className="invalid-feedback ">
                             {formik.errors.username}
                           </Form.Control.Feedback>
                         ) : null}
+                         <Form.Label>
+                          Username
+                        </Form.Label>
                       </Form.Group>
 
-                      <Form.Group className="mb-3">
-                        <Form.Label>Password</Form.Label>
+                      <Form.Group className="mb-3 input_wrap">
                         <Form.Control
                           id="password"
-                          type="password"
-                          placeholder="Password"
+                          type="password" required
                           name="password"
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
@@ -165,6 +164,8 @@ const Login = () => {
                             {formik.errors.password}
                           </Form.Control.Feedback>
                         ) : null}
+                        <Form.Label >Password</Form.Label>
+
                       </Form.Group>
 
                       <Form.Group

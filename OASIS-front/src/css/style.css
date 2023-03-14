@@ -2159,7 +2159,7 @@ textarea.form-control {
   width: 100%;
   margin-top: 0.25rem;
   font-size: 80%;
-  color: #FF285C; }
+  color: #f70202; }
 
 .invalid-tooltip {
   position: absolute;
@@ -30650,5 +30650,78 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
     background-color: transparent; }
     [data-theme-version="dark"] .footer .copyright p {
       color: #fff; }
+
+      input[type="text"] {
+        border: 2px solid #E54927;
+        border-radius: 5px;
+        height: 47px;
+        width: 100%;
+        color: #000000;
+        font-size: 14px;
+        padding-left: 20px;
+        box-shadow: none;  
+      }
+      input[type="password"] {
+        border: 2px solid #E54927;
+        border-radius: 5px;
+        height: 47px;
+        width: 100%;
+        color: #000000;
+        font-size: 14px;
+        padding-left: 20px;
+        box-shadow: none;  
+      }
+      input[type="email"] {
+        border: 2px solid #E54927;
+        border-radius: 5px;
+        height: 47px;
+        width: 100%;
+        color: #000000;
+        font-size: 14px;
+        padding-left: 20px;
+        box-shadow: none;  
+      }
+      input[type="number"] {
+        border: 2px solid #E54927;
+        border-radius: 5px;
+        height: 47px;
+        width: 100%;
+        color: #000000;
+        font-size: 14px;
+        padding-left: 20px;
+        box-shadow: none;  
+      }
+
+      input:focus + label, input:valid + label{
+        font-size: 12px;
+        color: #e39b96;
+        top: -5px;
+        left:10px;
+        background: #ffffff;
+        padding: 0px 5px 0px 5px;
+      }
+
+      .input_wrap {width:100%; height:auto; position:relative;
+      }
+
+      .input_wrap label {
+        font-family:arial;
+        font-size:16px;
+        color: #e39b96;
+        padding: 14px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition:0.2s ease all; 
+        -moz-transition:0.2s ease all; 
+        -webkit-transition:0.2s ease all;
+        pointer-events: none;
+       
+      
+      }
+      input[type="text"]:focus {outline:0;}
+      input[type="password"]:focus {outline:none;}
+      input[type="email"]:focus {outline:none;}
+      input[type="number"]:focus {outline:none;}
 
 /*# sourceMappingURL=style.css.map */
