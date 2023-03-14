@@ -8,11 +8,12 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import profile from "../../../images/profile/17.jpg";
 import avatar from "../../../images/avatar/1.jpg";
 import { Button } from "react-bootstrap";
+import AppProfile from "../../components/AppsMenu/AppProfile/AppProfile";
 
 const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
   const history = useHistory();
   const user = JSON.parse(localStorage.getItem("connectedUser"));
- // const profilePic = {require(src="../../../images/users/" + user.image)};
+  // const profilePic = {require(src="../../../images/users/" + user.image)};
 
   var path = window.location.pathname.split("/");
   var name = path[path.length - 1].split("-");
@@ -328,8 +329,7 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                 </div>
               </li>
               <li className="nav-item dropdown header-profile">
-                <Link
-                  to="#"
+                <a
                   role="button"
                   data-toggle="dropdown"
                   className={`nav-item dropdown header-profile ${
@@ -337,14 +337,21 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                   }`}
                   onClick={() => onProfile()}
                 >
-                  <img src={require("../../../images/users/" + user.image)} width={20} alt />
-                </Link>
+                  <img
+                    src={require("../../../images/users/" + user.image)}
+                    width={20}
+                  />
+                </a>
                 <div
                   className={`dropdown-menu dropdown-menu-right ${
                     toggle === "profile" ? "show" : ""
                   }`}
                 >
-                  <Link to="/app-profile" className="dropdown-item ai-icon">
+                  <Link
+                    to="/app-profile"
+                    key={"profile"}
+                    className="dropdown-item ai-icon"
+                  >
                     <svg
                       id="icon-user1"
                       xmlns="http://www.w3.org/2000/svg"
@@ -382,13 +389,17 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                     </svg>
                     <span className="ml-2">Inbox </span>
                   </Link>
-                  <Button
-                    to="/page-login"
+                  <Link
                     className="dropdown-item ai-icon"
+                    key={"logout"}
                     onClick={() => {
-                      localStorage.removeItem("token");
-                      localStorage.removeItem("user");
+
+                      // localStorage.removeItem("token");
+                      // localStorage.removeItem("connectedUser");
+                      localStorage.clear();
                       history.push("/page-login");
+                      history.go(0);
+
                     }}
                   >
                     <svg
@@ -409,7 +420,7 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                       <line x1={21} y1={12} x2={9} y2={12} />
                     </svg>
                     <span className="ml-2">Logout </span>
-                  </Button>
+                  </Link>
                 </div>
               </li>
             </ul>
