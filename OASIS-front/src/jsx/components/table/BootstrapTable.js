@@ -50,7 +50,7 @@ const BootstrapTable = () => {
     bannedUsers && setUsers(users.filter((user) => user.banned === true));
     newUsers && setUsers(users.filter((user) => user.approved === false));
     search && setUsers(users.filter((user) => user.username.includes(search)));
-  }, []);
+  }, [users]);
 
   const handleApprove = (id) => {
     axios.post("http://localhost:3000/users/approve/" + id).catch((err) => {
@@ -161,8 +161,15 @@ const BootstrapTable = () => {
                       <td>{user.email}</td>
                       <td>
                         <span
-                          className={`badge badge-${user.role === "SuperAdmin" ? "danger" : user.role === "Member" ? "info" : user.role === "President" ? "dark" : "warning"
-                            }`}
+                          className={`badge badge-${
+                            user.role === "SuperAdmin"
+                              ? "danger"
+                              : user.role === "Member"
+                              ? "info"
+                              : user.role === "President"
+                              ? "dark"
+                              : "warning"
+                          }`}
                         >
                           {user.role}
                         </span>
@@ -184,7 +191,7 @@ const BootstrapTable = () => {
                                 axios
                                   .post(
                                     "http://localhost:3000/users/approve/" +
-                                    user._id
+                                      user._id
                                   )
                                   .then((res) => {
                                     // console.log(res)
@@ -235,7 +242,7 @@ const BootstrapTable = () => {
                                     axios
                                       .post(
                                         "http://localhost:3000/users/ban/" +
-                                        user._id
+                                          user._id
                                       )
                                       .then((res) => {
                                         // console.log(res)
