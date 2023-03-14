@@ -55,6 +55,7 @@ import UiTypography from "./components/bootstrap/Typography";
 
 /// App
 import AppProfile from "./components/AppsMenu/AppProfile/AppProfile";
+import FrontProfile from "./components/AppsMenu/AppProfile/FrontProfile";
 import Compose from "./components/AppsMenu/Email/Compose/Compose";
 import Inbox from "./components/AppsMenu/Email/Inbox/Inbox";
 import Read from "./components/AppsMenu/Email/Read/Read";
@@ -127,6 +128,7 @@ const Markup = () => {
     { url: "ui-grid", component: UiGrid },
     /// Apps
     { url: "app-profile", component: AppProfile },
+    { url: "front-profile", component: FrontProfile },
     { url: "email-compose", component: Compose },
     { url: "email-inbox", component: Inbox },
     { url: "email-read", component: Read },
@@ -190,14 +192,15 @@ const Markup = () => {
   path = path.split("/");
   path = path[path.length - 1];
   let pagePath = path.split("-").includes("page");
+  let frontPath = path.split("-").includes("front");
 
   return (
     <>
       <Router basename="/react">
         <div id="main-wrapper" className="show">
-          {!pagePath && <Nav />}
+          {!pagePath && !frontPath && <Nav />}
 
-          <div className={!pagePath && "content-body"}>
+          <div className={!pagePath && !frontPath && "content-body"}>
             <div className="container-fluid">
               <Switch>
                 {routes.map((data, i) => (
@@ -226,6 +229,7 @@ const Markup = () => {
             </div>
           </div>
         </div>
+
 
       </Router>
     </>
