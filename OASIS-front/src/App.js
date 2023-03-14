@@ -20,7 +20,6 @@ const App = ({ width }) => {
 
   return (
     <Fragment>
-      {/* <Auth /> */}
       <Markup />
     </Fragment>
   );

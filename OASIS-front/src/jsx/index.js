@@ -188,9 +188,9 @@ const Markup = () => {
     { url: "widget-basic", component: Widget },
 
     // { url: "page-register", component: Registration },
-    // { url: "page-reset-password", component: ResetPassword },
-    // { url: "page-new-password", component: NewPassword },
-    // { url: "page-twofactor-auth", component: TwoFactorAuth },
+    { url: "page-reset-password", component: ResetPassword },
+    { url: "page-new-password", component: NewPassword },
+    { url: "page-twofactor-auth", component: TwoFactorAuth },
     // { url: "page-login", component: Login },
     { url: "*", component: Error404 },
 
@@ -217,10 +217,10 @@ const Markup = () => {
   const history = useHistory();
 
   const [loggedIn, setLoggedIn] = useState(false);
-  const cond = !pagePath && loggedIn && !frontPath;
+  let frontPath = path.split("-").includes("front");
 
-  async function fn() {
-    await axios
+  useEffect(() => {
+    return axios
       .get("http://localhost:3000/getUsername", {
         headers: {
           Authorization: localStorage.getItem("token"),
@@ -228,11 +228,10 @@ const Markup = () => {
       })
       .then((res) => res.data.isLoggedIn && setLoggedIn(true))
       .catch((err) => console.log("not"));
-  }
-  useEffect(() => {
-    fn();
-    console.log(loggedIn);
+    //console.log(loggedIn);
   }, []);
+
+  const cond = !pagePath && loggedIn && !frontPath;
 
   function PrivateRoute({ component: Component, ...rest }) {
     console.log("logged in ? ", loggedIn);
@@ -254,37 +253,23 @@ const Markup = () => {
     );
   }
 
-  let frontPath = path.split("-").includes("front");
-
   return (
     <>
-      <Router basename="/react">
-        <div id="main-wrapper" className="show">
-
-          {cond && <Nav />}
-
-          <div className={cond && "content-body"}>
-
+      {!loggedIn ? (
+        <Router basename="/">
+          <div id="main-wrapper" className="show">
+            {/* {cond && <Nav />} */}
+            {/* <div className={cond && "content-body"}> */}
             <div className="container-fluid">
               <Switch>
-                {
-                  authRoutes.map((data, i) => (
-                    <Route
-                      key={i}
-                      exact
-                      path={`/${data.url}`}
-                      component={data.component}
-                    />
-                  ))
-                  // : authRoutes.map((data, i) => (
-                  //     <Route
-                  //       key={i}
-                  //       exact
-                  //       path={`/${data.url}`}
-                  //       component={data.component}
-                  //     />
-                  //   ))
-                }
+                {authRoutes.map((data, i) => (
+                  <Route
+                    key={i}
+                    exact
+                    path={`/${data.url}`}
+                    component={data.component}
+                  />
+                ))}
                 {routes.map((data, i) => (
                   <PrivateRoute
                     key={i}
@@ -293,27 +278,52 @@ const Markup = () => {
                     component={data.component}
                   />
                 ))}
-                {/* <PrivateRoute path="/*" exact component={Home} /> */}
               </Switch>
             </div>
           </div>
 
-          {cond && <Footer />}
-        </div>
-      </Router>
+          {/* {cond && <Footer />} */}
+          {/* </div> */}
+        </Router>
+      ) : (
+        <>
+          <Router basename="/">
+            <div id="main-wrapper" className="show">
+              {/* {cond && <Nav />} */}
+              <Nav />
 
-      <Router name="/front-profile">
-      <div id="main-wrapper" className="show">
-          {!pagePath && <Navf />}
+              {/* <div className={cond && "content-body"}> */}
+              <div className="content-body">
+                <div className="container-fluid">
+                  <Switch>
+                    {routes.map((data, i) => (
+                      <Route
+                        key={i}
+                        exact
+                        path={`/${data.url}`}
+                        component={data.component}
+                      />
+                    ))}
+                  </Switch>
+                </div>
+              </div>
 
-          <div className={!pagePath && "content-body"}>
-            <div className="container-fluid">
-              
+              {/* {cond && <Footer />} */}
+              <Footer />
             </div>
-          </div>
-        </div>
+          </Router>
 
-      </Router>
+          <Router name="/front-profile">
+            <div id="main-wrapper" className="show">
+              {!pagePath && <Navf />}
+
+              <div className={!pagePath && "content-body"}>
+                <div className="container-fluid"></div>
+              </div>
+            </div>
+          </Router>
+        </>
+      )}
     </>
   );
 };

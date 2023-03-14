@@ -15,7 +15,7 @@ function verifyJWt(req, res, next) {
     });
   } else {
     res
-      .status(200)
+      .status(401)
       .send({ auth: false, message: "No token provided", isLoggedIn: false });
   }
 }

@@ -89,7 +89,7 @@ const BootstrapTable = () => {
                 >
                   Banned Users{" "}
                 </Badge>
-                    <Badge
+                <Badge
                   variant={
                     newUsers ? "dark badge-xl dark" : "light badge-xl light"
                   }
