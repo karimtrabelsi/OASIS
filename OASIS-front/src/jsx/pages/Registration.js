@@ -129,12 +129,13 @@ const Register = () => {
                             !!formik.touched.cin && !!formik.errors.cin
                           }
                         />
+                        <Form.Label className="text-center">Cin</Form.Label>
                         {formik.touched.cin && formik.errors.cin ? (
                           <Form.Control.Feedback className="invalid-feedback">
                             {formik.errors.cin}
                           </Form.Control.Feedback>
                         ) : null}
-                        <Form.Label className="text-center">Cin</Form.Label>
+                        
 
                       </Form.Group>
                       <Form.Group className="mb-3 input_wrap " hasValidation>
@@ -154,15 +155,16 @@ const Register = () => {
                                 !!formik.errors.firstName
                               }
                             />
+                              <Form.Label className="text-center md-8">
+                              First Name
+                            </Form.Label>
                             {formik.touched.firstName &&
                             formik.errors.firstName ? (
                               <Form.Control.Feedback className="invalid-feedback">
                                 {formik.errors.firstName}
                               </Form.Control.Feedback>
                             ) : null}
-                             <Form.Label className="text-center ">
-                              First Name
-                            </Form.Label>
+                           
                           </Col>
                           <Col>
                           
@@ -179,15 +181,16 @@ const Register = () => {
                                 !!formik.errors.lastName
                               }
                             />
+                               <Form.Label className="text-center ">
+                              Last Name
+                            </Form.Label>
                             {formik.touched.lastName &&
                             formik.errors.lastName ? (
                               <Form.Control.Feedback className="invalid-feedback">
                                 {formik.errors.lastName}
                               </Form.Control.Feedback>
                             ) : null}
-                              <Form.Label className="text-center ">
-                              Last Name
-                            </Form.Label>
+                           
                           </Col>
                         </Row>
                       </Form.Group>
@@ -208,15 +211,16 @@ const Register = () => {
                                 !!formik.errors.username
                               }
                             />
+                             <Form.Label className="text-center">
+                              Username
+                            </Form.Label>
                             {formik.touched.username &&
                             formik.errors.username ? (
                               <Form.Control.Feedback className="invalid-feedback">
                                 {formik.errors.username}
                               </Form.Control.Feedback>
                             ) : null}
-                            <Form.Label className="text-center">
-                              Username
-                            </Form.Label>
+                           
                           </Col>
                           <Col>
                             
@@ -232,14 +236,15 @@ const Register = () => {
                                 !!formik.touched.email && !!formik.errors.email
                               }
                             />
+                                <Form.Label className="text-center ">
+                              Email
+                            </Form.Label>
                             {formik.touched.email && formik.errors.email ? (
                               <Form.Control.Feedback className="invalid-feedback">
                                 {formik.errors.email}
                               </Form.Control.Feedback>
                             ) : null}
-                            <Form.Label className="text-center ">
-                              Email
-                            </Form.Label>
+                        
                           </Col>
                         </Row>
                       </Form.Group>
@@ -260,15 +265,16 @@ const Register = () => {
                                 !!formik.errors.phoneNumber
                               }
                             />
+                                    <Form.Label className="text-center">
+                              Phone Number
+                            </Form.Label>
                             {formik.touched.phoneNumber &&
                             formik.errors.phoneNumber ? (
                               <Form.Control.Feedback className="invalid-feedback">
                                 {formik.errors.phoneNumber}
                               </Form.Control.Feedback>
                             ) : null}
-                                 <Form.Label className="text-center">
-                              Phone Number
-                            </Form.Label>
+                         
                           </Col>
                           <Col>
                         
@@ -284,14 +290,15 @@ const Register = () => {
                                 !!formik.touched.club && !!formik.errors.club
                               }
                             />
+                                   <Form.Label className="text-center ">
+                              Club
+                            </Form.Label>
                             {formik.touched.club && formik.errors.club ? (
                               <Form.Control.Feedback className="invalid-feedback">
                                 {formik.errors.club}
                               </Form.Control.Feedback>
                             ) : null}
-                                <Form.Label className="text-center ">
-                              Club
-                            </Form.Label>
+                         
                           </Col>
                         </Row>
                       </Form.Group>
@@ -324,13 +331,14 @@ const Register = () => {
                                 !!formik.errors.password
                               }
                             />
+                            <Form.Label>Password</Form.Label>
                             {formik.touched.password &&
                             formik.errors.password ? (
                               <Form.Control.Feedback className="invalid-feedback">
                                 {formik.errors.password}
                               </Form.Control.Feedback>
                             ) : null}
-                            <Form.Label>Password</Form.Label>
+                            
                           </Col>
                         </Row>
                       </Form.Group>

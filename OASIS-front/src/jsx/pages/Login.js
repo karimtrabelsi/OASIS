@@ -134,14 +134,15 @@ const Login = () => {
                             formik.touched.username && !!formik.errors.username
                           }
                         />
+                         <Form.Label>
+                          Username
+                        </Form.Label>
                         {formik.touched.username && formik.errors.username ? (
                           <Form.Control.Feedback className="invalid-feedback ">
                             {formik.errors.username}
                           </Form.Control.Feedback>
                         ) : null}
-                         <Form.Label>
-                          Username
-                        </Form.Label>
+                        
                       </Form.Group>
 
                       <Form.Group className="mb-3 input_wrap">
@@ -159,12 +160,13 @@ const Login = () => {
                             formik.touched.password && !!formik.errors.password
                           }
                         />
+                        <Form.Label >Password</Form.Label>
+
                         {formik.touched.password && formik.errors.password ? (
                           <Form.Control.Feedback className="invalid-feedback">
                             {formik.errors.password}
                           </Form.Control.Feedback>
                         ) : null}
-                        <Form.Label >Password</Form.Label>
 
                       </Form.Group>
 

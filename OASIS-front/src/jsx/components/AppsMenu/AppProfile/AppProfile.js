@@ -296,7 +296,7 @@ function handleRegister(e) {
                                                 className="form-control"
                                                 defaultValue="Email"
                                                 placeholder="Email"
-                                                name="Email"
+                                                name="email"
                                              />
                                           </div>
                                        </div>
@@ -1021,6 +1021,7 @@ function handleRegister(e) {
 <br></br>
                                           <div class="input_wrap">
                                           <input type="text" required 
+                                          name="email"
                                            defaultValue={user.email}
                                            />
                                           <label> Email</label>
