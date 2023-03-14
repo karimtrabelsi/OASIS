@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 /// React router dom
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useHistory,
+  Redirect,
+  Link,
+  withRouter,
+} from "react-router-dom";
 
 /// Css
 import "./index.css";
@@ -96,6 +104,9 @@ import MainSweetAlert from "./components/PluginsMenu/Sweet Alert/SweetAlert";
 import Toastr from "./components/PluginsMenu/Toastr/Toastr";
 import JqvMap from "./components/PluginsMenu/Jqv Map/JqvMap";
 import RechartJs from "./components/charts/rechart";
+import axios from "axios";
+import Header from "./layouts/nav/Header";
+import Register from "./pages/Registration";
 
 const Markup = () => {
   const routes = [
@@ -173,11 +184,13 @@ const Markup = () => {
     /// pages
     { url: "widget-basic", component: Widget },
 
-    { url: "page-register", component: Registration },
-    { url: "page-reset-password", component: ResetPassword },
-    { url: "page-new-password", component: NewPassword },
-    { url: "page-twofactor-auth", component: TwoFactorAuth },
-    { url: "page-login", component: Login },
+    // { url: "page-register", component: Registration },
+    // { url: "page-reset-password", component: ResetPassword },
+    // { url: "page-new-password", component: NewPassword },
+    // { url: "page-twofactor-auth", component: TwoFactorAuth },
+    // { url: "page-login", component: Login },
+    { url: "*", component: Error404 },
+
     { url: "page-error-400", component: Error400 },
     { url: "page-error-403", component: Error403 },
     { url: "page-error-404", component: Error404 },
@@ -185,33 +198,99 @@ const Markup = () => {
     { url: "page-error-503", component: Error503 },
   ];
 
+  const authRoutes = [
+    { url: "page-register", component: Registration },
+    { url: "page-reset-password", component: ResetPassword },
+    { url: "page-new-password", component: NewPassword },
+    { url: "page-twofactor-auth", component: TwoFactorAuth },
+    { url: "page-login", component: Login },
+    // { url: "*", component: Login },
+  ];
   let path = window.location.pathname;
   path = path.split("/");
   path = path[path.length - 1];
   let pagePath = path.split("-").includes("page");
+  const history = useHistory();
+
+  const [loggedIn, setLoggedIn] = useState(false);
+  const cond = !pagePath && loggedIn;
+
+  async function fn() {
+    await axios
+      .get("http://localhost:3000/getUsername", {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((res) => res.data.isLoggedIn && setLoggedIn(true))
+      .catch((err) => console.log("not"));
+  }
+  useEffect(() => {
+    fn();
+    console.log(loggedIn);
+  }, []);
+
+  function PrivateRoute({ component: Component, ...rest }) {
+    console.log("logged in ? ", loggedIn);
+    return (
+      <Route
+        {...rest}
+        render={(props) =>
+          loggedIn ? (
+            <Component {...props} />
+          ) : (
+            <Redirect
+              to={{
+                pathname: "/page-login",
+              }}
+            />
+          )
+        }
+      />
+    );
+  }
 
   return (
     <>
       <Router basename="/react">
         <div id="main-wrapper" className="show">
-          {!pagePath && <Nav />}
+          {cond && <Nav />}
 
-          <div className={!pagePath && "content-body"}>
+          <div className={cond && "content-body"}>
             <div className="container-fluid">
               <Switch>
+                {
+                  authRoutes.map((data, i) => (
+                    <Route
+                      key={i}
+                      exact
+                      path={`/${data.url}`}
+                      component={data.component}
+                    />
+                  ))
+                  // : authRoutes.map((data, i) => (
+                  //     <Route
+                  //       key={i}
+                  //       exact
+                  //       path={`/${data.url}`}
+                  //       component={data.component}
+                  //     />
+                  //   ))
+                }
                 {routes.map((data, i) => (
-                  <Route
+                  <PrivateRoute
                     key={i}
                     exact
                     path={`/${data.url}`}
                     component={data.component}
                   />
                 ))}
+                {/* <PrivateRoute path="/*" exact component={Home} /> */}
               </Switch>
             </div>
           </div>
 
-          {!pagePath && <Footer />}
+          {cond && <Footer />}
         </div>
       </Router>
     </>

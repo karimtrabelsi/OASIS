@@ -83,7 +83,7 @@ const BootstrapTable = () => {
                   variant={
                     bannedUsers ? "dark badge-xl dark" : "light badge-xl light"
                   }
-                  className="col-lg-2"
+                  className=""
                   onClick={() => setBannedUsers(!bannedUsers)}
                 >
                   Banned Users{" "}
@@ -93,12 +93,12 @@ const BootstrapTable = () => {
                   variant={
                     newUsers ? "dark badge-xl dark" : "light badge-xl light"
                   }
-                  className="col-lg-2"
+                  className=""
                   onClick={() => setNewUsers(!newUsers)}
                 >
                   New Users{" "}
                 </Badge>
-                <div className="input-group search-area d-lg-inline-flex d-none mr-5">
+                <div className="input-group search-area d-lg-inline-flex d-none ">
                   <input
                     type="text"
                     className="form-control"

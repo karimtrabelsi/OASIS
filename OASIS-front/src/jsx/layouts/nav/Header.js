@@ -12,7 +12,7 @@ import { Button } from "react-bootstrap";
 const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
   const history = useHistory();
   const user = JSON.parse(localStorage.getItem("connectedUser"));
- // const profilePic = {require(src="../../../images/users/" + user.image)};
+  // const profilePic = {require(src="../../../images/users/" + user.image)};
 
   var path = window.location.pathname.split("/");
   var name = path[path.length - 1].split("-");
@@ -337,7 +337,11 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                   }`}
                   onClick={() => onProfile()}
                 >
-                  <img src={require("../../../images/users/" + user.image)} width={20} alt />
+                  <img
+                    src={require("../../../images/users/" + user.image)}
+                    width={20}
+                    alt
+                  />
                 </Link>
                 <div
                   className={`dropdown-menu dropdown-menu-right ${
@@ -387,7 +391,7 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                     className="dropdown-item ai-icon"
                     onClick={() => {
                       localStorage.removeItem("token");
-                      localStorage.removeItem("user");
+                      localStorage.removeItem("connectedUser");
                       history.push("/page-login");
                     }}
                   >

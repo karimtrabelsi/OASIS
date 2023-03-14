@@ -353,9 +353,9 @@ const Register = () => {
                     <div className="mt-3">
                       <p className="mb-0  text-center">
                         Already have an account??{" "}
-                        <a href="{''}" className="text-primary fw-bold">
-                          Sign In
-                        </a>
+                        <Link to="/page-login" className="text-primary fw-bold">
+                          Sign in
+                        </Link>
                       </p>
                     </div>
                   </div>
