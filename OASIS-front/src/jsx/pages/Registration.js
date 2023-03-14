@@ -64,8 +64,6 @@ const Register = () => {
         .required("Required"),
       role: Yup.string()
         .required("Required"),
-      image: Yup.string()
-      .required("Required"),
     }),
     onSubmit: (values) => {
       console.log("aaaaaaaaaaaaaaaaa");
@@ -314,11 +312,21 @@ const Register = () => {
                               as="input"
                               type="text" required
                               name="role"
-                              
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values.role}
+                              isInvalid={
+                                !!formik.touched.role && !!formik.errors.role
+                              }
                             />
                             <Form.Label className="text-center ">
                               Your Role
                             </Form.Label>
+                            {formik.touched.role && formik.errors.role ? (
+                              <Form.Control.Feedback className="invalid-feedback">
+                                {formik.errors.role}
+                              </Form.Control.Feedback>
+                            ) : null}
                           </Col>
                           <Col>
                             
