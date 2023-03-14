@@ -38,6 +38,7 @@ const BootstrapTable = () => {
   const [newUsers, setNewUsers] = useState(false);
   const [search, setSearch] = useState("");
   useEffect(() => {
+    const userr = JSON.parse(localStorage.getItem("connectedUser"));
     axios
       .get("http://localhost:3000/users")
       .then((res) => {
@@ -78,7 +79,7 @@ const BootstrapTable = () => {
               <Card.Title>Users</Card.Title>
             </Card.Header>
             <Card.Body>
-              <div className="">
+              <div className="d-flex justify-content-between ">
                 <Badge
                   variant={
                     bannedUsers ? "dark badge-xl dark" : "light badge-xl light"
@@ -88,8 +89,7 @@ const BootstrapTable = () => {
                 >
                   Banned Users{" "}
                 </Badge>
-
-                <Badge
+                    <Badge
                   variant={
                     newUsers ? "dark badge-xl dark" : "light badge-xl light"
                   }

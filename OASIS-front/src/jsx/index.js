@@ -17,6 +17,7 @@ import "./chart.css";
 
 /// Layout
 import Nav from "./layouts/nav";
+import Navf from "./layouts/navf";
 import Footer from "./layouts/Footer";
 
 /// Pages
@@ -62,6 +63,7 @@ import UiTypography from "./components/bootstrap/Typography";
 
 /// App
 import AppProfile from "./components/AppsMenu/AppProfile/AppProfile";
+import FrontProfile from "./components/AppsMenu/AppProfile/FrontProfile";
 import Compose from "./components/AppsMenu/Email/Compose/Compose";
 import Inbox from "./components/AppsMenu/Email/Inbox/Inbox";
 import Read from "./components/AppsMenu/Email/Read/Read";
@@ -137,6 +139,7 @@ const Markup = () => {
     { url: "ui-grid", component: UiGrid },
     /// Apps
     { url: "app-profile", component: AppProfile },
+    { url: "front-profile", component: FrontProfile },
     { url: "email-compose", component: Compose },
     { url: "email-inbox", component: Inbox },
     { url: "email-read", component: Read },
@@ -210,10 +213,11 @@ const Markup = () => {
   path = path.split("/");
   path = path[path.length - 1];
   let pagePath = path.split("-").includes("page");
+
   const history = useHistory();
 
   const [loggedIn, setLoggedIn] = useState(false);
-  const cond = !pagePath && loggedIn;
+  const cond = !pagePath && loggedIn && !frontPath;
 
   async function fn() {
     await axios
@@ -250,13 +254,17 @@ const Markup = () => {
     );
   }
 
+  let frontPath = path.split("-").includes("front");
+
   return (
     <>
       <Router basename="/react">
         <div id="main-wrapper" className="show">
+
           {cond && <Nav />}
 
           <div className={cond && "content-body"}>
+
             <div className="container-fluid">
               <Switch>
                 {
@@ -292,6 +300,19 @@ const Markup = () => {
 
           {cond && <Footer />}
         </div>
+      </Router>
+
+      <Router name="/front-profile">
+      <div id="main-wrapper" className="show">
+          {!pagePath && <Navf />}
+
+          <div className={!pagePath && "content-body"}>
+            <div className="container-fluid">
+              
+            </div>
+          </div>
+        </div>
+
       </Router>
     </>
   );

@@ -3,7 +3,7 @@
 /////////////////////////////
 .form-control.is-valid {
     border-color: $success !important;
-    border-right: 0px !important;
+     border-right: 0px !important;
     &:focus {
         box-shadow: none;
     }
@@ -11,7 +11,7 @@
 
 .form-control.is-warning {
     border-color: $warning !important;
-    border-right: 0px !important;
+     border-right: 0px !important;
     &:focus {
         box-shadow: none;
     }
@@ -19,7 +19,7 @@
 
 .form-control.is-invalid {
     border-color: $danger !important;
-    border-right: 0px !important;
+     border-right: 0px !important;
     &:focus {
         box-shadow: none;
     }

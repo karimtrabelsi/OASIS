@@ -296,7 +296,7 @@ function handleRegister(e) {
                                                 className="form-control"
                                                 defaultValue="Email"
                                                 placeholder="Email"
-                                                name="email"
+                                                name="Email"
                                              />
                                           </div>
                                        </div>
@@ -954,90 +954,84 @@ function handleRegister(e) {
                                        : ""
                                  }`}
                               >
-                                 <div className="pt-3  ">
-                                 <h4 className="text-primary d-flex justify-content-center" >
-                                                 Account Setting
+                                 <div className="pt-3">
+                                    <div className="settings-form">
+                                       <h4 className="text-primary">
+                                          Account Setting
                                        </h4>
-
-                                    <div className="settings-form  ">
-                                     
                                        <form
                                           onSubmit={(e) => handleRegister(e)}
                                        >
-                                          <br></br>
-                                          <div className="input_wrap w-full">
+                                          <div className="form-row">
+                                             <div className="form-group col-md-6">
+                                                <label>Email</label>
+                                                <input
+                                                   type="email"
+                                                   placeholder="Email"
+                                                   defaultValue={user.email}
+                                                   className="form-control"
+                                                   name="email"
+                                                />
+                                             </div>
+                                          </div>
+                                          <div className="form-group">
+                                             <label>First Name</label>
                                              <input
-                                                type="text" required
-                                                
+                                                type="text"
+                                                placeholder="first name"
                                                 defaultValue={user.firstname}
-                                                className="form-control w-full"
+                                                className="form-control"
                                                 name="firstname"
                                              />
-                                             <label>First Name</label>
                                           </div>
-                                          <br></br>
-                                          <div className="input_wrap">
+                                          <div className="form-group">
+                                             <label>Last Name</label>
                                              <input
-                                                type="text" required
-                                               
+                                                type="text"
+                                                placeholder="last name"
                                                 defaultValue={user.lastname}
                                                 className="form-control"
                                                 name="lastname"
                                              />
-                                             <label>Last Name</label>
                                           </div>
-                                          <br></br>
-                                          <div className="input_wrap">
+                                          <div className="form-group">
+                                             <label>Username
+                                             </label>
                                              <input
-                                                type="text" required
+                                                type="text"
+                                                placeholder="username"
                                                 defaultValue={user.username}
                                                 className="form-control"
                                                 name="username"
                                              />
-                                              <label>Username
-                                             </label>
                                           </div>
-                                          <br></br>
-                                          <div className="input_wrap">
-                                             
+                                          <div className="form-group">
+                                             <label>Phone Number</label>
                                              <input
-                                                type="text" required
+                                                type="text"
+                                                placeholder="phone number"
                                                 defaultValue={user.phonenumber}
                                                 className="form-control"
                                                 name = "phonenumber"
                                              />
-                                             <label>Phone Number</label>
                                           </div>
-<br></br>
-                                          <div className="input_wrap">
-                                             <input 
-                                                type="text" required
+                                          <div className="form-group">
+                                             <label>Club</label>
+                                             <input
+                                                type="text"
+                                                placeholder="club"
                                                 defaultValue={user.club}
                                                 className="form-control"
                                                 name = "club"
                                              />
-                                             <label>Club</label>
                                           </div>
-<br></br>
-                                          <div class="input_wrap">
-                                          <input type="text" required 
-                                          name="email"
-                                           defaultValue={user.email}
-                                           />
-                                          <label> Email</label>
-
-                                           </div>
-<br></br>
-      
-                                          <div className="input_wrap">
+                                          <div className="custom-file">
                           <input
                             type="file"
                             className="custom-file-input"
                             name="image"
                           />
-<br></br>
-
-                          <label className="custom-file-label " name="image">
+                          <label className="custom-file-label" name="image">
                             Profile Picture
                           </label>
                           <br></br>

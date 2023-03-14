@@ -11,6 +11,7 @@ const approve = require("./routes/user/approveUser");
 const passwordReset = require("./routes/user/resetPassword");
 const twoFactorAuth = require("./routes/user/twoFactorAuth");
 const verifyJWt = require("./middleware/verifyJWT");
+const getUser = require("./routes/user/getUser");
 const app = express();
 app.use(cors());
 require("dotenv").config();
@@ -73,3 +74,5 @@ app.use("/users/twoFactorAuth", twoFactorAuth);
 app.get("/getUsername", verifyJWt, (req, res) => {
   res.json({ isLoggedIn: true, username: req.user.username });
 });
+
+app.get("/users/:id",  getUser);
