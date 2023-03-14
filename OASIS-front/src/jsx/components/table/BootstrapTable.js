@@ -47,11 +47,10 @@ const BootstrapTable = () => {
       .catch((err) => {
         console.log(err);
       });
-
     bannedUsers && setUsers(users.filter((user) => user.banned === true));
     newUsers && setUsers(users.filter((user) => user.approved === false));
     search && setUsers(users.filter((user) => user.username.includes(search)));
-  }, [users]);
+  }, []);
 
   const handleApprove = (id) => {
     axios.post("http://localhost:3000/users/approve/" + id).catch((err) => {
@@ -139,6 +138,9 @@ const BootstrapTable = () => {
                       <strong>EMAIL</strong>
                     </th>
                     <th>
+                      <strong>ROLE</strong>
+                    </th>
+                    <th>
                       <strong>STATUS</strong>
                     </th>
                     <th></th>
@@ -158,6 +160,14 @@ const BootstrapTable = () => {
                       <td>{user.username}</td>
                       <td>{user.email}</td>
                       <td>
+                        <span
+                          className={`badge badge-${user.role === "SuperAdmin" ? "danger" : user.role === "Member" ? "info" : user.role === "President" ? "dark" : "warning"
+                            }`}
+                        >
+                          {user.role}
+                        </span>
+                      </td>
+                      <td>
                         {user.approved ? (
                           <Badge variant="success light">Approved</Badge>
                         ) : (
@@ -174,7 +184,7 @@ const BootstrapTable = () => {
                                 axios
                                   .post(
                                     "http://localhost:3000/users/approve/" +
-                                      user._id
+                                    user._id
                                   )
                                   .then((res) => {
                                     // console.log(res)
@@ -225,7 +235,7 @@ const BootstrapTable = () => {
                                     axios
                                       .post(
                                         "http://localhost:3000/users/ban/" +
-                                          user._id
+                                        user._id
                                       )
                                       .then((res) => {
                                         // console.log(res)

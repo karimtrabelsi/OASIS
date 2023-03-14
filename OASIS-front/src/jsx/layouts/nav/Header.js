@@ -393,11 +393,13 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                     className="dropdown-item ai-icon"
                     key={"logout"}
                     onClick={() => {
+
                       // localStorage.removeItem("token");
                       // localStorage.removeItem("connectedUser");
                       localStorage.clear();
                       history.push("/page-login");
                       history.go(0);
+
                     }}
                   >
                     <svg
