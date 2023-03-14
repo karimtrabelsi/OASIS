@@ -36,6 +36,7 @@ const Register = () => {
       password: "",
       // phonenumber:'',
       club: "",
+      role:"",
       image: "",
     },
     validationSchema: Yup.object({
@@ -61,6 +62,10 @@ const Register = () => {
         .required("Required"),
       club: Yup.string()
         .required("Required"),
+      role: Yup.string()
+        .required("Required"),
+      image: Yup.string()
+      .required("Required"),
     }),
     onSubmit: (values) => {
       console.log("aaaaaaaaaaaaaaaaa");
