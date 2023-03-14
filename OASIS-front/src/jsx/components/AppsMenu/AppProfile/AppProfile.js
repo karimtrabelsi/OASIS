@@ -29,11 +29,12 @@ const AppProfile = () => {
    
 // user update 
 const [user, setuser] = useState([]);
+const userr = JSON.parse(localStorage.getItem("connectedUser"));
 
 const notifyBottomCenter = () => {
    toast.warn("✅ User Updated !", {
       position: "bottom-center",
-      autoClose: 5000,
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -106,7 +107,9 @@ function handleRegister(e) {
                            <img
                               className="img-fluid rounded-circle"
                               alt="profile"
-                              src={("../../../../images/users/" + user.image)} key={user.image} 
+                              width={100}
+                              height={100}
+                              src={require("../../../../images/users/" + userr.image)} key={userr.image} 
                               />
                    
                         </div>
