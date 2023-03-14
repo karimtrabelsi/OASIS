@@ -9,6 +9,7 @@ import "./chart.css";
 
 /// Layout
 import Nav from "./layouts/nav";
+import Navf from "./layouts/navf";
 import Footer from "./layouts/Footer";
 
 /// Pages
@@ -213,6 +214,19 @@ const Markup = () => {
 
           {!pagePath && <Footer />}
         </div>
+      </Router>
+
+      <Router name="/front-profile">
+      <div id="main-wrapper" className="show">
+          {!pagePath && <Navf />}
+
+          <div className={!pagePath && "content-body"}>
+            <div className="container-fluid">
+              
+            </div>
+          </div>
+        </div>
+
       </Router>
     </>
   );
