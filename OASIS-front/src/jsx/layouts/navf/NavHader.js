@@ -9,13 +9,14 @@ import logoText from "../../../images/logo-text.png";
 
 const NavHader = () => {
    const [toggle, setToggle] = useState(false);
+   const [showLogo, setShowLogo] = useState([]);
    
    return (
       <div className="nav-header">
          <Link to="/" className="brand-logo" >
          <img className="logo-abbr" src={logo} alt=""/> 
             {/* <img className="logo-compact" src={logoText} alt="" /> */}
-            <img className="brand-title" src={logoText} alt="" />
+            {showLogo && <img className="brand-title" src={logoText} alt="" />}
          </Link>
 
          {/* <div className="nav-control" onClick={() => setToggle(!toggle)}>

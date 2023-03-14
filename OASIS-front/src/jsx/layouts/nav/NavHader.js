@@ -9,16 +9,22 @@ import logoText from "../../../images/logo-text.png";
 
 const NavHader = () => {
    const [toggle, setToggle] = useState(false);
+   const [showLogo, setShowLogo] = useState(true);
+
+  const handleButtonClick = () => {
+    setShowLogo(!showLogo);
+  }
    
    return (
       <div className="nav-header">
          <Link to="/" className="brand-logo">
             <img className="logo-abbr" src={logo} alt=""/> 
             {/* <img className="logo-compact" src={logoText} alt="" /> */}
-            <img className="brand-title" src={logoText} alt="" />
+            {showLogo && <img className="brand-title" src={logoText} alt="" />}
          </Link>
 
-         <div className="nav-control" onClick={() => setToggle(!toggle)}>
+
+         <div className="nav-control" onClick={() => setToggle(!toggle) && handleButtonClick()}>
             <div className={`hamburger ${toggle ? "is-active" : ""}`}>
                <span className="line"></span>
                <span className="line"></span>
