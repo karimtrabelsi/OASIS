@@ -28,11 +28,9 @@ const Login = () => {
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .max(7, "Must be 7 characters or less")
-        .required("Required"),
+        .required("Please enter your username"),
       password: Yup.string()
-        .max(6, "Must be 6 characters or less")
-        .required("Required"),
+        .required("Please enter your password"),
     }),
     onSubmit: (values) => {
       // alert(JSON.stringify(values, null, 2));
