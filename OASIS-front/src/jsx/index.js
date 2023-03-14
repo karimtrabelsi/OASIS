@@ -9,7 +9,6 @@ import "./chart.css";
 
 /// Layout
 import Nav from "./layouts/nav";
-import Navf from "./layouts/navf";
 import Footer from "./layouts/Footer";
 
 /// Pages
@@ -55,7 +54,6 @@ import UiTypography from "./components/bootstrap/Typography";
 
 /// App
 import AppProfile from "./components/AppsMenu/AppProfile/AppProfile";
-import FrontProfile from "./components/AppsMenu/AppProfile/FrontProfile";
 import Compose from "./components/AppsMenu/Email/Compose/Compose";
 import Inbox from "./components/AppsMenu/Email/Inbox/Inbox";
 import Read from "./components/AppsMenu/Email/Read/Read";
@@ -128,7 +126,6 @@ const Markup = () => {
     { url: "ui-grid", component: UiGrid },
     /// Apps
     { url: "app-profile", component: AppProfile },
-    { url: "front-profile", component: FrontProfile },
     { url: "email-compose", component: Compose },
     { url: "email-inbox", component: Inbox },
     { url: "email-read", component: Read },
@@ -192,15 +189,14 @@ const Markup = () => {
   path = path.split("/");
   path = path[path.length - 1];
   let pagePath = path.split("-").includes("page");
-  let frontPath = path.split("-").includes("front");
 
   return (
     <>
       <Router basename="/react">
         <div id="main-wrapper" className="show">
-          {!pagePath && !frontPath &&  <Nav />}
+          {!pagePath && <Nav />}
 
-          <div className={!pagePath && !frontPath && "content-body"}>
+          <div className={!pagePath && "content-body"}>
             <div className="container-fluid">
               <Switch>
                 {routes.map((data, i) => (
@@ -217,19 +213,6 @@ const Markup = () => {
 
           {!pagePath && <Footer />}
         </div>
-      </Router>
-
-      <Router name="/front-profile">
-      <div id="main-wrapper" className="show">
-          {!pagePath && <Navf />}
-
-          <div className={!pagePath && "content-body"}>
-            <div className="container-fluid">
-              
-            </div>
-          </div>
-        </div>
-
       </Router>
     </>
   );
