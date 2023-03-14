@@ -21,7 +21,9 @@ const Register = () => {
   };
 
   const history = useHistory();
-
+// min 5 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit.
+  const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
+  const emailRules = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/ ;
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const formik = useFormik({
@@ -41,26 +43,23 @@ const Register = () => {
         .max(8, "Must be 8 characters or less")
         .required("Required"),
       firstName: Yup.string()
-        .max(8, "Must be 8 characters or less")
         .required("Required"),
       lastName: Yup.string()
-        .max(8, "Must be 8 characters or less")
         .required("Required"),
       username: Yup.string()
         .max(7, "Must be 7 characters or less")
         .required("Required"),
       email: Yup.string()
-        .max(20, "Must be 20 characters or less")
-        .required("Required"),
+        .matches( emailRules,"Please enter a valid email")
+        .required("Required "),
       password: Yup.string()
-        .max(4, "Must be 4 characters or less")
-        .required("Required"),
+      .matches(passwordRules, { message: "Please create a stronger password" })
+      .required("Password is required"),
       phoneNumber: Yup.string()
         .matches(phoneRegExp, "Phone number is not valid")
         .max(8, "Must be 8 characters or less")
         .required("Required"),
       club: Yup.string()
-        .max(4, "Must be 4 characters or less")
         .required("Required"),
     }),
     onSubmit: (values) => {
