@@ -51,6 +51,10 @@ const Login = () => {
             swal("Oops", "Your account is not approved yet!", "error");
           } else if (err.response.data === "User is banned") {
             swal("Oops", "Your account is banned !", "error");
+          } else if (err.response.data === "Invalid Username or Password") {
+            swal("Oops", "Invalid Username or Password !", "error");
+          } else if (err.response.data === "User not found") {
+            swal("Oops", "User not found !", "error");
           } else if (
             err.response.data.msg ===
             "User is not allowed to login from this IP"
