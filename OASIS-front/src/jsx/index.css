@@ -572,7 +572,7 @@ rect#chart_ChartBorder {
    height: 40px;
    cursor: pointer;
 }
-.calendar__day self:hover:not(&--disabled) {
+.calendar__day self:hover:not(disabled) {
    background: #aab6fe;
    cursor: pointer;
 }

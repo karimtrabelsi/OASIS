@@ -445,7 +445,10 @@ class SideBar extends Component {
                   </Link>
                   <ul aria-expanded="false">
                     <li>
-                      <Link to="/app-profile">Error 400</Link>
+                      <Link to="/app-profile">Profile</Link>
+                    </li>
+                    <li>
+                      <Link to="/front-profile">Front Profile</Link>
                     </li>
                     <li>
                       <Link
@@ -459,9 +462,6 @@ class SideBar extends Component {
                       >
                         Logout
                       </Link>
-                    </li>
-                    <li>
-                      <Link to="/page-error-404">Error 404</Link>
                     </li>
                     <li>
                       <Link to="/page-error-500">Error 500</Link>
