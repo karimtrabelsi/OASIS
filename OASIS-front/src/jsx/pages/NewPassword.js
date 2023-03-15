@@ -13,7 +13,7 @@ const NewPassword = () => {
     const id = searchParams.get("id");
     const token = searchParams.get("token");
     axios
-      .post("http://localhost:3000/users/password-reset/" + id + "/" + token, {
+      .post("http://localhost:3000/password-reset/" + id + "/" + token, {
         password: password,
       })
       .then((res) => {
