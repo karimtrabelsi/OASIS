@@ -6,7 +6,7 @@ const ResetPassword = () => {
       e.preventDefault();
      const form = e.target;
      const   email = form.email.value;
-    axios.post("http://localhost:3000/users/password-reset",  {email : email}).then((res) => {
+    axios.post("http://localhost:3000/password-reset",  {email : email}).then((res) => {
     
       console.log(res);    
     } ).catch((err) => {
