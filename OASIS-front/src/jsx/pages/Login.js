@@ -36,9 +36,11 @@ const Login = () => {
         .then((res) => {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("connectedUser", res.data.user);
-
-          history.push("");
-          history.go();
+          console.log(res.data.user);
+          JSON.parse(res.data.user).role === "SuperAdmin"
+            ? history.push("")
+            : history.push("/front-profile");
+          // history.go(0);
         })
         .catch((err) => {
           console.log(err);

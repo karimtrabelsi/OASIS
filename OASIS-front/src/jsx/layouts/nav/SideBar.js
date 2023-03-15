@@ -18,7 +18,7 @@ class MM extends Component {
     this.mm = new MetisMenu(this.$el);
   }
   componentWillUnmount() {
-    this.mm("dispose");
+    //  this.mm("dispose");
   }
   render() {
     return (
@@ -461,7 +461,7 @@ class SideBar extends Component {
                       </Link>
                     </li>
                     <li>
-                      <Link to="/page-error-404">Error 404</Link>
+                      <Link to="/front-profile">Error 404</Link>
                     </li>
                     <li>
                       <Link to="/page-error-500">Error 500</Link>

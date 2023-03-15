@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useCallback } from "react";
 import PageTitle from "../../layouts/PageTitle";
 import swal from "sweetalert";
 import swalMessage from "@sweetalert/with-react";
@@ -37,16 +37,15 @@ const BootstrapTable = () => {
   const [bannedUsers, setBannedUsers] = useState(false);
   const [newUsers, setNewUsers] = useState(false);
   const [search, setSearch] = useState("");
+  const fetchData = useCallback(async () => {
+    const response = await axios.get("http://localhost:3000/users");
+    setUsers(response.data);
+  }, []);
   useEffect(() => {
     const userr = JSON.parse(localStorage.getItem("connectedUser"));
-    axios
-      .get("http://localhost:3000/users")
-      .then((res) => {
-        setUsers(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+
+    fetchData();
+
     bannedUsers && setUsers(users.filter((user) => user.banned === true));
     newUsers && setUsers(users.filter((user) => user.approved === false));
     search && setUsers(users.filter((user) => user.username.includes(search)));
