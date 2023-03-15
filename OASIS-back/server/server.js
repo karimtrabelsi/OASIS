@@ -67,7 +67,7 @@ app.post("/users/ban/:id", ban);
 
 app.post("/users/approve/:id", approve);
 
-app.use("/users/password-reset", passwordReset);
+app.use("/password-reset", passwordReset);
 
 app.use("/users/twoFactorAuth", twoFactorAuth);
 
