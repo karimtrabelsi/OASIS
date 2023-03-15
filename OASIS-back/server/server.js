@@ -61,7 +61,7 @@ app.post("/login", login);
 
 app.get("/users", getusers);
 
-app.post("/users/:id",upload.single("image"), update);
+app.post("/users/:id", upload.single("image"), update);
 
 app.post("/users/ban/:id", ban);
 
@@ -75,4 +75,4 @@ app.get("/getUsername", verifyJWt, (req, res) => {
   res.json({ isLoggedIn: true, username: req.user.username });
 });
 
-app.get("/users/:id",  getUser);
+app.get("/users/:id", getUser);
