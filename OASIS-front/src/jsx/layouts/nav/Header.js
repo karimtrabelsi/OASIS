@@ -348,7 +348,7 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                   }`}
                 >
                   <Link
-                    to="/app-profile"
+                    to="/front-profile"
                     key={"profile"}
                     className="dropdown-item ai-icon"
                   >
@@ -393,13 +393,10 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                     className="dropdown-item ai-icon"
                     key={"logout"}
                     onClick={() => {
-
                       // localStorage.removeItem("token");
                       // localStorage.removeItem("connectedUser");
                       localStorage.clear();
                       history.push("/page-login");
-                      history.go(0);
-
                     }}
                   >
                     <svg

@@ -37,7 +37,6 @@ const BootstrapTable = () => {
   const [search, setSearch] = useState("");
   const userr = JSON.parse(localStorage.getItem("connectedUser"));
   useEffect(() => {
-    
     axios
       .get("http://localhost:3000/users")
       .then((res) => {
@@ -60,8 +59,6 @@ const BootstrapTable = () => {
             </Card.Header>
             <Card.Body>
               <div className="d-flex justify-content-between ">
-               
-               
                 <div className="input-group search-area d-lg-inline-flex d-none mr-5">
                   <input
                     type="text"
@@ -113,115 +110,120 @@ const BootstrapTable = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.filter((user) => user.club == userr.club).map((users, index) => (
-                    <tr key={users._id}>
-                      <td>
-                        <strong>{users._id}</strong>
-                      </td>
-                      <td>{users.firstname + " " + users.lastname}</td>
-                      <td>{users.username}</td>
-                      <td>{users.email}</td>
-                      <td>
-                        {users.approved ? (
-                          <Badge variant="success light">Member</Badge>
-                        ) : (
-                          <Badge
-                            variant="warning light"
-                            onClick={() =>
-                              swal({
-                                title: "Are you sure?",
-                                text: "Once Approved, user will be able to login !",
-                                icon: "warning",
-                                buttons: true,
-                                dangerMode: true,
-                              }).then(() =>
-                                axios
-                                  .post(
-                                    "http://localhost:3000/users/approve/" +
-                                    users._id
-                                  )
-                                  .then((res) => {
-                                    // console.log(res)
-                                    if ((res.respone = 200)) {
-                                      swal("User has been approved!", {
-                                        icon: "success",
-                                      });
+                  {users
+                    .filter(
+                      (user) =>
+                        user.club == userr.club && user.role !== "SuperAdmin"
+                    )
+                    .map((users, index) => (
+                      <tr key={users._id}>
+                        <td>
+                          <strong>{users._id}</strong>
+                        </td>
+                        <td>{users.firstname + " " + users.lastname}</td>
+                        <td>{users.username}</td>
+                        <td>{users.email}</td>
+                        <td>
+                          {users.approved ? (
+                            <Badge variant="success light">Member</Badge>
+                          ) : (
+                            <Badge
+                              variant="warning light"
+                              onClick={() =>
+                                swal({
+                                  title: "Are you sure?",
+                                  text: "Once Approved, user will be able to login !",
+                                  icon: "warning",
+                                  buttons: true,
+                                  dangerMode: true,
+                                }).then(() =>
+                                  axios
+                                    .post(
+                                      "http://localhost:3000/users/approve/" +
+                                        users._id
+                                    )
+                                    .then((res) => {
+                                      // console.log(res)
+                                      if ((res.respone = 200)) {
+                                        swal("User has been approved!", {
+                                          icon: "success",
+                                        });
+                                      } else {
+                                        swal("Nothing changed !");
+                                      }
+                                    })
+                                )
+                              }
+                            >
+                              Pending
+                            </Badge>
+                          )}
+                        </td>
+                        <td>
+                          {users.banned && (
+                            <Badge variant="warning light">Excluded</Badge>
+                          )}
+                        </td>
+                        <td>{users.club}</td>
+                        <td>
+                          <Dropdown>
+                            <Dropdown.Toggle
+                              variant="success"
+                              className="light sharp icon-false"
+                            >
+                              {svg1}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                              <Dropdown.Item
+                                as={Button}
+                                // onClick={() => handleBan(user._id)}
+                                onClick={() =>
+                                  swal({
+                                    title: "Are you sure?",
+                                    text: users.banned
+                                      ? "Unban User"
+                                      : "Once Banned, user will not be able to login !",
+                                    icon: "warning",
+                                    buttons: true,
+                                    dangerMode: true,
+                                  }).then((willBan) => {
+                                    if (willBan) {
+                                      axios
+                                        .post(
+                                          "http://localhost:3000/users/ban/" +
+                                            users._id
+                                        )
+                                        .then((res) => {
+                                          // console.log(res)
+                                          if ((res.respone = 200)) {
+                                            swal(
+                                              users.banned
+                                                ? "User Unbanned!"
+                                                : "User Banned !",
+                                              {
+                                                icon: "success",
+                                              }
+                                            );
+                                          } else {
+                                            swal("Connection Error!");
+                                          }
+                                        })
+                                        .catch((err) => {
+                                          console.log(err);
+                                        });
                                     } else {
                                       swal("Nothing changed !");
                                     }
                                   })
-                              )
-                            }
-                          >
-                            Pending
-                          </Badge>
-                        )}
-                      </td>
-                      <td>
-                        {users.banned && (
-                          <Badge variant="warning light">Excluded</Badge>
-                        )}
-                      </td>
-                      <td>{users.club}</td>
-                      <td>
-                        <Dropdown>
-                          <Dropdown.Toggle
-                            variant="success"
-                            className="light sharp icon-false"
-                          >
-                            {svg1}
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu>
-                            <Dropdown.Item
-                              as={Button}
-                              // onClick={() => handleBan(user._id)}
-                              onClick={() =>
-                                swal({
-                                  title: "Are you sure?",
-                                  text: users.banned
-                                    ? "Unban User"
-                                    : "Once Banned, user will not be able to login !",
-                                  icon: "warning",
-                                  buttons: true,
-                                  dangerMode: true,
-                                }).then((willBan) => {
-                                  if (willBan) {
-                                    axios
-                                      .post(
-                                        "http://localhost:3000/users/ban/" +
-                                        users._id
-                                      )
-                                      .then((res) => {
-                                        // console.log(res)
-                                        if ((res.respone = 200)) {
-                                          swal(
-                                            users.banned
-                                              ? "User Unbanned!"
-                                              : "User Banned !",
-                                            {
-                                              icon: "success",
-                                            }
-                                          );
-                                        } else {
-                                          swal("Connection Error!");
-                                        }
-                                      })
-                                      .catch((err) => {
-                                        console.log(err);
-                                      });
-                                  } else {
-                                    swal("Nothing changed !");
-                                  }
-                                })
-                              }
-                            >
-                              {users.banned ? "Unban" : "Ban"}
-                            </Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </td>
-                    </tr>
-                  ))}
+                                }
+                              >
+                                {users.banned ? "Unban" : "Ban"}
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </Table>
             </Card.Body>

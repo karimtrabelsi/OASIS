@@ -10,9 +10,7 @@ module.exports = async (req, res) => {
     console.log(dbUser);
     if (!dbUser) {
       res.status(400).send("User not found");
-    }
-
-    if (!dbUser.approved) {
+    } else if (!dbUser.approved) {
       res
         .status(400)
         .send(
@@ -25,30 +23,34 @@ module.exports = async (req, res) => {
         msg: "User is not allowed to login from this IP",
         number: dbUser.phonenumber,
       });
-    }
-
-    bcrypt.compare(userLogginIn.password, dbUser.password).then((isCorrect) => {
-      if (isCorrect) {
-        const payload = {
-          id: dbUser._id,
-          username: dbUser.username,
-        };
-        jwt.sign(
-          payload,
-          process.env.JWT_SECRET,
-          { expiresIn: 3600 },
-          (err, token) => {
-            if (err) {
-              res.status(500).send("Error signing token");
-            }
-            res
-              .status(200)
-              .send({ token: "Bearer " + token, user: JSON.stringify(dbUser) });
+    } else
+      bcrypt
+        .compare(userLogginIn.password, dbUser.password)
+        .then((isCorrect) => {
+          if (isCorrect) {
+            const payload = {
+              id: dbUser._id,
+              username: dbUser.username,
+            };
+            jwt.sign(
+              payload,
+              process.env.JWT_SECRET,
+              { expiresIn: 3600 },
+              (err, token) => {
+                if (err) {
+                  res.status(500).send("Error signing token");
+                }
+                res
+                  .status(200)
+                  .send({
+                    token: "Bearer " + token,
+                    user: JSON.stringify(dbUser),
+                  });
+              }
+            );
+          } else {
+            res.status(400).send("Invalid Username or Password");
           }
-        );
-      } else {
-        res.status(400).send("Invalid Username or Password");
-      }
-    });
+        });
   });
 };
