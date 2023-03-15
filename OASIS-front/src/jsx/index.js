@@ -220,15 +220,11 @@ const Markup = () => {
   let frontPath = path.split("-").includes("front");
 
   useEffect(() => {
-    return axios
-      .get("http://localhost:3000/getUsername", {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-      })
-      .then((res) => res.data.isLoggedIn && setLoggedIn(true))
-      .catch((err) => console.log("not"));
-    //console.log(loggedIn);
+    const token = localStorage.getItem("token");
+    if (token) {
+      setLoggedIn(true);
+    }
+    console.log("🙂");
   }, []);
 
   const cond = !pagePath && loggedIn && !frontPath;
@@ -255,8 +251,8 @@ const Markup = () => {
 
   return (
     <>
-      {!loggedIn ? (
-        <Router basename="/">
+    {!loggedIn ? (
+        <Router basename="/react">
           <div id="main-wrapper" className="show">
             {/* {cond && <Nav />} */}
             {/* <div className={cond && "content-body"}> */}
@@ -286,45 +282,40 @@ const Markup = () => {
           {/* </div> */}
         </Router>
       ) : (
-        <>
-          <Router basename="/">
-            <div id="main-wrapper" className="show">
-              {/* {cond && <Nav />} */}
-              <Nav />
+      <Router basename="/react">
+        <div id="main-wrapper" className="show">
+          {!pagePath && !frontPath &&  <Nav />}
 
-              {/* <div className={cond && "content-body"}> */}
-              <div className="content-body">
-                <div className="container-fluid">
-                  <Switch>
-                    {routes.map((data, i) => (
-                      <Route
-                        key={i}
-                        exact
-                        path={`/${data.url}`}
-                        component={data.component}
-                      />
-                    ))}
-                  </Switch>
-                </div>
-              </div>
-
-              {/* {cond && <Footer />} */}
-              <Footer />
+          <div className={!pagePath && !frontPath && "content-body"}>
+            <div className="container-fluid">
+              <Switch>
+                {routes.map((data, i) => (
+                  <Route
+                    key={i}
+                    exact
+                    path={`/${data.url}`}
+                    component={data.component}
+                  />
+                ))}
+              </Switch>
             </div>
-          </Router>
+          </div>
 
-          <Router name="/front-profile">
-            <div id="main-wrapper" className="show">
-              {!pagePath && <Navf />}
+          {!pagePath && <Footer />}
+        </div>
+      <Route name="/front-profile">
+      <div id="main-wrapper" className="show">
+          {!pagePath && <Navf />}
 
-              <div className={!pagePath && "content-body"}>
-                <div className="container-fluid"></div>
-              </div>
+          <div className={!pagePath && "content-body"}>
+            <div className="container-fluid">
+              
             </div>
-          </Router>
-        </>
+          </div>
+        </div>
+      </Route>
+      </Router>
       )}
-
     </>
   );
 };
