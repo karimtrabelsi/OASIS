@@ -130,22 +130,14 @@ const Markup = () => {
   const [role, setRole] = useState("");
   let frontPath = path.split("-").includes("app");
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   const user = JSON.parse(localStorage.getItem("connectedUser"));
-  //   if (token) {
-  //     setLoggedIn(true);
-  //     setRole(user.role);
-  //     console.log(user.role);
-  //   }
-  //   console.log("🙂");
-  //   console.log(loggedIn);
-  //   return () => {
-  //     console.log("😢");
-  //   };
-  // }, []);
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("connectedUser"));
+    if (user) {
+      setRole(user.role);
+    }
+  }, [pagePath]);
 
-  const cond = !pagePath;
+  const cond = !pagePath && role !== "Member";
 
   const routes = [
     /// Deshborad
@@ -222,10 +214,10 @@ const Markup = () => {
     /// pages
     { url: "widget-basic", component: Widget },
 
-    { url: "page-register", component: Registration },
-    { url: "page-reset-password", component: ResetPassword },
-    { url: "page-new-password", component: NewPassword },
-    { url: "page-twofactor-auth", component: TwoFactorAuth },
+    // { url: "page-register", component: Registration },
+    // { url: "page-reset-password", component: ResetPassword },
+    // { url: "page-new-password", component: NewPassword },
+    // { url: "page-twofactor-auth", component: TwoFactorAuth },
     // { url: "page-login", component: Login },
     // { url: "*", component: Error404 },
 
@@ -302,6 +294,7 @@ const Markup = () => {
     <Router basename="/react">
       <div id="main-wrapper" className="show">
         {cond && <Nav />}
+        {role === "Member" && <Navf />}
         <div className={cond && "content-body"}>
           <div className="container-fluid">
             <Switch>
@@ -311,10 +304,14 @@ const Markup = () => {
                 </PrivateRoute>
               ))}
               <Route path="/page-login" component={Login} />
+              <Route path="/page-register" component={Register} />
+              <Route path="/page-reset-password" component={ResetPassword} />
+              <Route path="/page-new-password" component={NewPassword} />
+              <Route path="/page-twofactor-auth" component={TwoFactorAuth} />
 
               <Route path="/table-bootstrap-basic" component={BootstrapTable} />
               <Route path="/table-datatable-basic" component={DataTable} />
-              <Route path="/app-profile" component={AppProfile} />
+              <Route path="/front-profile" component={AppProfile} />
             </Switch>
           </div>
         </div>

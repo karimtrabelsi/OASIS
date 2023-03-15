@@ -75,6 +75,7 @@ const Login = () => {
                   "error"
                 );
                 localStorage.setItem("number", err.response.data.number);
+                localStorage.setItem("userLogginIn", JSON.stringify(user));
                 history.push("/page-twofactor-auth");
               });
           }

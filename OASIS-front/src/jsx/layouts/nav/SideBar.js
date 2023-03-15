@@ -32,11 +32,20 @@ class MM extends Component {
 }
 
 class SideBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: JSON.parse(localStorage.getItem("connecedUser")),
+    };
+  }
   /// Open menu
   componentDidMount() {
     // sidebar open/close
     var btn = document.querySelector(".nav-control");
     var aaa = document.querySelector("#main-wrapper");
+    const user = JSON.parse(localStorage.getItem("connecedUser"));
+
+    console.log(this.state);
 
     function toggleFunc() {
       return aaa.classList.toggle("menu-toggle");
@@ -424,60 +433,6 @@ class SideBar extends Component {
                 </li>
                 <li>
                   <Link to="table-datatable-basic">Members Management</Link>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <Link className="has-arrow ai-icon" to="#" aria-expanded="false">
-                <i className="flaticon-381-layer-1"></i>
-                <span className="nav-text">Pages</span>
-              </Link>
-              <ul aria-expanded="false">
-                <li>
-                  <Link to="/page-register">Register</Link>
-                </li>
-                <li>
-                  <Link to="/page-login">Login</Link>
-                </li>
-                <li>
-                  <Link className="has-arrow" to="#" aria-expanded="false">
-                    Error
-                  </Link>
-                  <ul aria-expanded="false">
-                    <li>
-                      <Link to="/app-profile">Error 400</Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="/page-login"
-                        className="dropdown-item ai-icon"
-                        onClick={() => {
-                          // localStorage.removeItem("token");
-                          // localStorage.removeItem("connectedUser");
-                          localStorage.clear();
-                        }}
-                      >
-                        Logout
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/front-profile">Error 404</Link>
-                    </li>
-                    <li>
-                      <Link to="/page-error-500">Error 500</Link>
-                    </li>
-                    <li>
-                      <Link to="/page-error-503">Error 503</Link>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <Link to="/page-reset-password">Reset Password</Link>
-                </li>
-                <li>
-                  <Link to="/page-twofactor-screen">
-                    Two Factor Authincation
-                  </Link>
                 </li>
               </ul>
             </li>
