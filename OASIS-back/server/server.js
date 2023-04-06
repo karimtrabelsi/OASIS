@@ -61,13 +61,13 @@ app.post("/login", login);
 
 app.get("/users", getusers);
 
-app.post("/users/:id",upload.single("image"), update);
+app.post("/users/:id", upload.single("image"), update);
 
 app.post("/users/ban/:id", ban);
 
 app.post("/users/approve/:id", approve);
 
-app.use("/users/password-reset", passwordReset);
+app.use("/password-reset", passwordReset);
 
 app.use("/users/twoFactorAuth", twoFactorAuth);
 
@@ -75,4 +75,4 @@ app.get("/getUsername", verifyJWt, (req, res) => {
   res.json({ isLoggedIn: true, username: req.user.username });
 });
 
-app.get("/users/:id",  getUser);
+app.get("/users/:id", getUser);

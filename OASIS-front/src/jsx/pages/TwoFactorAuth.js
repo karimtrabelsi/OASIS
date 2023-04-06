@@ -28,14 +28,13 @@ const TwoFactorAuth = () => {
               localStorage.setItem("token", res.data.token);
               localStorage.setItem("connectedUser", res.data.user);
 
-              history.push("/dashboard");
+              history.push("/");
             });
-          history.push("/dashboard");
         }
       })
       .catch((err) => {
         console.log(phonenumber);
-    console.log(code);
+        console.log(code);
         console.log(err);
       });
   };

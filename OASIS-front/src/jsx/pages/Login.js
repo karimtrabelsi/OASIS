@@ -36,9 +36,11 @@ const Login = () => {
         .then((res) => {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("connectedUser", res.data.user);
-
-          history.push("");
-          history.go();
+          console.log(res.data.user);
+          JSON.parse(res.data.user).role === "SuperAdmin"
+            ? history.push("")
+            : history.push("/front-profile");
+          // history.go(0);
         })
         .catch((err) => {
           console.log(err);
@@ -49,6 +51,10 @@ const Login = () => {
             swal("Oops", "Your account is not approved yet!", "error");
           } else if (err.response.data === "User is banned") {
             swal("Oops", "Your account is banned !", "error");
+          } else if (err.response.data === "Invalid Username or Password") {
+            swal("Oops", "Invalid Username or Password !", "error");
+          } else if (err.response.data === "User not found") {
+            swal("Oops", "User not found !", "error");
           } else if (
             err.response.data.msg ===
             "User is not allowed to login from this IP"
@@ -69,6 +75,7 @@ const Login = () => {
                   "error"
                 );
                 localStorage.setItem("number", err.response.data.number);
+                localStorage.setItem("userLogginIn", JSON.stringify(user));
                 history.push("/page-twofactor-auth");
               });
           }
