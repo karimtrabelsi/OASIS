@@ -442,7 +442,6 @@ class SideBar extends Component {
             <p>
               <strong>Oasis Dashboard</strong> ©All Rights Reserved
             </p>
-            <p>by DexignZone</p>
           </div>
         </PerfectScrollbar>
       </div>
