@@ -348,7 +348,7 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                   }`}
                 >
                   <Link
-                    to="/app-profile"
+                    to="/front-profile"
                     className="dropdown-item ai-icon"
                   >
                     <svg

@@ -19,6 +19,21 @@ require("dotenv").config();
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(bodyParser.json(), urlencodedParser);
 
+const { NlpManager } = require("node-nlp");
+console.log("Starting Chatbot ...");
+const manager = new NlpManager({ languages: ["en"] });
+manager.load();
+app.use(express.json());
+app.post('/chat', async (req, res) => {
+  const { message } = req.body;
+  const response = await manager.process('en', message);
+  res.json({ message: response.answer });
+});
+
+app.listen(3002, () => {
+  console.log('Chatbot API is running on port 3002');
+});
+
 mongoose
   .connect(process.env.DBURI, {
     useNewUrlParser: true,
