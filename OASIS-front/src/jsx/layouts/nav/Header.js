@@ -13,6 +13,8 @@ import AppProfile from "../../components/AppsMenu/AppProfile/AppProfile";
 const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
   const history = useHistory();
   const user = JSON.parse(localStorage.getItem("connectedUser"));
+  const isAuthenticated = localStorage.getItem("connectedUser") ? true : false;
+
   // const profilePic = {require(src="../../../images/users/" + user.image)};
 
   var path = window.location.pathname.split("/");
@@ -337,10 +339,14 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                   }`}
                   onClick={() => onProfile()}
                 >
-                  <img
-                    src={require("../../../images/users/" + user.image)}
-                    width={20}
-                  />
+                  {isAuthenticated ? (
+                    <img
+                      src={require("../../../images/users/" + user.image)}
+                      width={20}
+                    />
+                  ) : (
+                    <img src={require("../../../images/1.jpg")} width={20} />
+                  )}
                 </a>
                 <div
                   className={`dropdown-menu dropdown-menu-right ${
