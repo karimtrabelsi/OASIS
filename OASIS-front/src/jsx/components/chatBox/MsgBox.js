@@ -16,7 +16,7 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
    const [message, setMessage] = useState([]);
    const [newResponse, setNewResponse] = useState();
    const [newMessage, setNewMessage] = useState();
-   const [chat,setChat] = useState([{}])
+   const [chat, setChat] = useState([])
    useEffect(() => {
       axios.get("http://localhost:3000/users").then((res) => {
          setuser(res.data);
@@ -31,7 +31,8 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
       setNewResponse(res.data.message);
       setResponse([...response, res.data.message]);
       setMessage([...message, m]);
-      setChat([...chat,{message:newMessage,response:newResponse}])
+      //setChat([...chat,{message:newMessage,response:newResponse}])
+      setChat(prevChat => [...prevChat, { message: m, response: res.data.message }]);
       console.log(chat);
    };
 
@@ -80,7 +81,7 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
                </svg>
             </a>
             <div>
-               <h6 className="mb-1">Chat with Khelesh</h6>
+               <h6 className="mb-1">Chat with Our ChatBot</h6>
                <p className="mb-0 text-success">Online</p>
             </div>
             <div className="dropdown">
@@ -150,35 +151,35 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
                } `}
             id="DZ_W_Contacts_Body3"
          >
-            {chat.map((c) => (
-               <>
-            <div className="d-flex justify-content-end mb-4">
-               <div className="msg_cotainer_send">
-                 {c.message}
-                  <span className="msg_time_send">{time}, Today</span>
+            {chat.map((msg, index) => (
+               <div key={index}>
+                  <div className="d-flex justify-content-end mb-4">
+                     <div className="msg_cotainer_send">
+                        {msg.message}
+                        <span className="msg_time_send">{time}, Today</span>
+                     </div>
+                     <div className="img_cont_msg">
+                        <img
+                           src={require("../../../images/users/" + userr.image)}
+                           className="rounded-circle user_img_msg"
+                           alt=""
+                        />
+                     </div>
+                  </div>
+                  <div className="d-flex justify-content-start mb-4">
+                     <div className="img_cont_msg">
+                        <img
+                           src={avatar1}
+                           className="rounded-circle user_img_msg"
+                           alt=""
+                        />
+                     </div>
+                     <div className="msg_cotainer">
+                        {msg.response}
+                        <span className="msg_time">{time}, Today</span>
+                     </div>
+                  </div>
                </div>
-               <div className="img_cont_msg">
-                  <img
-                     src={require("../../../images/users/" + userr.image)}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-            </div>
-            <div className="d-flex justify-content-start mb-4">
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar1}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-               <div className="msg_cotainer">
-                  {c.response}
-                  <span className="msg_time">{time}, Today</span>
-               </div>
-            </div>
-            </>
             ))}
 
          </PerfectScrollbar>
