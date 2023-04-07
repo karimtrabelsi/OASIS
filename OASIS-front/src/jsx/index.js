@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 
 /// React router dom
 import {
@@ -10,6 +10,7 @@ import {
   Link,
   withRouter,
 } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 /// Css
 import "./index.css";
@@ -109,6 +110,8 @@ import RechartJs from "./components/charts/rechart";
 import axios from "axios";
 import Header from "./layouts/nav/Header";
 import Register from "./pages/Registration";
+import { formatRelativeWithOptions } from "date-fns/esm/fp";
+import { RequireAuth } from "./pages/authprovider";
 
 const Markup = () => {
   const authRoutes = [
@@ -166,7 +169,7 @@ const Markup = () => {
     { url: "ui-typography", component: UiTypography },
     { url: "ui-grid", component: UiGrid },
     /// Apps
-    // { url: "app-profile", component: AppProfile },
+    { url: "front-profile", component: AppProfile },
     { url: "email-compose", component: Compose },
     { url: "email-inbox", component: Inbox },
     { url: "email-read", component: Read },
@@ -191,8 +194,8 @@ const Markup = () => {
     { url: "chart-rechart", component: RechartJs },
 
     /// table
-    // { url: "table-datatable-basic", component: DataTable },
-    // { url: "table-bootstrap-basic", component: BootstrapTable },
+    { url: "table-datatable-basic", component: DataTable },
+    { url: "table-bootstrap-basic", component: BootstrapTable },
 
     /// Form
     { url: "form-element", component: Element },
@@ -219,7 +222,7 @@ const Markup = () => {
     // { url: "page-new-password", component: NewPassword },
     // { url: "page-twofactor-auth", component: TwoFactorAuth },
     // { url: "page-login", component: Login },
-    // { url: "*", component: Error404 },
+    { url: "*", component: Error404 },
 
     { url: "page-error-400", component: Error400 },
     { url: "page-error-403", component: Error403 },
@@ -227,30 +230,73 @@ const Markup = () => {
     { url: "page-error-500", component: Error500 },
     { url: "page-error-503", component: Error503 },
   ];
-  const useAuth = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState(true);
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [cancel, setCancel] = useState(null);
+  const getUsername = useCallback(() => {
+    console.log("before :", isAuthenticated);
+    setIsLoading(true);
+    setError(null);
+
+    // axios
+    //   .get("http://localhost:3000/getUsername", {
+    //     headers: {
+    //       Authorization: localStorage.getItem("token"),
+    //       cancelToken: new axios.CancelToken((c) => setCancel(c)),
+    //     },
+    //   })
+    //   .then((res) => {
+    //     console.log(res.data.isLoggedIn);
+    //     setIsAuthenticated(true);
+    //     console.log("after :", isAuthenticated);
+    //     console.log(res.data);
+
+    //     setIsLoading(false);
+    //   })
+    //   .catch((err) => {
+    //     if (axios.isCancel(err)) {
+    //       console.log("Request canceled:", err.message);
+    //     } else {
+    //       console.error(err);
+    //     }
+    //     setIsLoading(false);
+    //     setError(err.message);
+    //     setIsAuthenticated(false);
+    //   });
+
+    const user = localStorage.getItem("connectedUser");
+    console.log("user :", user);
+    user ? setIsAuthenticated(true) : setIsAuthenticated(false);
+    console.log("after :", isAuthenticated);
+  }, []);
+
+  useEffect(() => {
+    // const cancelToken = new axios.CancelToken((c) => setCancel(c));
+
+    getUsername();
+    console.log("useeffect ", isAuthenticated);
+    return () => {
+      // cancelToken();
+      console.log("cancelling");
+    };
+  }, [getUsername]);
+
+  function PrivateRoute({ children, ...rest }) {
+    const [auth, setAuth] = useState(isAuthenticated); // use state to store auth status
 
     useEffect(() => {
-      console.log("aa");
-      const token = localStorage.getItem("token");
-      if (token) {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-      }
-      console.log(isAuthenticated);
-    }, []);
+      setAuth(isAuthenticated); // update state only when isAuthenticated changes
+    }, [children]);
 
-    return { isAuthenticated, setIsAuthenticated };
-  };
-  function PrivateRoute({ children, ...rest }) {
-    const { isAuthenticated } = useAuth();
-    console.log(isAuthenticated);
+    console.log(auth);
     return (
       <Route
+        exact
         {...rest}
         render={(props) => {
-          return isAuthenticated === true ? (
+          return auth === true ? (
             children
           ) : (
             <Redirect
@@ -263,6 +309,13 @@ const Markup = () => {
       />
     );
   }
+
+  useEffect(() => {
+    console.log("mounting");
+    return () => {
+      console.log("unmounting");
+    };
+  }, []);
 
   // return (
   //   <Router basename="/react">
@@ -288,7 +341,6 @@ const Markup = () => {
   //     </div>
   //   </Router>
   // );
-  const { isAuthenticated } = useAuth();
 
   return (
     <Router basename="/react">
@@ -299,19 +351,42 @@ const Markup = () => {
           <div className="container-fluid">
             <Switch>
               {routes.map((data, i) => (
-                <PrivateRoute key={i} exact path={`/${data.url}`}>
-                  <data.component key={i} />
-                </PrivateRoute>
+                <Route key={i} exact path={`/${data.url}`}>
+                  <RequireAuth>
+                    <data.component key={i} />
+                  </RequireAuth>
+                </Route>
               ))}
-              <Route path="/page-login" component={Login} />
+              <Route
+                path="/page-login"
+                render={(props) => {
+                  return isAuthenticated === true ? (
+                    <Redirect
+                      to={{
+                        pathname: "/",
+                        state: { message: "Already logged in" },
+                      }}
+                    />
+                  ) : (
+                    <Login />
+                  );
+                }}
+              />
               <Route path="/page-register" component={Register} />
               <Route path="/page-reset-password" component={ResetPassword} />
               <Route path="/page-new-password" component={NewPassword} />
               <Route path="/page-twofactor-auth" component={TwoFactorAuth} />
+              {/* <Route path="/table-bootstrap-basic">
+                <RequireAuth>
+                  <BootstrapTable />
+                </RequireAuth>
+              </Route> */}
 
-              <Route path="/table-bootstrap-basic" component={BootstrapTable} />
-              <Route path="/table-datatable-basic" component={DataTable} />
-              <Route path="/front-profile" component={AppProfile} />
+              {/* <PrivateRoute path="/table-bootstrap-basic">
+                <BootstrapTable />
+              </PrivateRoute> */}
+              {/* <Route path="/table-datatable-basic" component={DataTable} />
+              <Route path="/front-profile" component={AppProfile} /> */}
             </Switch>
           </div>
         </div>

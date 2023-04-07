@@ -72,7 +72,8 @@ app.use("/password-reset", passwordReset);
 app.use("/users/twoFactorAuth", twoFactorAuth);
 
 app.get("/getUsername", verifyJWt, (req, res) => {
-  res.json({ isLoggedIn: true, username: req.user.username });
+  console.log(req.user);
+  res.status(200).send({ isLoggedIn: true, username: req.user.username });
 });
 
 app.get("/users/:id", getUser);
