@@ -90,6 +90,8 @@ import BtcChart from "./components/charts/apexcharts/ApexChart";
 /// Table
 import DataTable from "./components/table/DataTable";
 import BootstrapTable from "./components/table/BootstrapTable";
+import Club from "./components/table/Club";
+
 import ApexChart from "./components/charts/apexcharts";
 
 /// Form
@@ -196,6 +198,8 @@ const Markup = () => {
     /// table
     { url: "table-datatable-basic", component: DataTable },
     { url: "table-bootstrap-basic", component: BootstrapTable },
+    { url: "table-club", component: Club },
+
 
     /// Form
     { url: "form-element", component: Element },
