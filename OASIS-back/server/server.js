@@ -13,6 +13,7 @@ const twoFactorAuth = require("./routes/user/twoFactorAuth");
 const verifyJWt = require("./middleware/verifyJWT");
 const getUser = require("./routes/user/getUser");
 const app = express();
+const club = require("./routes/club/club");
 app.use(cors());
 require("dotenv").config();
 
@@ -70,6 +71,8 @@ app.post("/users/approve/:id", approve);
 app.use("/password-reset", passwordReset);
 
 app.use("/users/twoFactorAuth", twoFactorAuth);
+ 
+app.use("/clubs", club);
 
 app.get("/getUsername", verifyJWt, (req, res) => {
   res.json({ isLoggedIn: true, username: req.user.username });
