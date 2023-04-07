@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
+import {
+  Col,
+  Button,
+  Row,
+  Container,
+  Card,
+  Form,
+  FormLabel,
+  FormControl,
+} from "react-bootstrap";
 import logo from "../../images/logo.png";
 import logoText from "../../images/logo-text.png";
 import axios from "axios";
 import swal from "sweetalert";
-import { useFormik } from "formik";
+import { Field, useFormik } from "formik";
 import * as Yup from "yup";
 
 const Register = () => {
@@ -20,10 +29,15 @@ const Register = () => {
     setIP(res.data.ip);
   };
 
+  const options = [
+    { value: "Member", label: "Member" },
+    { value: "President", label: "President" },
+  ];
+
   const history = useHistory();
-// min 5 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit.
+  // min 5 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit.
   const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
-  const emailRules = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/ ;
+  const emailRules = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const formik = useFormik({
@@ -36,34 +50,33 @@ const Register = () => {
       password: "",
       // phonenumber:'',
       club: "",
-      role:"",
-      image: "",
+      role: "",
+      image: null,
     },
     validationSchema: Yup.object({
       cin: Yup.string()
-        .max(8, "Must be 8 characters or less")
+        .max(8, "Must be 8 characters")
         .required("Required"),
-      firstName: Yup.string()
-        .required("Required"),
-      lastName: Yup.string()
-        .required("Required"),
+      firstName: Yup.string().required("Required"),
+      lastName: Yup.string().required("Required"),
       username: Yup.string()
         .max(7, "Must be 7 characters or less")
         .required("Required"),
       email: Yup.string()
-        .matches( emailRules,"Please enter a valid email")
+        .matches(emailRules, "Please enter a valid email")
         .required("Required "),
       password: Yup.string()
-      .matches(passwordRules, { message: "Please create a stronger password" })
-      .required("Password is required"),
+        .matches(passwordRules, {
+          message: "Please create a stronger password",
+        })
+        .required("Password is required"),
       phoneNumber: Yup.string()
         .matches(phoneRegExp, "Phone number is not valid")
         .max(8, "Must be 8 characters or less")
         .required("Required"),
-      club: Yup.string()
-        .required("Required"),
-      role: Yup.string()
-        .required("Required"),
+      club: Yup.string().required("Required"),
+      role: Yup.string().required("Please select an option"),
+      image: Yup.mixed().required(),
     }),
     onSubmit: (values) => {
       console.log("aaaaaaaaaaaaaaaaa");
@@ -117,13 +130,13 @@ const Register = () => {
                     {/* <img className="brand-title" src={logoText} alt="" /> */}
                   </div>
                   <div className="mb-3">
-                    <Form onSubmit={formik.handleSubmit}>
+                    <Form onSubmit={formik.handleSubmit} noValidate>
                       <Form.Group className="mb-3 input_wrap" hasValidation>
                         <Form.Control
                           as="input"
-                          type="number" required
-                          name="cin" 
-                         
+                          type="number"
+                          required
+                          name="cin"
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.cin}
@@ -137,18 +150,15 @@ const Register = () => {
                             {formik.errors.cin}
                           </Form.Control.Feedback>
                         ) : null}
-                        
-
                       </Form.Group>
                       <Form.Group className="mb-3 input_wrap " hasValidation>
                         <Row>
                           <Col>
-                           
                             <Form.Control
                               as="input"
-                              type="text" required
+                              type="text"
+                              required
                               name="firstName"
-                             
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={formik.values.firstName}
@@ -157,7 +167,7 @@ const Register = () => {
                                 !!formik.errors.firstName
                               }
                             />
-                              <Form.Label className="text-center md-8">
+                            <Form.Label className="text-center md-8">
                               First Name
                             </Form.Label>
                             {formik.touched.firstName &&
@@ -166,15 +176,13 @@ const Register = () => {
                                 {formik.errors.firstName}
                               </Form.Control.Feedback>
                             ) : null}
-                           
                           </Col>
                           <Col>
-                          
                             <Form.Control
                               as="input"
-                              type="text" required
+                              type="text"
+                              required
                               name="lastName"
-                             
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={formik.values.lastName}
@@ -183,7 +191,7 @@ const Register = () => {
                                 !!formik.errors.lastName
                               }
                             />
-                               <Form.Label className="text-center ">
+                            <Form.Label className="text-center ">
                               Last Name
                             </Form.Label>
                             {formik.touched.lastName &&
@@ -192,19 +200,17 @@ const Register = () => {
                                 {formik.errors.lastName}
                               </Form.Control.Feedback>
                             ) : null}
-                           
                           </Col>
                         </Row>
                       </Form.Group>
                       <Form.Group className="mb-3 input_wrap" hasValidation>
                         <Row>
                           <Col>
-                            
                             <Form.Control
                               as="input"
-                              type="text" required
+                              type="text"
+                              required
                               name="username"
-                              
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={formik.values.username}
@@ -213,7 +219,7 @@ const Register = () => {
                                 !!formik.errors.username
                               }
                             />
-                             <Form.Label className="text-center">
+                            <Form.Label className="text-center">
                               Username
                             </Form.Label>
                             {formik.touched.username &&
@@ -222,15 +228,13 @@ const Register = () => {
                                 {formik.errors.username}
                               </Form.Control.Feedback>
                             ) : null}
-                           
                           </Col>
                           <Col>
-                            
                             <Form.Control
                               as="input"
-                              type="email" required
+                              type="email"
+                              required
                               name="email"
-                            
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={formik.values.email}
@@ -238,7 +242,7 @@ const Register = () => {
                                 !!formik.touched.email && !!formik.errors.email
                               }
                             />
-                                <Form.Label className="text-center ">
+                            <Form.Label className="text-center ">
                               Email
                             </Form.Label>
                             {formik.touched.email && formik.errors.email ? (
@@ -246,19 +250,17 @@ const Register = () => {
                                 {formik.errors.email}
                               </Form.Control.Feedback>
                             ) : null}
-                        
                           </Col>
                         </Row>
                       </Form.Group>
-                      <Form.Group className="mb-3 input_wrap" hasValidation>
+                      <Form.Group className="mb-3 input_wrap">
                         <Row>
                           <Col>
-                       
                             <Form.Control
                               as="input"
-                              type="text" required
+                              type="text"
+                              required
                               name="phoneNumber"
-                             
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={formik.values.phoneNumber}
@@ -267,24 +269,22 @@ const Register = () => {
                                 !!formik.errors.phoneNumber
                               }
                             />
-                                    <Form.Label className="text-center">
+                            <Form.Label className="text-center">
                               Phone Number
                             </Form.Label>
-                            {formik.touched.phoneNumber &&
-                            formik.errors.phoneNumber ? (
+                            {!!formik.touched.phoneNumber &&
+                            !!formik.errors.phoneNumber ? (
                               <Form.Control.Feedback className="invalid-feedback">
                                 {formik.errors.phoneNumber}
                               </Form.Control.Feedback>
                             ) : null}
-                         
                           </Col>
                           <Col>
-                        
                             <Form.Control
                               as="input"
-                              type="text" required
+                              type="text"
+                              required
                               name="club"
-                            
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={formik.values.club}
@@ -292,7 +292,7 @@ const Register = () => {
                                 !!formik.touched.club && !!formik.errors.club
                               }
                             />
-                                   <Form.Label className="text-center ">
+                            <Form.Label className="text-center ">
                               Club
                             </Form.Label>
                             {formik.touched.club && formik.errors.club ? (
@@ -300,41 +300,43 @@ const Register = () => {
                                 {formik.errors.club}
                               </Form.Control.Feedback>
                             ) : null}
-                         
                           </Col>
                         </Row>
                       </Form.Group>
-                      <Form.Group className="mb-3 input_wrap" hasValidation>
+                      <Form.Group className="mb-3 input_wrap">
                         <Row>
                           <Col>
-                            
                             <Form.Control
-                              as="input"
-                              type="text" required
+                              as="select"
                               name="role"
-                              onChange={formik.handleChange}
-                              onBlur={formik.handleBlur}
-                              value={formik.values.role}
-                              isInvalid={
-                                !!formik.touched.role && !!formik.errors.role
+                              onBlur={() =>
+                                formik.setFieldTouched("role", true)
                               }
-                            />
-                            <Form.Label className="text-center ">
-                              Your Role
-                            </Form.Label>
-                            {formik.touched.role && formik.errors.role ? (
-                              <Form.Control.Feedback className="invalid-feedback">
+                              isInvalid={
+                                !!formik.errors.role && !!formik.touched.role
+                              }
+                            >
+                              <option selected disabled value="">
+                                Select Role
+                              </option>
+                              {options.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                  {option.label}
+                                </option>
+                              ))}
+                            </Form.Control>
+                            {formik.errors.role && formik.touched.role && (
+                              <div className="invalid-feedback">
                                 {formik.errors.role}
-                              </Form.Control.Feedback>
-                            ) : null}
+                              </div>
+                            )}
                           </Col>
                           <Col>
-                            
                             <Form.Control
                               as="input"
                               name="password"
-                              type="password" required
-                           
+                              type="password"
+                              required
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={formik.values.password}
@@ -350,12 +352,11 @@ const Register = () => {
                                 {formik.errors.password}
                               </Form.Control.Feedback>
                             ) : null}
-                            
                           </Col>
                         </Row>
                       </Form.Group>
-                      <Form.Group>
-                        <div className="custom-file">
+                      <Form.Group hasValidation>
+                        {/* <div className="custom-file">
                           <input
                             type="file"
                             className="custom-file-input"
@@ -370,7 +371,23 @@ const Register = () => {
                           <label className="custom-file-label">
                             Profile Picture
                           </label>
-                        </div>
+                        </div> */}
+                        <Form.Label>Profile Picture</Form.Label>
+                        <Form.Control
+                          hasValidation
+                          type="file"
+                          name="image"
+                          onChange={(e) =>
+                            formik.setFieldValue(
+                              "image",
+                              e.currentTarget.files[0]
+                            )
+                          }
+                          isInvalid={!!formik.errors.image}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {formik.errors.image}
+                        </Form.Control.Feedback>
                       </Form.Group>
 
                       <div className="d-flex justify-content-center">
