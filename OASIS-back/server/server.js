@@ -12,6 +12,10 @@ const passwordReset = require("./routes/user/resetPassword");
 const twoFactorAuth = require("./routes/user/twoFactorAuth");
 const verifyJWt = require("./middleware/verifyJWT");
 const getUser = require("./routes/user/getUser");
+const creatEvent = require ("./routes/event/event");
+const updatedEvent = require("./routes/event/updateEvent");
+const deletEvent = require("./routes/event/deleteEvent");
+const getEvent = require("./routes/event/getEvent");
 const app = express();
 app.use(cors());
 require("dotenv").config();
@@ -34,6 +38,7 @@ mongoose
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 let path = require("path");
+const updateEvent = require("./routes/event/updateEvent");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -77,3 +82,8 @@ app.get("/getUsername", verifyJWt, (req, res) => {
 });
 
 app.get("/users/:id", getUser);
+
+app.post("/event", creatEvent);
+app.put("/updateEvent/:id", updatedEvent);
+app.delete("/deletEvent/:id", deletEvent);
+app.get("/getEvent",getEvent);

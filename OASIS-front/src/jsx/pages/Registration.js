@@ -55,7 +55,7 @@ const Register = () => {
     },
     validationSchema: Yup.object({
       cin: Yup.string()
-        .max(8, "Must be 8 characters or less")
+        .max(8, "Must be 8 characters")
         .required("Required"),
       firstName: Yup.string().required("Required"),
       lastName: Yup.string().required("Required"),
