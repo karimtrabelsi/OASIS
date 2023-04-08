@@ -12,17 +12,37 @@ const passwordReset = require("./routes/user/resetPassword");
 const twoFactorAuth = require("./routes/user/twoFactorAuth");
 const verifyJWt = require("./middleware/verifyJWT");
 const getUser = require("./routes/user/getUser");
+const newElection = require("./routes/election/newElection");
+const deleteElection = require("./routes/election/deleteElection");
+const updateElection = require("./routes/election/updateElection");
+const getElections = require("./routes/election/getElections");
 const creatEvent = require ("./routes/event/event");
 const updatedEvent = require("./routes/event/updateEvent");
 const deletEvent = require("./routes/event/deleteEvent");
 const getEvent = require("./routes/event/getEvent");
 const financialManagement = require("./routes/event/financialManagement");
 const app = express();
+const club = require("./routes/club/club");
 app.use(cors());
 require("dotenv").config();
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(bodyParser.json(), urlencodedParser);
+
+const { NlpManager } = require("node-nlp");
+console.log("Starting Chatbot ...");
+const manager = new NlpManager({ languages: ["en"] });
+manager.load();
+app.use(express.json());
+app.post('/chat', async (req, res) => {
+  const { message } = req.body;
+  const response = await manager.process('en', message);
+  res.json({ message: response.answer });
+});
+
+app.listen(3002, () => {
+  console.log('Chatbot API is running on port 3002');
+});
 
 mongoose
   .connect(process.env.DBURI, {
@@ -76,9 +96,20 @@ app.post("/users/approve/:id", approve);
 app.use("/password-reset", passwordReset);
 
 app.use("/users/twoFactorAuth", twoFactorAuth);
+ 
+app.use("/clubs", club);
+
+app.use("/election/newElection", newElection);
+
+app.delete("/election/deleteElection/:id", deleteElection);
+
+app.put("/election/updateElection/:id", updateElection);
+
+app.get("/election", getElections);
 
 app.get("/getUsername", verifyJWt, (req, res) => {
-  res.json({ isLoggedIn: true, username: req.user.username });
+  console.log(req.user);
+  res.status(200).send({ isLoggedIn: true, username: req.user.username });
 });
 
 app.get("/users/:id", getUser);

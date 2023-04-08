@@ -30730,4 +30730,16 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
         }
       }
 
+      @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+      }
+
+      .typing-animation {
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      animation: typing 1s steps(40, end) infinite alternate;
+      }
+
 /*# sourceMappingURL=style.css.map */

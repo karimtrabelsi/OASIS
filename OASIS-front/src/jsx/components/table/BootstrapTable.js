@@ -1,4 +1,10 @@
-import React, { Fragment, useEffect, useState, useCallback } from "react";
+import React, {
+  Fragment,
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
 import PageTitle from "../../layouts/PageTitle";
 import swal from "sweetalert";
 import swalMessage from "@sweetalert/with-react";
@@ -37,18 +43,29 @@ const BootstrapTable = () => {
   const [bannedUsers, setBannedUsers] = useState(false);
   const [newUsers, setNewUsers] = useState(false);
   const [search, setSearch] = useState("");
+  const isMounted = useRef(true);
   const fetchData = useCallback(async () => {
     const response = await axios.get("http://localhost:3000/users");
-    setUsers(response.data);
-  }, []);
+    if (isMounted.current) {
+      setUsers(response.data);
+    }
+  }, [users]);
   useEffect(() => {
     const userr = JSON.parse(localStorage.getItem("connectedUser"));
 
-    fetchData();
+    axios.get("http://localhost:3000/users").then((res) => {
+    setUsers(res.data);
+    }).catch((err) => {
+      console.log(err);
+    });
+
 
     bannedUsers && setUsers(users.filter((user) => user.banned === true));
     newUsers && setUsers(users.filter((user) => user.approved === false));
     search && setUsers(users.filter((user) => user.username.includes(search)));
+    return () => {
+      isMounted.current = false;
+    };
   }, [users]);
 
   const handleApprove = (id) => {

@@ -436,6 +436,9 @@ class SideBar extends Component {
                 </li>
                 <li>
                   <Link to="Event-Table">Event Management</Link>
+                  </li>
+                  <li>
+                  <Link to="table-election">Elections Management</Link>
                 </li>
               </ul>
             </li>
@@ -445,7 +448,6 @@ class SideBar extends Component {
             <p>
               <strong>Oasis Dashboard</strong> ©All Rights Reserved
             </p>
-            <p>by DexignZone</p>
           </div>
         </PerfectScrollbar>
       </div>

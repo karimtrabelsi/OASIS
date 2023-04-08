@@ -2,8 +2,11 @@ const jwt = require("jsonwebtoken");
 
 function verifyJWt(req, res, next) {
   const token = req.headers["authorization"]?.split(" ")[1];
+  const cancelToken = req.headers["authorization"]?.split(" ")[2];
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      console.log(token);
+      console.log(decoded);
       if (err)
         return res
           .status(401)
