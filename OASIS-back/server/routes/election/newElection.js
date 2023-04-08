@@ -6,6 +6,7 @@ module.exports = async (req, res) => {
     const dbElection = new Election({
       name: election.name,
       club: election.club,
+      type: election.type,
       description: election.description,
       startDate: election.startDate,
       endDate: election.endDate,

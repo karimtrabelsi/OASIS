@@ -1,4 +1,9 @@
 const mongoose = require("mongoose");
+const User = require("./user");
+const Type = {
+  ExecutiveBoard: "ExecutiveBoard",
+  ExpandedBoard: "ExpandedBoard",
+};
 
 const electionSchema = new mongoose.Schema(
   {
@@ -8,6 +13,11 @@ const electionSchema = new mongoose.Schema(
     },
     club: {
       type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      enum: Object.values(Type),
       required: true,
     },
     description: {
@@ -23,8 +33,7 @@ const electionSchema = new mongoose.Schema(
         required: true,
     },
     candidates: {   
-        type: [String],
-        required: true,
+        type: [User.schema],
     },
    },
   { timestamps: true }

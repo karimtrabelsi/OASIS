@@ -20,6 +20,7 @@ const creatEvent = require ("./routes/event/event");
 const updatedEvent = require("./routes/event/updateEvent");
 const deletEvent = require("./routes/event/deleteEvent");
 const getEvent = require("./routes/event/getEvent");
+const newCandidacy = require("./routes/candidacy/newCandidacy");
 const app = express();
 const club = require("./routes/club/club");
 app.use(cors());
@@ -117,3 +118,5 @@ app.post("/event", creatEvent);
 app.put("/updateEvent/:id", updatedEvent);
 app.delete("/deletEvent/:id", deletEvent);
 app.get("/getEvent",getEvent);
+
+app.post("/candidacy/newCandidacy", newCandidacy);
