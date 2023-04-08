@@ -10,6 +10,7 @@ const ban = require("./routes/user/banUser");
 const approve = require("./routes/user/approveUser");
 const passwordReset = require("./routes/user/resetPassword");
 const twoFactorAuth = require("./routes/user/twoFactorAuth");
+const posts = require("./routes/posts/posts");
 const verifyJWt = require("./middleware/verifyJWT");
 const getUser = require("./routes/user/getUser");
 const app = express();
@@ -70,6 +71,7 @@ app.post("/users/approve/:id", approve);
 app.use("/password-reset", passwordReset);
 
 app.use("/users/twoFactorAuth", twoFactorAuth);
+app.use("/posts", posts);
 
 app.get("/getUsername", verifyJWt, (req, res) => {
   console.log(req.user);
