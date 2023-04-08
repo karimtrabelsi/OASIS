@@ -7,8 +7,8 @@ module.exports = async (req, res) => {
       name: election.name,
       club: election.club,
       description: election.description,
-      StartDate: election.StartDate,
-      EndDate: election.EndDate,
+      startDate: election.startDate,
+      endDate: election.endDate,
       candidates: election.candidates,
     });
     const savedElection = await dbElection.save();

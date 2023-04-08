@@ -14,11 +14,11 @@ const electionSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    StartDate: {
+    startDate: {
         type: Date,
         required: true,
     },
-    EndDate: {  
+    endDate: {  
         type: Date,
         required: true,
     },
