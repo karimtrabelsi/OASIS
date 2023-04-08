@@ -90,6 +90,7 @@ import BtcChart from "./components/charts/apexcharts/ApexChart";
 /// Table
 import DataTable from "./components/table/DataTable";
 import BootstrapTable from "./components/table/BootstrapTable";
+import ElectionTable from "./components/table/ElectionTable";
 import ApexChart from "./components/charts/apexcharts";
 
 /// Form
@@ -196,6 +197,7 @@ const Markup = () => {
 
     /// table
     { url: "table-datatable-basic", component: DataTable },
+    { url: "table-election" , component: ElectionTable},
     { url: "table-bootstrap-basic", component: BootstrapTable },
 
     /// Form
@@ -377,8 +379,8 @@ const Markup = () => {
               <Route path="/page-reset-password" component={ResetPassword} />
               <Route path="/page-new-password" component={NewPassword} />
               <Route path="/page-twofactor-auth" component={TwoFactorAuth} />
-              <Route path="/table-election" component={BasicDatatable} />
               <Route path="/table-bootstrap-basic" component={BootstrapTable} />
+              <Route path="/table-election" component={ElectionTable} />
               <Route path="/table-datatable-basic" component={DataTable} />
               <Route path="/front-profile" component={AppProfile} />
               {/* <Route path="/table-bootstrap-basic">
