@@ -12,11 +12,8 @@ const passwordReset = require("./routes/user/resetPassword");
 const twoFactorAuth = require("./routes/user/twoFactorAuth");
 const verifyJWt = require("./middleware/verifyJWT");
 const getUser = require("./routes/user/getUser");
-const newElection = require("./routes/election/newElection");
-const deleteElection = require("./routes/election/deleteElection");
-const updateElection = require("./routes/election/updateElection");
-const getElections = require("./routes/election/getElections");
 const app = express();
+const club = require("./routes/club/club");
 app.use(cors());
 require("dotenv").config();
 
@@ -53,6 +50,7 @@ mongoose
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 let path = require("path");
+const updateEvent = require("./routes/event/updateEvent");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -89,6 +87,8 @@ app.post("/users/approve/:id", approve);
 app.use("/password-reset", passwordReset);
 
 app.use("/users/twoFactorAuth", twoFactorAuth);
+ 
+app.use("/clubs", club);
 
 app.use("/election/newElection", newElection);
 
@@ -99,7 +99,13 @@ app.put("/election/updateElection/:id", updateElection);
 app.get("/election", getElections);
 
 app.get("/getUsername", verifyJWt, (req, res) => {
-  res.json({ isLoggedIn: true, username: req.user.username });
+  console.log(req.user);
+  res.status(200).send({ isLoggedIn: true, username: req.user.username });
 });
 
 app.get("/users/:id", getUser);
+
+app.post("/event", creatEvent);
+app.put("/updateEvent/:id", updatedEvent);
+app.delete("/deletEvent/:id", deletEvent);
+app.get("/getEvent",getEvent);

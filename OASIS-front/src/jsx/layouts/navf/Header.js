@@ -14,6 +14,8 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
   const history = useHistory();
   const user = JSON.parse(localStorage.getItem("connectedUser"));
   // const profilePic = {require(src="../../../images/users/" + user.image)};
+  const isAuthenticated = localStorage.getItem("connectedUser") ? true : false;
+  const test = false;
 
   var path = window.location.pathname.split("/");
   var name = path[path.length - 1].split("-");
@@ -337,10 +339,14 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                   }`}
                   onClick={() => onProfile()}
                 >
-                  <img
-                    src={require("../../../images/users/" + user.image)}
-                    width={20}
-                  />
+                  {isAuthenticated ? (
+                    <img
+                      src={require("../../../images/users/" + user.image)}
+                      width={20}
+                    />
+                  ) : (
+                    <img src={require("../../../images/1.jpg")} width={20} />
+                  )}
                 </a>
                 <div
                   className={`dropdown-menu dropdown-menu-right ${
@@ -392,13 +398,11 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                     className="dropdown-item ai-icon"
                     key={"logout"}
                     onClick={() => {
-
                       // localStorage.removeItem("token");
                       // localStorage.removeItem("connectedUser");
                       localStorage.clear();
                       history.push("/page-login");
                       history.go(0);
-
                     }}
                   >
                     <svg
