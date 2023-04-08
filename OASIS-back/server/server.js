@@ -16,6 +16,7 @@ const creatEvent = require ("./routes/event/event");
 const updatedEvent = require("./routes/event/updateEvent");
 const deletEvent = require("./routes/event/deleteEvent");
 const getEvent = require("./routes/event/getEvent");
+const financialManagement = require("./routes/event/financialManagement");
 const app = express();
 app.use(cors());
 require("dotenv").config();
@@ -86,3 +87,6 @@ app.post("/event", creatEvent);
 app.put("/updateEvent/:id", updatedEvent);
 app.delete("/deletEvent/:id", deletEvent);
 app.get("/getEvent",getEvent);
+app.post("/predictBudget",  (req, res) => {
+  financialManagement
+}); 
