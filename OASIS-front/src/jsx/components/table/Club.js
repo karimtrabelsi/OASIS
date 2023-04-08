@@ -7,6 +7,7 @@ import React, {
   } from "react";
   import PageTitle from "../../layouts/PageTitle";
   import swal from "sweetalert";
+  import Swal from "sweetalert2";
   import swalMessage from "@sweetalert/with-react";
   
   import {
@@ -92,6 +93,87 @@ import React, {
                   >
                     New Clubs{" "}
                   </Badge>
+                  <Button onClick={() => Swal.fire({
+                        title:  '<p> Add Club </p>',
+                        html:
+                        '<br> </br>'+
+                        '<div className="mb-3">'+
+                        '<div className="input_wrap ">' +
+                         '<input type="text"  id="clubname" class="form-control "/> <label className="text-center ">Club name</label> </div>' +
+                         '<div className="input_wrap ">' +
+                         '<input type="text"   id="foundingpresident" class="form-control "/> <label>Founding president</label></div>' +
+                         '<div className="input_wrap ">' +
+                         '<input type="text"   id="city" class="form-control "/> <label>City</label></div>'+
+                         '<div className="input_wrap ">' +
+                         '<input type="text"  id="region" class="form-control "/> <label>Region</label></div>'+
+                         '<div className="input_wrap ">' +
+                         '<input type="email" id="email" class="form-control "/> <label>Email</label></div>'+
+                         '<div className="input_wrap ">' +
+                         '<input type="text"  id="club" class="form-control "/> <label>Club </label></div>'+
+                         '<div className="input_wrap ">' +
+                         '<select id="type" name="type" class="form-control>'+
+                         '<option value="Rotary">Rotary</option>' +
+                         '<option value="Rotaract">Rotaract</option>'+
+                         '<option value="Interact">Interact</option>'+
+                         '<option value="Lions">Lions</option>'+
+                         '<option value="Leo">Leo</option>'+
+                         '</select> '+
+                         '<label>Type</label></div>'+
+                         '</div>'+
+                        '<div className="input_wrap ">' +
+                            '<input type="file"  id="image" class="form-control "/> <label>Image</label></div>'+
+                          '</div>',
+              
+                            
+                        focusConfirm: false,
+                        preConfirm: () => {
+                           const clubname = document.getElementById('clubname').value;
+                           const foundingpresident = document.getElementById('foundingpresident').value;
+                           const city = document.getElementById('city').value;
+                           const region = document.getElementById('region').value;
+                           const email = document.getElementById('email').value;
+                           const club = document.getElementById('club').value;
+                           const type = document.getElementById('type').value;
+                           const image = document.getElementById('image').value;
+
+                           if (!clubname || !foundingpresident || !city || !region || !email || !club || !type || !image) {
+                              Swal.showValidationMessage('Please fill in all fields');
+                           }
+                           return { clubname: clubname, fp: foundingpresident, city: city, region: region, email: email, club: club , type: type, image: image };
+                        }
+                     }).then(result => {
+                        if (result.isConfirmed) {
+                           console.log(result.value);
+                           fetch('http://localhost:3000/clubs/create', {
+                              method: 'POST',
+                              headers: {
+                                 'Content-Type': 'application/json'
+                              },
+                              body: JSON.stringify(result.value)
+                           })
+                              .then(response => {
+                                 if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                 }
+                                 Swal.fire({
+                                    icon: 'success',
+                                    title: 'Club added successfully',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                 });
+                              })
+                              .catch(error => {
+                                 console.error('There was an error adding the club:', error);
+                                 Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong!'
+                                 });
+                              });
+                        }
+                     })
+                     }
+                        variant="primary">+ Add</Button>
                   <div className="input-group search-area d-lg-inline-flex d-none ">
                     <input
                       type="text"
