@@ -1,7 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+
 
 const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
+   const userr = JSON.parse(localStorage.getItem("connectedUser"));
+   const now = new Date();
+   const hours = now.getHours();
+   const minutes = now.getMinutes();
+   const ampm = hours >= 12 ? 'PM' : 'AM';
+   const time = `${hours % 12}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
    const [toggle, setToggle] = useState(false);
+   const [user, setuser] = useState([]);
+   const [response, setResponse] = useState([]);
+   const [message, setMessage] = useState([]);
+   const [newResponse, setNewResponse] = useState();
+   const [newMessage, setNewMessage] = useState();
+   const [chat, setChat] = useState([])
+   const [isTyping, setIsTyping] = useState(false);
+   useEffect(() => {
+      axios.get("http://localhost:3000/users").then((res) => {
+         setuser(res.data);
+      });
+   }, []);
+
+   const handleSubmit = async (event) => {
+      event.preventDefault();
+      const m = event.target.elements.message.value;
+      const res = await axios.post('http://localhost:3000/chat', { message: m });
+      setNewMessage(m);
+      setNewResponse(res.data.message);
+      setResponse([...response, res.data.message]);
+      setMessage([...message, m]);
+      //setChat([...chat,{message:newMessage,response:newResponse}])
+      setChat(prevChat => [...prevChat, { message: m, response: res.data.message }]);
+      console.log(chat);
+   };
+
+ 
+
+   // const handleSubmit = async (event) => {
+   //    event.preventDefault();
+   //    const m = event.target.elements.message.value;
+   //    setIsTyping(true);
+   //    setTimeout(async () => {
+   //      const res = await axios.post('http://localhost:3000/chat', { message: m });
+   //      setNewMessage(m);
+   //      setNewResponse(res.data.message);
+   //      setResponse([...response, res.data.message]);
+   //      setMessage([...message, m]);
+   //      setChat(prevChat => [...prevChat, { message: m, response: res.data.message }]);
+   //      setIsTyping(false);
+   //    }, 2000);
+   //  };
+
+
+
    return (
       <div
          className={`card chat dz-chat-history-box ${openMsg ? "" : "d-none"}`}
@@ -47,7 +101,7 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
                </svg>
             </a>
             <div>
-               <h6 className="mb-1">Chat with Khelesh</h6>
+               <h6 className="mb-1">Chat with Our ChatBot</h6>
                <p className="mb-0 text-success">Online</p>
             </div>
             <div className="dropdown">
@@ -79,9 +133,8 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
                   </svg>
                </a>
                <ul
-                  className={`dropdown-menu dropdown-menu-right ${
-                     toggle ? "show" : ""
-                  }`}
+                  className={`dropdown-menu dropdown-menu-right ${toggle ? "show" : ""
+                     }`}
                >
                   <li
                      className="dropdown-item"
@@ -114,206 +167,62 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
             </div>
          </div>
          <PerfectScrollbar
-            className={`card-body msg_card_body dz-scroll ${
-               openMsg ? "ps ps--active-y" : ""
-            } `}
+            className={`card-body msg_card_body dz-scroll ${openMsg ? "ps ps--active-y" : ""
+               } `}
             id="DZ_W_Contacts_Body3"
          >
-            <div className="d-flex justify-content-start mb-4">
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar1}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
+            {chat.map((msg, index) => (
+               <div key={index}>
+                  <div className="d-flex justify-content-end mb-4">
+                     <div className="msg_cotainer_send">
+                        {msg.message}
+                        
+                        <span className="msg_time_send">{time}, Today</span>
+                     </div>
+                     <div className="img_cont_msg">
+                        <img
+                           src={require("../../../images/users/" + userr.image)}
+                           className="rounded-circle user_img_msg"
+                           alt=""
+                        />
+                     </div>
+                  </div>
+                  <div className="d-flex justify-content-start mb-4">
+                     <div className="img_cont_msg">
+                        <img
+                           src={avatar1}
+                           className="rounded-circle user_img_msg"
+                           alt=""
+                        />
+                     </div>
+                     <div className="msg_cotainer">
+                        {msg.response}
+                        {isTyping && (
+                           <span className="msg_cotainer">is typing...</span>
+                        )}
+                        <span className="msg_time">{time}, Today</span>
+                     </div>
+                  </div>
                </div>
-               <div className="msg_cotainer">
-                  Hi, how are you samim?
-                  <span className="msg_time">8:40 AM, Today</span>
-               </div>
-            </div>
-            <div className="d-flex justify-content-end mb-4">
-               <div className="msg_cotainer_send">
-                  Hi Khalid i am good tnx how about you?
-                  <span className="msg_time_send">8:55 AM, Today</span>
-               </div>
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar2}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-            </div>
-            <div className="d-flex justify-content-start mb-4">
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar1}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-               <div className="msg_cotainer">
-                  I am good too, thank you for your chat template
-                  <span className="msg_time">9:00 AM, Today</span>
-               </div>
-            </div>
-            <div className="d-flex justify-content-end mb-4">
-               <div className="msg_cotainer_send">
-                  You are welcome
-                  <span className="msg_time_send">9:05 AM, Today</span>
-               </div>
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar2}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-            </div>
-            <div className="d-flex justify-content-start mb-4">
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar1}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-               <div className="msg_cotainer">
-                  I am looking for your next templates
-                  <span className="msg_time">9:07 AM, Today</span>
-               </div>
-            </div>
-            <div className="d-flex justify-content-end mb-4">
-               <div className="msg_cotainer_send">
-                  Ok, thank you have a good day
-                  <span className="msg_time_send">9:10 AM, Today</span>
-               </div>
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar2}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-            </div>
-            <div className="d-flex justify-content-start mb-4">
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar1}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-               <div className="msg_cotainer">
-                  Bye, see you
-                  <span className="msg_time">9:12 AM, Today</span>
-               </div>
-            </div>
-            <div className="d-flex justify-content-start mb-4">
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar1}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-               <div className="msg_cotainer">
-                  Hi, how are you samim?
-                  <span className="msg_time">8:40 AM, Today</span>
-               </div>
-            </div>
-            <div className="d-flex justify-content-end mb-4">
-               <div className="msg_cotainer_send">
-                  Hi Khalid i am good tnx how about you?
-                  <span className="msg_time_send">8:55 AM, Today</span>
-               </div>
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar2}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-            </div>
-            <div className="d-flex justify-content-start mb-4">
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar1}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-               <div className="msg_cotainer">
-                  I am good too, thank you for your chat template
-                  <span className="msg_time">9:00 AM, Today</span>
-               </div>
-            </div>
-            <div className="d-flex justify-content-end mb-4">
-               <div className="msg_cotainer_send">
-                  You are welcome
-                  <span className="msg_time_send">9:05 AM, Today</span>
-               </div>
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar2}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-            </div>
-            <div className="d-flex justify-content-start mb-4">
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar1}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-               <div className="msg_cotainer">
-                  I am looking for your next templates
-                  <span className="msg_time">9:07 AM, Today</span>
-               </div>
-            </div>
-            <div className="d-flex justify-content-end mb-4">
-               <div className="msg_cotainer_send">
-                  Ok, thank you have a good day
-                  <span className="msg_time_send">9:10 AM, Today</span>
-               </div>
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar2}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-            </div>
-            <div className="d-flex justify-content-start mb-4">
-               <div className="img_cont_msg">
-                  <img
-                     src={avatar1}
-                     className="rounded-circle user_img_msg"
-                     alt=""
-                  />
-               </div>
-               <div className="msg_cotainer">
-                  Bye, see you
-                  <span className="msg_time">9:12 AM, Today</span>
-               </div>
-            </div>
+            ))}
+
          </PerfectScrollbar>
          <div className="card-footer type_msg">
-            <div className="input-group">
-               <textarea
-                  className="form-control"
-                  placeholder="Type your message..."
-               ></textarea>
-               <div className="input-group-append">
-                  <button type="button" className="btn btn-primary">
-                     <i className="fa fa-location-arrow"></i>
-                  </button>
+            <form onSubmit={handleSubmit}>
+               <div className="input-group">
+                  <input
+                     className="form-control"
+                     placeholder="Type your message..."
+                     name="message"
+                  />
+                  <div className="input-group-append">
+                     <button type="submit" className="btn btn-primary">
+                        <i className="fa fa-location-arrow"></i>
+                     </button>
+                  </div>
+
                </div>
-            </div>
+            </form>
          </div>
       </div>
    );

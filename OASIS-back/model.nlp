@@ -1,0 +1,517 @@
+{
+  "settings": {
+    "languages": [
+      "en"
+    ],
+    "tag": "nlp",
+    "threshold": 0.5,
+    "autoLoad": true,
+    "autoSave": true,
+    "modelFileName": "model.nlp",
+    "executeActionsBeforeAnswers": false,
+    "calculateSentiment": true
+  },
+  "nluManager": {
+    "settings": {
+      "tag": "nlu-manager"
+    },
+    "locales": [
+      "en"
+    ],
+    "languageNames": {},
+    "domainManagers": {
+      "en": {
+        "settings": {
+          "locale": "en",
+          "trainByDomain": false,
+          "tag": "domain-manager-en",
+          "nluByDomain": {
+            "default": {
+              "className": "NeuralNlu",
+              "settings": {}
+            }
+          },
+          "useStemDict": true
+        },
+        "stemDict": {
+          "goodby": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "bye,care,take": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "later,see,you": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "bye,for,now": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "go,i,must": {
+            "intent": "greetings.bye",
+            "domain": "default"
+          },
+          "hello": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "hi": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "howdi": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "greet": {
+            "intent": "greetings.hello",
+            "domain": "default"
+          },
+          "a,club,do,how,i,join": {
+            "intent": "help",
+            "domain": "default"
+          },
+          "laprof": {
+            "intent": "help",
+            "domain": "default"
+          }
+        },
+        "intentDict": {
+          "greetings.bye": "default",
+          "greetings.hello": "default",
+          "help": "default"
+        },
+        "sentences": [
+          {
+            "domain": "default",
+            "utterance": "goodbye",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "bye take care",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "see you later",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "bye for now",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "i must go",
+            "intent": "greetings.bye"
+          },
+          {
+            "domain": "default",
+            "utterance": "hello",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "hi",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "howdy",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "Greetings",
+            "intent": "greetings.hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "How do i join a club",
+            "intent": "help"
+          },
+          {
+            "domain": "default",
+            "utterance": "laprof",
+            "intent": "help"
+          }
+        ],
+        "domains": {
+          "master_domain": {
+            "settings": {
+              "locale": "en",
+              "tag": "nlu-en",
+              "keepStopwords": true,
+              "nonefeatureValue": 1,
+              "nonedeltaMultiplier": 1.2,
+              "spellCheck": false,
+              "spellCheckDistance": 1,
+              "filterZeros": true,
+              "log": true
+            },
+            "features": {
+              "goodby": 1,
+              "bye": 1,
+              "take": 1,
+              "care": 1,
+              "see": 1,
+              "you": 1,
+              "later": 1,
+              "for": 1,
+              "now": 1,
+              "i": 1,
+              "must": 1,
+              "go": 1,
+              "hello": 1,
+              "hi": 1,
+              "howdi": 1,
+              "greet": 1,
+              "how": 1,
+              "do": 1,
+              "join": 1,
+              "a": 1,
+              "club": 1,
+              "laprof": 1
+            },
+            "intents": {
+              "greetings.bye": 1,
+              "greetings.hello": 1,
+              "help": 1
+            },
+            "intentFeatures": {
+              "greetings.bye": {
+                "goodby": 1,
+                "bye": 1,
+                "take": 1,
+                "care": 1,
+                "see": 1,
+                "you": 1,
+                "later": 1,
+                "for": 1,
+                "now": 1,
+                "i": 1,
+                "must": 1,
+                "go": 1
+              },
+              "greetings.hello": {
+                "hello": 1,
+                "hi": 1,
+                "howdi": 1,
+                "greet": 1
+              },
+              "help": {
+                "how": 1,
+                "do": 1,
+                "i": 1,
+                "join": 1,
+                "a": 1,
+                "club": 1,
+                "laprof": 1
+              }
+            },
+            "featuresToIntent": {
+              "goodby": [
+                "greetings.bye"
+              ],
+              "bye": [
+                "greetings.bye"
+              ],
+              "take": [
+                "greetings.bye"
+              ],
+              "care": [
+                "greetings.bye"
+              ],
+              "see": [
+                "greetings.bye"
+              ],
+              "you": [
+                "greetings.bye"
+              ],
+              "later": [
+                "greetings.bye"
+              ],
+              "for": [
+                "greetings.bye"
+              ],
+              "now": [
+                "greetings.bye"
+              ],
+              "i": [
+                "greetings.bye",
+                "help"
+              ],
+              "must": [
+                "greetings.bye"
+              ],
+              "go": [
+                "greetings.bye"
+              ],
+              "hello": [
+                "greetings.hello"
+              ],
+              "hi": [
+                "greetings.hello"
+              ],
+              "howdi": [
+                "greetings.hello"
+              ],
+              "greet": [
+                "greetings.hello"
+              ],
+              "how": [
+                "help"
+              ],
+              "do": [
+                "help"
+              ],
+              "join": [
+                "help"
+              ],
+              "a": [
+                "help"
+              ],
+              "club": [
+                "help"
+              ],
+              "laprof": [
+                "help"
+              ]
+            },
+            "neuralNetwork": {
+              "settings": {
+                "locale": "en",
+                "tag": "nlu-en",
+                "keepStopwords": true,
+                "nonefeatureValue": 1,
+                "nonedeltaMultiplier": 1.2,
+                "spellCheck": false,
+                "spellCheckDistance": 1,
+                "filterZeros": true,
+                "log": true
+              },
+              "features": [
+                "goodby",
+                "bye",
+                "take",
+                "care",
+                "see",
+                "you",
+                "later",
+                "for",
+                "now",
+                "i",
+                "must",
+                "go",
+                "hello",
+                "hi",
+                "howdi",
+                "greet",
+                "how",
+                "do",
+                "join",
+                "a",
+                "club",
+                "laprof"
+              ],
+              "intents": [
+                "greetings.bye",
+                "greetings.hello",
+                "help"
+              ],
+              "perceptrons": [
+                [
+                  10.748013496398926,
+                  5.497448921203613,
+                  2.7488372325897217,
+                  2.7488372325897217,
+                  3.6646924018859863,
+                  3.6646924018859863,
+                  3.6646924018859863,
+                  2.7484335899353027,
+                  2.7484335899353027,
+                  2.823267936706543,
+                  4.0852580070495605,
+                  4.0852580070495605,
+                  -3.257904052734375,
+                  -3.247471332550049,
+                  -3.2364091873168945,
+                  -3.2247300148010254,
+                  -1.2281744480133057,
+                  -1.2281744480133057,
+                  -1.2281744480133057,
+                  -1.2281744480133057,
+                  -1.2281744480133057,
+                  -3.2106688022613525,
+                  3.2787008195158265
+                ],
+                [
+                  -5.956491947174072,
+                  -3.0805916786193848,
+                  -1.540521502494812,
+                  -1.540521502494812,
+                  -2.0532469749450684,
+                  -2.0532469749450684,
+                  -2.0532469749450684,
+                  -1.5397597551345825,
+                  -1.5397597551345825,
+                  -2.6219046115875244,
+                  -1.7686610221862793,
+                  -1.7686610221862793,
+                  8.031560897827148,
+                  8.035609245300293,
+                  8.011651039123535,
+                  7.986210823059082,
+                  -0.7765659093856812,
+                  -0.7765659093856812,
+                  -0.7765659093856812,
+                  -0.7765659093856812,
+                  -0.7765659093856812,
+                  -6.007347106933594,
+                  6.172830907772293
+                ],
+                [
+                  -1.6929150819778442,
+                  -0.8840079307556152,
+                  -0.4409036934375763,
+                  -0.4409036934375763,
+                  -0.5814714431762695,
+                  -0.5814714431762695,
+                  -0.5814714431762695,
+                  -0.430098295211792,
+                  -0.430098295211792,
+                  0.9617031812667847,
+                  -1.359020709991455,
+                  -1.359020709991455,
+                  -1.6801185607910156,
+                  -1.6715203523635864,
+                  -1.6626116037368774,
+                  -1.6534013748168945,
+                  2.32165265083313,
+                  2.32165265083313,
+                  2.32165265083313,
+                  2.32165265083313,
+                  2.32165265083313,
+                  12.321123123168945,
+                  1.7272759554994057
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "intentDomains": {},
+    "extraSentences": [
+      [
+        "en",
+        "goodbye"
+      ],
+      [
+        "en",
+        "bye take care"
+      ],
+      [
+        "en",
+        "see you later"
+      ],
+      [
+        "en",
+        "bye for now"
+      ],
+      [
+        "en",
+        "i must go"
+      ],
+      [
+        "en",
+        "hello"
+      ],
+      [
+        "en",
+        "hi"
+      ],
+      [
+        "en",
+        "howdy"
+      ],
+      [
+        "en",
+        "Greetings"
+      ],
+      [
+        "en",
+        "How do i join a club"
+      ],
+      [
+        "en",
+        "laprof"
+      ]
+    ]
+  },
+  "ner": {
+    "settings": {
+      "tag": "ner",
+      "entityPreffix": "%",
+      "entitySuffix": "%"
+    },
+    "rules": {}
+  },
+  "nlgManager": {
+    "settings": {
+      "tag": "nlg-manager"
+    },
+    "responses": {
+      "en": {
+        "greetings.bye": [
+          {
+            "answer": "see you soon!"
+          },
+          {
+            "answer": "Till next time"
+          },
+          {
+            "answer": "bye bye"
+          },
+          {
+            "answer": "have a great day"
+          }
+        ],
+        "greetings.hello": [
+          {
+            "answer": "Hey there!"
+          },
+          {
+            "answer": "Hello"
+          },
+          {
+            "answer": "Hi"
+          },
+          {
+            "answer": "Greetings"
+          }
+        ],
+        "help": [
+          {
+            "answer": "You can join a club by going to the club page and clicking the join button."
+          },
+          {
+            "answer": "w leeeeeeee"
+          }
+        ]
+      }
+    }
+  },
+  "actionManager": {
+    "settings": {
+      "tag": "action-manager"
+    },
+    "actions": {}
+  },
+  "slotManager": {}
+}

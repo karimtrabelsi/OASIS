@@ -38,7 +38,7 @@ const Login = () => {
           localStorage.setItem("connectedUser", res.data.user);
           console.log(res.data.user);
           JSON.parse(res.data.user).role === "SuperAdmin"
-            ? history.push("")
+            ? history.push("/")
             : history.push("/front-profile");
           // history.go(0);
         })
@@ -82,21 +82,6 @@ const Login = () => {
         });
     },
   });
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/getUsername", {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-      })
-      .then((res) =>
-        res.data.isLoggedIn
-          ? history.push("/dashboard")
-          : history.push("/page-login")
-      )
-      .catch((err) => console.log(err));
-  }, []);
 
   return (
     <div>
