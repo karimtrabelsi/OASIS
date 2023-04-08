@@ -109,6 +109,7 @@ import RechartJs from "./components/charts/rechart";
 import axios from "axios";
 import Header from "./layouts/nav/Header";
 import Register from "./pages/Registration";
+import BasicDatatable from "./components/table/BasicDatatable";
 
 const Markup = () => {
   const authRoutes = [
@@ -308,7 +309,7 @@ const Markup = () => {
               <Route path="/page-reset-password" component={ResetPassword} />
               <Route path="/page-new-password" component={NewPassword} />
               <Route path="/page-twofactor-auth" component={TwoFactorAuth} />
-
+              <Route path="/table-election" component={BasicDatatable} />
               <Route path="/table-bootstrap-basic" component={BootstrapTable} />
               <Route path="/table-datatable-basic" component={DataTable} />
               <Route path="/front-profile" component={AppProfile} />

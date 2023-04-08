@@ -12,6 +12,10 @@ const passwordReset = require("./routes/user/resetPassword");
 const twoFactorAuth = require("./routes/user/twoFactorAuth");
 const verifyJWt = require("./middleware/verifyJWT");
 const getUser = require("./routes/user/getUser");
+const newElection = require("./routes/election/newElection");
+const deleteElection = require("./routes/election/deleteElection");
+const updateElection = require("./routes/election/updateElection");
+const getElections = require("./routes/election/getElections");
 const app = express();
 app.use(cors());
 require("dotenv").config();
@@ -85,6 +89,14 @@ app.post("/users/approve/:id", approve);
 app.use("/password-reset", passwordReset);
 
 app.use("/users/twoFactorAuth", twoFactorAuth);
+
+app.use("/election/newElection", newElection);
+
+app.delete("/election/deleteElection/:id", deleteElection);
+
+app.put("/election/updateElection/:id", updateElection);
+
+app.get("/election", getElections);
 
 app.get("/getUsername", verifyJWt, (req, res) => {
   res.json({ isLoggedIn: true, username: req.user.username });

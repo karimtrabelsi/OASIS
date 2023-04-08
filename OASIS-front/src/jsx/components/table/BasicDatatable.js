@@ -1,127 +1,159 @@
-import React, { useState, useRef } from "react";
-import { Table, Pagination } from "react-bootstrap";
+import React, { Fragment, useEffect, useState } from "react";
+import PageTitle from "../../layouts/PageTitle";
+import swal from "sweetalert";
+import Swal from "sweetalert2";
+import swalMessage from "@sweetalert/with-react";
+import moment from 'moment';
 
-import data from "./tableData.js";
+
+import {
+   Row,
+   Col,
+   Card,
+   CardDeck,
+   Table,
+   Badge,
+   Dropdown,
+   ProgressBar,
+   Button,
+} from "react-bootstrap";
+
+/// imge
+import avatar1 from "../../../images/avatar/1.jpg";
+import avatar2 from "../../../images/avatar/2.jpg";
+import avatar3 from "../../../images/avatar/3.jpg";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-const BasicDatatable = () => {
-   const sort = 3;
-   let jobPaggination = Array(Math.ceil(data.jobsTable.data.length / sort))
-      .fill()
-      .map((_, i) => i + 1);
-
-   const activePag = useRef(0);
-   const jobData = useRef(
-      data.jobsTable.data.slice(
-         activePag.current * sort,
-         (activePag.current + 1) * sort
-      )
+const BootstrapTable = () => {
+   const svg1 = (
+      <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1">
+         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+            <rect x="0" y="0" width="24" height="24"></rect>
+            <circle fill="#000000" cx="5" cy="12" r="2"></circle>
+            <circle fill="#000000" cx="12" cy="12" r="2"></circle>
+            <circle fill="#000000" cx="19" cy="12" r="2"></circle>
+         </g>
+      </svg>
    );
-   const [demo, setdemo] = useState();
-   const onClick = (i) => {
-      activePag.current = i;
 
-      jobData.current = data.jobsTable.data.slice(
-         activePag.current * sort,
-         (activePag.current + 1) * sort
-      );
-      setdemo(
-         data.jobsTable.data.slice(
-            activePag.current * sort,
-            (activePag.current + 1) * sort
-         )
-      );
-   };
+   const [elections, setElections] = useState([]);
+   const [search, setSearch] = useState("");
+   const userr = JSON.parse(localStorage.getItem("connectedUser"));
+   useEffect(() => {
+      axios
+         .get("http://localhost:3000/election")
+         .then((res) => {
+            setElections(res.data);
+         })
+         .catch((err) => {
+            console.log(err);
+         });
+      search && setElections(elections.filter((election) => election.name.includes(search)));
+   }, [elections]);
+
    return (
-      <div className="col-12">
-         <div className="card">
-            <div className="card-header">
-               <h4 className="card-title">Basic Datatable</h4>
-            </div>
-            <div className="card-body">
-               <Table responsive className="w-100">
-                  <div id="example_wrapper" className="dataTables_wrapper">
-                     <table id="example" className="display w-100 dataTable">
-                        <thead>
-                           <tr role="row">
-                              {data.jobsTable.columns.map((d, i) => (
-                                 <th key={i}>{d}</th>
-                              ))}
-                           </tr>
-                        </thead>
-                        <tbody>
-                           {jobData.current.map((d, i) => (
-                              <tr key={i}>
-                                 {d.map((da, i) => (
-                                    <td key={i}>{da}</td>
-                                 ))}
-                              </tr>
-                           ))}
-                        </tbody>
-                        <tfoot>
-                           <tr role="row">
-                              {data.jobsTable.columns.map((d, i) => (
-                                 <th key={i}>{d}</th>
-                              ))}
-                           </tr>
-                        </tfoot>
-                     </table>
-                     <div className="d-flex justify-content-between align-items-center mt-3">
-                        <div className="dataTables_info">
-                           Showing {activePag.current * sort + 1} to
-                           {data.jobsTable.data.length <
-                           (activePag.current + 1) * sort
-                              ? data.jobsTable.data.length
-                              : (activePag.current + 1) * sort}
-                           of {data.jobsTable.data.length} entries
-                        </div>
-                        <div className="dataTables_paginate paging_simple_numbers">
-                           <Pagination
-                              className="pagination-primary pagination-circle"
-                              size="lg"
-                           >
-                              <li
-                                 className="page-item page-indicator "
-                                 onClick={() =>
-                                    activePag.current > 1 &&
-                                    onClick(activePag.current - 1)
+      <Fragment>
+         <PageTitle activeMenu="Table" motherMenu="Bootstrap" />
+         <Row>
+            <Col lg={12}>
+               <Card>
+                  <Card.Header>
+                     <Card.Title>Elections</Card.Title>
+                     <Button onClick={() => Swal.fire({
+                                       title: 'Enter your details',
+                                       html: '<input type="text" id="name" placeholder="Name">' +
+                                          '<input type="email" id="email" placeholder="Email">',
+                                       showCancelButton: true,
+                                       confirmButtonText: 'Submit'
+                                    }).then((result) => {
+                                       if (result.isConfirmed) {
+                                          // Handle form submission here
+                                          const name = document.getElementById('name').value;
+                                          const email = document.getElementById('email').value;
+                                          console.log('Name:', name);
+                                          console.log('Email:', email);
+                                          Swal.fire({
+                                             title: 'Form submitted',
+                                             text: 'Thank you for submitting the form.',
+                                             icon: 'success'
+                                          });
+                                       }
+                                    })
                                  }
-                              >
-                                 <Link className="page-link" to="#">
-                                    <i className="la la-angle-left" />
-                                 </Link>
-                              </li>
-                              {jobPaggination.map((number, i) => (
-                                 <Pagination.Item
-                                    className={
-                                       activePag.current === i ? "active" : ""
+                     variant="primary">+</Button>
+                  </Card.Header>
+                  <Card.Body>
+                     {elections
+                        .filter((election) => election.club === userr.club)
+                        .reduce((accumulator, election, index) => {
+                           if (index % 3 === 0) {
+                              accumulator.push([]);
+                           }
+                           accumulator[accumulator.length - 1].push(
+                              <Card key={election.id} className="my-3">
+                                 <Card.Header>
+                                    <h5>{election.name}</h5>
+                                 </Card.Header>
+                                 <Card.Img variant="top" src={avatar3} />
+                                 <Card.Body>
+                                    <Card.Title>Club : {election.club}</Card.Title>
+                                    <Card.Text>Description : {election.description}</Card.Text>
+                                    <Card.Text>Start Date : {moment(election.startDate).format('MM/DD/YYYY')}</Card.Text>
+                                    <Card.Text>End Date : {moment(election.endDate).format('MM/DD/YYYY')}</Card.Text>
+                                    <Card.Text>Candidates : {election.candidates}</Card.Text>
+                                    <Button variant="primary">View Details</Button>
+                                 <Button
+                                    onClick={() =>
+                                       swal({
+                                          title: "Are you sure?",
+                                          text: "Once deleted, election will not be available anymore !",
+                                          icon: "warning",
+                                          buttons: true,
+                                          dangerMode: true,
+                                       }).then((willDelete) => {
+                                          if (willDelete) {
+                                             axios
+                                                .delete(
+                                                   "http://localhost:3000/election/deleteElection/" +
+                                                   election._id
+                                                )
+                                                .then((res) => {
+                                                   // console.log(res)
+                                                   if ((res.respone = 200)) {
+                                                      swal(
+                                                         election.name + "deleted !",
+                                                         {
+                                                            icon: "success",
+                                                         }
+                                                      );
+                                                   } else {
+                                                      swal("Connection Error!");
+                                                   }
+                                                })
+                                                .catch((err) => {
+                                                   console.log(err);
+                                                });
+                                          } else {
+                                             swal("Nothing changed !");
+                                          }
+                                       })
                                     }
-                                    onClick={() => onClick(i)}
-                                 >
-                                    {number}
-                                 </Pagination.Item>
-                              ))}
-                              <li
-                                 className="page-item page-indicator"
-                                 onClick={() =>
-                                    activePag.current + 1 <
-                                       jobPaggination.length &&
-                                    onClick(activePag.current + 1)
-                                 }
-                              >
-                                 <Link className="page-link" to="#">
-                                    <i className="la la-angle-right" />
-                                 </Link>
-                              </li>
-                           </Pagination>
-                        </div>
-                     </div>
-                  </div>
-               </Table>
-            </div>
-         </div>
-      </div>
+                                    variant="primary">Delete</Button>
+                              </Card.Body>
+                </Card>
+               );
+               return accumulator;
+            }, [])
+            .map((cardDeck, index) => <CardDeck key={index}>{cardDeck}</CardDeck>)
+          }
+            </Card.Body>
+         </Card>
+      </Col>
+  </Row >
+</Fragment >
+
    );
 };
 
-export default BasicDatatable;
+export default BootstrapTable;

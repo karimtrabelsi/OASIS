@@ -17,6 +17,7 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
    const [newResponse, setNewResponse] = useState();
    const [newMessage, setNewMessage] = useState();
    const [chat, setChat] = useState([])
+   const [isTyping, setIsTyping] = useState(false);
    useEffect(() => {
       axios.get("http://localhost:3000/users").then((res) => {
          setuser(res.data);
@@ -35,6 +36,25 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
       setChat(prevChat => [...prevChat, { message: m, response: res.data.message }]);
       console.log(chat);
    };
+
+ 
+
+   // const handleSubmit = async (event) => {
+   //    event.preventDefault();
+   //    const m = event.target.elements.message.value;
+   //    setIsTyping(true);
+   //    setTimeout(async () => {
+   //      const res = await axios.post('http://localhost:3000/chat', { message: m });
+   //      setNewMessage(m);
+   //      setNewResponse(res.data.message);
+   //      setResponse([...response, res.data.message]);
+   //      setMessage([...message, m]);
+   //      setChat(prevChat => [...prevChat, { message: m, response: res.data.message }]);
+   //      setIsTyping(false);
+   //    }, 2000);
+   //  };
+
+
 
    return (
       <div
@@ -156,6 +176,7 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
                   <div className="d-flex justify-content-end mb-4">
                      <div className="msg_cotainer_send">
                         {msg.message}
+                        
                         <span className="msg_time_send">{time}, Today</span>
                      </div>
                      <div className="img_cont_msg">
@@ -176,6 +197,9 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
                      </div>
                      <div className="msg_cotainer">
                         {msg.response}
+                        {isTyping && (
+                           <span className="msg_cotainer">is typing...</span>
+                        )}
                         <span className="msg_time">{time}, Today</span>
                      </div>
                   </div>
