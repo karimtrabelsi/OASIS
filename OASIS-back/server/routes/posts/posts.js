@@ -3,60 +3,31 @@ const router = express.Router();
 const User = require("../../models/user");
 const Post = require("../../models/post");
 const multer = require("multer");
+const fs = require("fs");
 
 let path = require("path");
 
-const imageStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(
-      null,
-      "../../../../OASIS-front/src/uploaded/posts/user_" +
-        req.body.userId +
-        "/" +
-        req.body.uuid +
-        "/images"
-    );
-  },
-  filename: function (req, file, cb) {
-    cb(null, path.extname(file.originalname));
-  },
-});
 const fileStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    if (file.fieldname === "file") {
-      cb(
-        null,
-        "../../../../OASIS-front/src/uploaded/posts/user_" +
-          req.body.userId +
-          "/" +
-          req.body.uuid +
-          "/files" +
-          path.extname(file.originalname)
-      );
-    } else {
-      cb(
-        null,
-        "../../../../OASIS-front/src/uploaded/posts/user_" +
-          req.body.userId +
-          "/" +
-          req.body.uuid +
-          "/images"
-      );
-    }
+    const dirPath =
+      "../OASIS-front/src/uploads/posts/user-" +
+      req.body.userId +
+      "/post-" +
+      req.body.uuid;
+    console.log(req.body);
+    fs.mkdir(dirPath, { recursive: true }, function (err) {
+      if (err) {
+        cb(err);
+      } else {
+        cb(null, dirPath);
+      }
+    });
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
   },
 });
 
-const imageFilter = (req, file, cb) => {
-  const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
-  if (allowedFileTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
 const fileFilter = (req, file, cb) => {
   const allowedFileTypes = [
     "image/jpeg",
@@ -73,9 +44,10 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-let uploadImage = multer({ imageStorage, imageFilter });
-let uploadFile = multer({ fileStorage, fileFilter });
-let upload = multer({ fileStorage, fileFilter });
+let upload = multer({
+  storage: fileStorage,
+  fileFilter,
+});
 
 router.get("/allPosts", (req, res) => {
   Post.find().then((posts) => {

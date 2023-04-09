@@ -1,6 +1,9 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
+import * as Yup from "yup";
+
 import { useQuery } from "react-query";
+import { GifIcon } from "@heroicons/react/24/outline";
 //** Import Image */
 import profile01 from "../../../../images/profile/1.jpg";
 import profile02 from "../../../../images/profile/2.jpg";
@@ -19,8 +22,10 @@ import "react-toastify/dist/ReactToastify.css";
 import PageTitle from "../../../layouts/PageTitle";
 
 import { SRLWrapper } from "simple-react-lightbox";
+import { useFormik } from "formik";
+import swal from "sweetalert";
 
-const AppProfile = () => {
+const AppProfile = (props) => {
   const [activeToggle, setActiveToggle] = useState("posts");
   const [sendMessage, setSendMessage] = useState(false);
 
@@ -76,7 +81,7 @@ const AppProfile = () => {
         console.log("user updated");
       })
       .catch((err) => {
-        console.log("err");
+        console.log(err);
       });
   }
   const options = {
@@ -84,6 +89,63 @@ const AppProfile = () => {
       overlayColor: "#000000",
     },
   };
+  const hiddenFileInput = React.useRef(null);
+  const hiddenImageInput = React.useRef(null);
+
+  const handleClickFile = (event) => {
+    hiddenFileInput.current.click();
+  };
+
+  const handleClickImage = (event) => {
+    hiddenImageInput.current.click();
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      content: "",
+      link: "",
+      userId: "",
+      uuid: "",
+      image: null,
+      file: null,
+    },
+    validationSchema: Yup.object({
+      content: Yup.string()
+        .max(100, "Must be 100 characters or less")
+        .required("Required"),
+    }),
+    onSubmit: (values) => {
+      const randomId = Math.round(Math.random() * 1000000);
+
+      const post = {
+        content: values.content,
+        link: values.link,
+        userId: userr._id,
+        uuid: randomId,
+        file: values.file,
+        image: values.image,
+      };
+      console.log(post);
+
+      axios
+        .post("http://localhost:3000/posts/addPost", post, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          swal(
+            "Post added!",
+            "Thanks for sharing your thoughts with us!",
+            "success"
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+          swal("Oops", "Something is wrong!", "error");
+        });
+    },
+  });
 
   return (
     <Fragment>
@@ -109,7 +171,9 @@ const AppProfile = () => {
                 </div>
                 <div className="profile-details">
                   <div className="profile-name px-3 pt-2">
-                    <h4 className="text-primary mb-0">{user.firstname} {user.lastname}</h4>
+                    <h4 className="text-primary mb-0">
+                      {user.firstname} {user.lastname}
+                    </h4>
                     <p>{user.role}</p>
                   </div>
                   <div className="profile-email px-2 pt-2">
@@ -548,31 +612,85 @@ const AppProfile = () => {
                         activeToggle === "posts" ? "active show" : ""
                       }`}
                     >
-                      <div className="my-post-content pt-3">
-                        <div className="post-input">
-                          <textarea
-                            name="textarea"
-                            id="textarea"
-                            cols="30"
-                            rows="5"
-                            className="form-control bg-transparent"
-                            defaultValue="Please type what you want...."
-                          />
-                          <Link
-                            to="/app-profile"
-                            className="btn btn-primary light px-3"
-                          >
-                            <i className="fa fa-link" />
-                          </Link>
-                          <Link
-                            to="/app-profile"
-                            className="btn btn-primary light mr-1 px-3 ml-1"
-                          >
-                            <i className="fa fa-camera" />
-                          </Link>
-                          <Link to="/app-profile" className="btn btn-primary">
-                            Post
-                          </Link>
+                      <div className="my-post-content pt-3 border ">
+                        <div className="post-input border border-secondary mt-2 mb-2 pb-2 ">
+                          <form onSubmit={formik.handleSubmit} noValidate>
+                            <div className="d-flex justify-content-evenly">
+                              <img
+                                src={profile07}
+                                alt="image"
+                                className="mr-2 rounded mt-3 ml-1"
+                                width={40}
+                                height={40}
+                              />
+                              <textarea
+                                name="content"
+                                id="textarea"
+                                cols="30"
+                                rows="5"
+                                className="form-control bg-transparent border border-0"
+                                placeholder="Whats happening ?"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.content}
+                                isInvalid={
+                                  !!formik.touched.content &&
+                                  !!formik.errors.content
+                                }
+                              />
+                            </div>
+                            <Button className="btn btn-primary light px-3 ml-2">
+                              <input
+                                name="link"
+                                type="text"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.link}
+                                style={{ display: "none" }}
+                              />
+                              <i className="fa fa-link" />
+                            </Button>
+                            <Button
+                              className="btn btn-primary light px-3 ml-2"
+                              onClick={handleClickFile}
+                            >
+                              <input
+                                name="file"
+                                type="file"
+                                ref={hiddenFileInput}
+                                onChange={(e) =>
+                                  formik.setFieldValue(
+                                    "file",
+                                    e.currentTarget.files[0]
+                                  )
+                                }
+                                style={{ display: "none" }}
+                              />
+                              <i className="fa fa-file" />
+                            </Button>
+                            <Button
+                              className="btn btn-primary light mr-1 px-3 ml-1"
+                              onClick={handleClickImage}
+                            >
+                              <input
+                                name="image"
+                                type="file"
+                                ref={hiddenImageInput}
+                                onChange={(e) => {
+                                  formik.setFieldValue(
+                                    "image",
+                                    e.currentTarget.files[0]
+                                  );
+                                  console.log(e.currentTarget.files[0]);
+                                }}
+                                style={{ display: "none" }}
+                              />
+                              <i className="fa fa-camera" />
+                            </Button>
+                            <Button type="submit" className="btn btn-primary">
+                              Post
+                            </Button>
+                          </form>
                         </div>
                         <div className="profile-uoloaded-post border-bottom-1 pb-5">
                           <img src={profile08} alt="" className="img-fluid" />
@@ -960,4 +1078,4 @@ const AppProfile = () => {
   );
 };
 
-export default AppProfile;  
+export default AppProfile;
