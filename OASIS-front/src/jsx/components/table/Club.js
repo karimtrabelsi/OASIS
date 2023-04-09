@@ -308,6 +308,71 @@ import React, {
                           <td>100</td>
                             <td></td>
                           <td>{club.club}</td>
+                          <Badge
+                                variant="warning light"
+                                onClick={() =>
+                                  Swal.fire({
+                                    title: "Update",
+                                    html:
+                                    '<br></br>'+
+                                    '<div class="input_wrap">' +
+                                    '<input type="text" required value='+club.clubname+' class="form-control" name="clubname">' +
+                                    '<label>Club name</label>' +
+                                       '</div>'+
+                                  '<br></br>'+
+                                  '<div class="input_wrap">' +
+                                  '<input type="text" required value='+club.email+' class="form-control" name="email">' +
+                                  '<label>Email</label>' +
+                                '</div>'+
+                                '<br></br>'+
+                                '<div class="input_wrap">' +
+                                '<input type="file"  value='+club.image+' class="form-control" name="image">' +
+                                '<label>image</label>' +
+                              '</div>',
+                                    icon: "info",
+                                    buttons: false,
+                                    dangerMode: true,
+                                    preConfirm: () => {
+                                      const clubname = Swal.getPopup().querySelector(
+                                        'input[name="clubname"]'
+                                      ).value;
+                                      const email = Swal.getPopup().querySelector(
+                                        'input[name="email"]'
+                                      ).value;
+                                      const image = Swal.getPopup().querySelector(
+                                        'input[name="image"]'
+                                      ).value;
+           
+                                      if (!clubname || !email || !image ) {
+                                         Swal.showValidationMessage('Please fill in all fields');
+                                      }
+                                      return { clubname: clubname, email: email,  image: image };
+                                   }
+                                  })
+                                  .then((result) => {
+
+                                 console.log(result)
+                                    axios
+                                      .put(
+                                        "http://localhost:3000/clubs/update/" +
+                                          club._id,result.value
+                                      )
+                                      .then((res) => {
+                                        // console.log(res)
+                                        if ((res.respone = 200)) {
+                                          Swal.fire("Club has been updated!", {
+                                            icon: "success",
+                                          });
+                                        } else {
+                                          Swal.fire("Nothing changed !");
+                                        }
+                                      })
+                                     } )
+                                }
+                              >
+                                Update
+                              </Badge>
+
                          
                         </tr>
                       ))}
