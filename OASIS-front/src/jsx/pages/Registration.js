@@ -79,8 +79,6 @@ const Register = () => {
       image: Yup.mixed().required(),
     }),
     onSubmit: (values) => {
-      console.log("aaaaaaaaaaaaaaaaa");
-      console.log(values);
       getData();
       const formUser = {
         _id: values.cin,

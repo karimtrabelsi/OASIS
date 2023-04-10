@@ -25,10 +25,10 @@ const candidacySchema = new mongoose.Schema(
     },
     file: {
         type: String,
-        required: true,
     },
     vote: {
         type: Number,
+        default: 0,
     },
    },
   { timestamps: true }

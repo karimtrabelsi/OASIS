@@ -300,7 +300,9 @@ const ElectionTable = () => {
                                        }
                                        }
                                           variant="primary" > Update </button>
-                                       <button type="button" class="btn btn-outline-info btn-rounded">Apply</button>
+                                       <Link to={`/table-apply?id=${election._id}`}>
+                                          <button type="button" className="btn btn-outline-info btn-rounded">Join</button>
+                                       </Link>
                                     </div>
                                  </Card.Body>
                               </Card>

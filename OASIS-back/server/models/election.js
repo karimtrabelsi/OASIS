@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("./user");
+const Candidacy = require("./candidacy");
 const Type = {
   ExecutiveBoard: "ExecutiveBoard",
   ExpandedBoard: "ExpandedBoard",
@@ -33,7 +34,7 @@ const electionSchema = new mongoose.Schema(
         required: true,
     },
     candidates: {   
-        type: [User.schema],
+        type: [Candidacy.schema],
     },
    },
   { timestamps: true }
