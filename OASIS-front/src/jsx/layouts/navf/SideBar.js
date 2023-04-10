@@ -436,7 +436,7 @@ class SideBar extends Component {
                            <Link to="table-datatable-basic">Members Management</Link>
                         </li>
                         <li>
-                           <Link to="">Clubs Management</Link>
+                           <Link to="table-club-f">Clubs Management</Link>
                         </li>
                      </ul>
                   </li>
