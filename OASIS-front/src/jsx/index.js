@@ -91,6 +91,7 @@ import BtcChart from "./components/charts/apexcharts/ApexChart";
 import DataTable from "./components/table/DataTable";
 import BootstrapTable from "./components/table/BootstrapTable";
 import ElectionTable from "./components/table/ElectionTable";
+import ApplyPage from "./components/table/ApplyPage";
 import ApexChart from "./components/charts/apexcharts";
 import FeesCollection from "./components/table/FeesCollection";
 
@@ -199,6 +200,7 @@ const Markup = () => {
     /// table
     { url: "table-datatable-basic", component: DataTable },
     { url: "table-election" , component: ElectionTable},
+    { url: "table-apply" , component: ApplyPage},
     { url: "table-bootstrap-basic", component: BootstrapTable },
 
     /// Form

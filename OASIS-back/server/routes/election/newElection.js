@@ -6,9 +6,10 @@ module.exports = async (req, res) => {
     const dbElection = new Election({
       name: election.name,
       club: election.club,
+      type: election.type,
       description: election.description,
-      StartDate: election.StartDate,
-      EndDate: election.EndDate,
+      startDate: election.startDate,
+      endDate: election.endDate,
       candidates: election.candidates,
     });
     const savedElection = await dbElection.save();
