@@ -353,7 +353,10 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                     toggle === "profile" ? "show" : ""
                   }`}
                 >
-                  <Link to="/app-profile" className="dropdown-item ai-icon">
+                  <Link
+                    to="/front-profile"
+                    className="dropdown-item ai-icon"
+                  >
                     <svg
                       id="icon-user1"
                       xmlns="http://www.w3.org/2000/svg"

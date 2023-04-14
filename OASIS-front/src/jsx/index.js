@@ -90,7 +90,10 @@ import BtcChart from "./components/charts/apexcharts/ApexChart";
 /// Table
 import DataTable from "./components/table/DataTable";
 import BootstrapTable from "./components/table/BootstrapTable";
+import ElectionTable from "./components/table/ElectionTable";
+import ApplyPage from "./components/table/ApplyPage";
 import ApexChart from "./components/charts/apexcharts";
+import FeesCollection from "./components/table/FeesCollection";
 
 /// Form
 import Element from "./components/Forms/Element/Element";
@@ -110,6 +113,7 @@ import RechartJs from "./components/charts/rechart";
 import axios from "axios";
 import Header from "./layouts/nav/Header";
 import Register from "./pages/Registration";
+import BasicDatatable from "./components/table/BasicDatatable";
 import { formatRelativeWithOptions } from "date-fns/esm/fp";
 import { RequireAuth } from "./pages/authprovider";
 
@@ -195,6 +199,8 @@ const Markup = () => {
 
     /// table
     { url: "table-datatable-basic", component: DataTable },
+    { url: "table-election" , component: ElectionTable},
+    { url: "table-apply" , component: ApplyPage},
     { url: "table-bootstrap-basic", component: BootstrapTable },
 
     /// Form
@@ -376,6 +382,11 @@ const Markup = () => {
               <Route path="/page-reset-password" component={ResetPassword} />
               <Route path="/page-new-password" component={NewPassword} />
               <Route path="/page-twofactor-auth" component={TwoFactorAuth} />
+              <Route path="/Event-Table" component={FeesCollection}/>
+              <Route path="/table-bootstrap-basic" component={BootstrapTable} />
+              <Route path="/table-election" component={ElectionTable} />
+              <Route path="/table-datatable-basic" component={DataTable} />
+              <Route path="/front-profile" component={AppProfile} />
               {/* <Route path="/table-bootstrap-basic">
                 <RequireAuth>
                   <BootstrapTable />

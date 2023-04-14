@@ -55,7 +55,7 @@ const Register = () => {
     },
     validationSchema: Yup.object({
       cin: Yup.string()
-        .max(8, "Must be 8 characters or less")
+        .max(8, "Must be 8 characters")
         .required("Required"),
       firstName: Yup.string().required("Required"),
       lastName: Yup.string().required("Required"),
@@ -79,8 +79,6 @@ const Register = () => {
       image: Yup.mixed().required(),
     }),
     onSubmit: (values) => {
-      console.log("aaaaaaaaaaaaaaaaa");
-      console.log(values);
       getData();
       const formUser = {
         _id: values.cin,

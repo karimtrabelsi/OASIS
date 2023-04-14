@@ -171,14 +171,15 @@ const AppProfile = (props) => {
                 </div>
                 <div className="profile-details">
                   <div className="profile-name px-3 pt-2">
+
                     <h4 className="text-primary mb-0">
                       {user.firstname} {user.lastname}
                     </h4>
                     <p>{user.role}</p>
                   </div>
                   <div className="profile-email px-2 pt-2">
-                    <h4 className="text-muted mb-0">{user.club}</h4>
-                    <p>Club</p>
+                    <h4 className="text-muted mb-0">{user.email}</h4>
+                    <p>Email</p>
                   </div>
                   <Dropdown className="dropdown ml-auto">
                     <Dropdown.Toggle
