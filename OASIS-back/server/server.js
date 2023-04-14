@@ -17,7 +17,7 @@ const newElection = require("./routes/election/newElection");
 const deleteElection = require("./routes/election/deleteElection");
 const updateElection = require("./routes/election/updateElection");
 const getElections = require("./routes/election/getElections");
-const creatEvent = require ("./routes/event/event");
+const creatEvent = require("./routes/event/event");
 const updatedEvent = require("./routes/event/updateEvent");
 const deletEvent = require("./routes/event/deleteEvent");
 const getEvent = require("./routes/event/getEvent");
@@ -41,14 +41,14 @@ console.log("Starting Chatbot ...");
 const manager = new NlpManager({ languages: ["en"] });
 manager.load();
 app.use(express.json());
-app.post('/chat', async (req, res) => {
+app.post("/chat", async (req, res) => {
   const { message } = req.body;
-  const response = await manager.process('en', message);
+  const response = await manager.process("en", message);
   res.json({ message: response.answer });
 });
 
 app.listen(3002, () => {
-  console.log('Chatbot API is running on port 3002');
+  console.log("Chatbot API is running on port 3002");
 });
 
 mongoose
@@ -72,7 +72,7 @@ const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "../OASIS-front/src/images/users");
   },
-    filename: function (req, file, cb) {
+  filename: function (req, file, cb) {
     cb(null, "userImage-" + req.body._id + path.extname(file.originalname));
   },
 });
@@ -81,13 +81,19 @@ const storageFile = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "../OASIS-front/src/images/files");
   },
-    filename: function (req, file, cb) {
+  filename: function (req, file, cb) {
     cb(null, "File-" + path.extname(file.originalname));
   },
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png" , "application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+  const allowedFileTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "application/pdf",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ];
   if (allowedFileTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
@@ -117,7 +123,6 @@ app.use("/users/twoFactorAuth", twoFactorAuth);
 
 app.use("/posts", posts);
 
- 
 app.use("/clubs", club);
 
 app.use("/election/newElection", newElection);
@@ -127,7 +132,6 @@ app.delete("/election/deleteElection/:id", deleteElection);
 app.put("/election/updateElection/:id", updateElection);
 
 app.get("/election", getElections);
-
 
 app.get("/getUsername", verifyJWt, (req, res) => {
   console.log(req.user);
@@ -139,15 +143,17 @@ app.get("/users/:id", getUser);
 app.post("/event", creatEvent);
 app.put("/updateEvent/:id", updatedEvent);
 app.delete("/deletEvent/:id", deletEvent);
-app.get("/getEvent",getEvent);
-
+app.get("/getEvent", getEvent);
 
 app.post("/candidacy/newCandidacy", uploadFile.single("file"), newCandidacy);
-app.put("/candidacy/updateCandidacy/:id", uploadFile.single("file") , updateCandidacy);
+app.put(
+  "/candidacy/updateCandidacy/:id",
+  uploadFile.single("file"),
+  updateCandidacy
+);
 app.delete("/candidacy/deleteCandidacy/:id", deleteCandidacy);
 app.get("/candidacy", getCandidacies);
 
-app.post("/predictBudget",  (req, res) => {
-  financialManagement
-}); 
-
+app.post("/predictBudget", (req, res) => {
+  financialManagement;
+});
