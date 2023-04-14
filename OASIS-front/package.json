@@ -10,6 +10,7 @@
       "@fullcalendar/interaction": "^5.4.0",
       "@fullcalendar/react": "^5.4.0",
       "@fullcalendar/timegrid": "^5.4.0",
+      "@heroicons/react": "^2.0.17",
       "@lls/react-light-calendar": "^2.2.0",
       "@loadable/component": "^5.14.1",
       "@material-ui/core": "^4.11.1",

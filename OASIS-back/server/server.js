@@ -10,6 +10,7 @@ const ban = require("./routes/user/banUser");
 const approve = require("./routes/user/approveUser");
 const passwordReset = require("./routes/user/resetPassword");
 const twoFactorAuth = require("./routes/user/twoFactorAuth");
+const posts = require("./routes/posts/posts");
 const verifyJWt = require("./middleware/verifyJWT");
 const getUser = require("./routes/user/getUser");
 const newElection = require("./routes/election/newElection");
@@ -113,6 +114,9 @@ app.post("/users/approve/:id", approve);
 app.use("/password-reset", passwordReset);
 
 app.use("/users/twoFactorAuth", twoFactorAuth);
+
+app.use("/posts", posts);
+
  
 app.use("/clubs", club);
 
@@ -123,6 +127,7 @@ app.delete("/election/deleteElection/:id", deleteElection);
 app.put("/election/updateElection/:id", updateElection);
 
 app.get("/election", getElections);
+
 
 app.get("/getUsername", verifyJWt, (req, res) => {
   console.log(req.user);
