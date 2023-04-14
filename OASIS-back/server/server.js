@@ -16,14 +16,17 @@ const newElection = require("./routes/election/newElection");
 const deleteElection = require("./routes/election/deleteElection");
 const updateElection = require("./routes/election/updateElection");
 const getElections = require("./routes/election/getElections");
+const getElection = require("./routes/election/getElection");
 const creatEvent = require ("./routes/event/event");
 const updatedEvent = require("./routes/event/updateEvent");
 const deletEvent = require("./routes/event/deleteEvent");
 const getEvent = require("./routes/event/getEvent");
 const newCandidacy = require("./routes/candidacy/newCandidacy");
 const updateCandidacy = require("./routes/candidacy/updateCandidacy");
+const voteCandidacy = require("./routes/candidacy/vote");
 const deleteCandidacy = require("./routes/candidacy/deleteCandidacy");
 const getCandidacies = require("./routes/candidacy/getCandidacy");
+const checkUser = require("./routes/candidacy/checkUser");
 const app = express();
 const club = require("./routes/club/club");
 app.use(cors());
@@ -73,15 +76,6 @@ const storage = multer.diskStorage({
   },
 });
 
-const storageFile = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "../OASIS-front/src/images/files");
-  },
-    filename: function (req, file, cb) {
-    cb(null, "File-" + path.extname(file.originalname));
-  },
-});
-
 const fileFilter = (req, file, cb) => {
   const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png" , "application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
   if (allowedFileTypes.includes(file.mimetype)) {
@@ -93,7 +87,21 @@ const fileFilter = (req, file, cb) => {
 
 let upload = multer({ storage, fileFilter });
 
-let uploadFile = multer({ storageFile, fileFilter });
+const storageFile = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '../OASIS-front/src/uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const uploadFile = multer({ storage: storageFile, fileFilter: fileFilter });
+
+app.get("/uploads/:filename", (req, res) => {
+  const file = path.join(__dirname, "../../OASIS-front/src/uploads", req.params.filename);
+  res.sendFile(file);
+});
 
 app.post("/register", upload.single("image"), register);
 
@@ -121,6 +129,8 @@ app.put("/election/updateElection/:id", updateElection);
 
 app.get("/election", getElections);
 
+app.get("/election/:id", getElection);
+
 app.get("/getUsername", verifyJWt, (req, res) => {
   console.log(req.user);
   res.status(200).send({ isLoggedIn: true, username: req.user.username });
@@ -135,5 +145,8 @@ app.get("/getEvent",getEvent);
 
 app.post("/candidacy/newCandidacy", uploadFile.single("file"), newCandidacy);
 app.put("/candidacy/updateCandidacy/:id", uploadFile.single("file") , updateCandidacy);
+app.put('/candidacy/vote/:id', voteCandidacy);
 app.delete("/candidacy/deleteCandidacy/:id", deleteCandidacy);
 app.get("/candidacy", getCandidacies);
+app.get("/candidacy/:userId/:electionId", checkUser);
+

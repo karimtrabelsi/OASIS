@@ -2,26 +2,37 @@ const fs = require("fs");
 const { NlpManager } = require("node-nlp");
 
 const manager = new NlpManager({
-	languages: ["en"],
+  languages: ["en"],
 });
+
 const files = fs.readdirSync("./server/routes/complaint/intents");
 
 for (const file of files) {
-	let data = fs.readFileSync(`./server/routes/complaint/intents/${file}`);
-	data = JSON.parse(data);
+  if (file.endsWith(".json")) {
+    const data = fs.readFileSync(`./server/routes/complaint/intents/${file}`);
+    const intents = JSON.parse(data);
 
-	const intent = file.replace(".json", "");
+    // Iterate over each intent in the array
+    for (const intent of intents) {
+      // Get the intent name from the object
+      const intentName = intent.name;
 
-	for (const question of data.questions) {
-		manager.addDocument("en", question, intent);
-	}
+      // Iterate over each question in the intent's questions array
+      for (const question of intent.questions) {
+        // Add the question to the NLP manager with the intent name as the tag
+        manager.addDocument("en", question, intentName);
+      }
 
-	for (const answer of data.answers) {
-		manager.addAnswer("en", intent, answer);
-	}
+      // Iterate over each answer in the intent's answers array
+      for (const answer of intent.answers) {
+        // Add the answer to the NLP manager with the intent name as the tag
+        manager.addAnswer("en", intentName, answer);
+      }
+    }
+  }
 }
 
 (async () => {
-	await manager.train();
-	manager.save();
+  await manager.train();
+  manager.save();
 })();

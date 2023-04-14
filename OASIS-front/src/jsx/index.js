@@ -227,7 +227,7 @@ const Markup = () => {
     // { url: "page-new-password", component: NewPassword },
     // { url: "page-twofactor-auth", component: TwoFactorAuth },
     // { url: "page-login", component: Login },
-    { url: "*", component: Error404 },
+    { url: "", component: Error404 },
 
     { url: "page-error-400", component: Error400 },
     { url: "page-error-403", component: Error403 },

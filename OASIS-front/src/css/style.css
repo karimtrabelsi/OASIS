@@ -3948,7 +3948,7 @@ input[type="button"].btn-block {
       margin-right: 15px;
       margin-bottom: 0;
       margin-left: 15px; } }
-
+      
 .card-group > .card {
   margin-bottom: 15px; }
 @media (min-width: 576px) {
@@ -30740,6 +30740,16 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
       overflow: hidden;
       white-space: nowrap;
       animation: typing 1s steps(40, end) infinite alternate;
+      }
+
+      .card-text-link:hover {
+        color: grey;
+        text-decoration: none;
+      }
+      .card-text-link {
+        color: #E23D19;
+        text-decoration: underline;
+        cursor: pointer;
       }
 
 /*# sourceMappingURL=style.css.map */

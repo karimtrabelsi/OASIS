@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const User = require("./user");
 const Candidacy = require("./candidacy");
+
+
 const Type = {
   ExecutiveBoard: "ExecutiveBoard",
   ExpandedBoard: "ExpandedBoard",
