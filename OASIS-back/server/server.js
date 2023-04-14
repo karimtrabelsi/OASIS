@@ -24,6 +24,9 @@ const newCandidacy = require("./routes/candidacy/newCandidacy");
 const updateCandidacy = require("./routes/candidacy/updateCandidacy");
 const deleteCandidacy = require("./routes/candidacy/deleteCandidacy");
 const getCandidacies = require("./routes/candidacy/getCandidacy");
+
+const financialManagement = require("./routes/event/financialManagement");
+
 const app = express();
 const club = require("./routes/club/club");
 app.use(cors());
@@ -133,7 +136,13 @@ app.put("/updateEvent/:id", updatedEvent);
 app.delete("/deletEvent/:id", deletEvent);
 app.get("/getEvent",getEvent);
 
+
 app.post("/candidacy/newCandidacy", uploadFile.single("file"), newCandidacy);
 app.put("/candidacy/updateCandidacy/:id", uploadFile.single("file") , updateCandidacy);
 app.delete("/candidacy/deleteCandidacy/:id", deleteCandidacy);
 app.get("/candidacy", getCandidacies);
+
+app.post("/predictBudget",  (req, res) => {
+  financialManagement
+}); 
+

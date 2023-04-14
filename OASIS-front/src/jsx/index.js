@@ -93,6 +93,7 @@ import BootstrapTable from "./components/table/BootstrapTable";
 import ElectionTable from "./components/table/ElectionTable";
 import ApplyPage from "./components/table/ApplyPage";
 import ApexChart from "./components/charts/apexcharts";
+import FeesCollection from "./components/table/FeesCollection";
 
 /// Form
 import Element from "./components/Forms/Element/Element";
@@ -381,6 +382,7 @@ const Markup = () => {
               <Route path="/page-reset-password" component={ResetPassword} />
               <Route path="/page-new-password" component={NewPassword} />
               <Route path="/page-twofactor-auth" component={TwoFactorAuth} />
+              <Route path="/Event-Table" component={FeesCollection}/>
               <Route path="/table-bootstrap-basic" component={BootstrapTable} />
               <Route path="/table-election" component={ElectionTable} />
               <Route path="/table-datatable-basic" component={DataTable} />
