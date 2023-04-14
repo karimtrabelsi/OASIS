@@ -8,7 +8,7 @@ const Client = () => {
   const { user } = useAuthStore();
   const auth = localStorage.getItem("connectedUser");
   console.log(user);
-  if (!auth) {
+  if (!user) {
     return <Navigate to="/login" />;
   }
   return (

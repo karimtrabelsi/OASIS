@@ -5,7 +5,7 @@ export const RequireAuth = ({ children }) => {
   const { user } = useAuthStore();
   console.log("test");
   const isAuthenticated = localStorage.getItem("connectedUser") ? true : false;
-  if (!isAuthenticated) {
+  if (!user) {
     return <Navigate to="/page-login" />;
   }
   return children;
