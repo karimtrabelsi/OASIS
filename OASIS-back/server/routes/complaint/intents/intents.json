@@ -115,5 +115,29 @@
             "In order to vote in an election, you may need to register on the Election Registration page. The requirements for registration may vary depending on the election.",
             "Once you have voted in an election, you can usually check the election results page to see if your vote has been counted."
         ]
-    }
+    },
+    {
+        "name": "Event Management",
+        "questions": [
+          "How do I create a new event?",
+          "What is the process for creating an event?",
+          "Can you guide me on how to start an event?",
+          "I have an idea for an event, how can I make it happen?"
+        ],
+        "answers": [
+          "To create a new event, go to the Event Management page and fill out the required information."
+        ]
+      },
+      {
+        "name": "Post Management",
+        "questions": [
+          "How do I create a new post?",
+          "What is the process for creating a post?",
+          "Can you guide me on how to make a new post?",
+          "I have something to share, how can I create a new post?"
+        ],
+        "answers": [
+          "To create a new post, go to the hompe page and post with filling out the required information and you can add some files or photos."
+        ]
+      }
 ]

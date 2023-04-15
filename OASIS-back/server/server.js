@@ -19,7 +19,6 @@ const updateElection = require("./routes/election/updateElection");
 const getElections = require("./routes/election/getElections");
 const getElection = require("./routes/election/getElection");
 const creatEvent = require ("./routes/event/event");
-const creatEvent = require("./routes/event/event");
 const updatedEvent = require("./routes/event/updateEvent");
 const deletEvent = require("./routes/event/deleteEvent");
 const getEvent = require("./routes/event/getEvent");
@@ -30,7 +29,7 @@ const deleteCandidacy = require("./routes/candidacy/deleteCandidacy");
 const getCandidacies = require("./routes/candidacy/getCandidacy");
 const checkUser = require("./routes/candidacy/checkUser");
 
-const financialManagement = require("./routes/event/financialManagement");
+// const financialManagement = require("./routes/event/financialManagement");
 
 const app = express();
 const club = require("./routes/club/club");

@@ -140,7 +140,7 @@ class SideBar extends Component {
               </Link>
               <ul aria-expanded="false">
                 <li>
-                  <Link to="/">Dashboard</Link>
+                  <Link to="/client/home">Dashboard</Link>
                 </li>
                 {/* <li>
                            <Link to="/workout-statistic">

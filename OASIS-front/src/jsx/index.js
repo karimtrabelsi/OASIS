@@ -214,6 +214,7 @@ const Markup = () => {
         <Route path="members" element={<DataTable />} />
         <Route path="Event-Table" element={<FeesCollection />} />
         <Route path="elections" element={<ElectionTable />} />
+        <Route path="table-apply" element={<ApplyPage />} />
         <Route path="*" element={<Error404 />} />
       </Route>
     </Routes>
