@@ -300,7 +300,7 @@ const ElectionTable = () => {
                                        }
                                        }
                                           variant="primary" > Update </button>
-                                       <Link to={`/table-apply?id=${election._id}`}>
+                                       <Link to={`/client/table-apply?id=${election._id}`}>
                                           <button type="button" className="btn btn-outline-info btn-rounded">Join</button>
                                        </Link>
                                     </div>

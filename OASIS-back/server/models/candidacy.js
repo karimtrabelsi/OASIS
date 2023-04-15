@@ -1,22 +1,34 @@
 const mongoose = require("mongoose");
 const User = require("./user");
-const Type = {
+const Election = require("./election");
+
+const Position = {
     President: "President",
     Secretary: "Secretary",
     Treasurer: "Treasurer",
     Protocol: "Protocol",
     VicePresident: "Vice-President",
+    ChiefExecutiveOfficer : "ChiefExecutiveOfficer", 
+    ChiefOperatingOfficer :"ChiefOperatingOfficer",
+    ChiefFinancialOfficer: "ChiefFinancialOfficer",
+    ChiefMarketingOfficer: "ChiefMarketingOfficer",
+    ChiefTechnologyOfficer: "ChiefTechnologyOfficer",
+    ChiefHumanResourcesOfficer: "ChiefHumanResourcesOfficer",
 };
 
 const candidacySchema = new mongoose.Schema(
   {
+    electionSelected: {
+        type: String,
+        required: true,
+    },
     user: {
         type: User.schema,
         required: true,
     },
     position: {
         type: String,
-        enum: Object.values(Type),
+        enum: Object.values(Position),
         required: true,
     },
     description: {
@@ -25,6 +37,7 @@ const candidacySchema = new mongoose.Schema(
     },
     file: {
         type: String,
+        required: true,
     },
     vote: {
         type: Number,
