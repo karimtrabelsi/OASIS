@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 /// Scroll
 import PerfectScrollbar from "react-perfect-scrollbar";
 
@@ -11,7 +11,7 @@ import { Button } from "react-bootstrap";
 import AppProfile from "../../components/AppsMenu/AppProfile/AppProfile";
 
 const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("connectedUser"));
   // const profilePic = {require(src="../../../images/users/" + user.image)};
   const isAuthenticated = localStorage.getItem("connectedUser") ? true : false;
@@ -353,10 +353,7 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                     toggle === "profile" ? "show" : ""
                   }`}
                 >
-                  <Link
-                    to="/front-profile"
-                    className="dropdown-item ai-icon"
-                  >
+                  <Link to="/front-profile" className="dropdown-item ai-icon">
                     <svg
                       id="icon-user1"
                       xmlns="http://www.w3.org/2000/svg"
@@ -401,8 +398,7 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                       // localStorage.removeItem("token");
                       // localStorage.removeItem("connectedUser");
                       localStorage.clear();
-                      history.push("/page-login");
-                      history.go(0);
+                      navigate("/login");
                     }}
                   >
                     <svg

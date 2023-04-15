@@ -429,13 +429,16 @@ class SideBar extends Component {
               </Link>
               <ul aria-expanded="false">
                 <li>
-                  <Link to="table-bootstrap-basic">Users Management</Link>
+                  <Link to="users">Users Management</Link>
                 </li>
                 <li>
-                  <Link to="table-datatable-basic">Members Management</Link>
+                  <Link to="members">Members Management</Link>
                 </li>
                 <li>
-                  <Link to="table-election">Elections Management</Link>
+                  <Link to="Event-Table">Event Management</Link>
+                </li>
+                <li>
+                  <Link to="elections">Elections Management</Link>
                 </li>
               </ul>
             </li>
