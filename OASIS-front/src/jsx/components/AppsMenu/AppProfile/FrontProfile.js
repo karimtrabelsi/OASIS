@@ -14,10 +14,16 @@ import { Dropdown, Button, Modal } from "react-bootstrap";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useAuthStore from "../../../../utils/zustand";
 
 import PageTitle from "../../../layouts/PageTitle";
 
 import { SRLWrapper } from "simple-react-lightbox";
+import { useQuery } from "react-query";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import swal from "sweetalert";
+import PostImage from "../../frontOffice/postImage";
 
 const AppProfile = () => {
   const [activeToggle, setActiveToggle] = useState("posts");
@@ -26,9 +32,10 @@ const AppProfile = () => {
   const [replay, setReplay] = useState(false);
 
   // user update
-  const [user, setuser] = useState([]);
+  const { user } = useAuthStore();
+  const [uuser, setuser] = useState([JSON.parse(user)]);
   const [posts, setposts] = useState([]);
-  const userr = JSON.parse(localStorage.getItem("connectedUser"));
+  const userr = JSON.parse(user);
 
   const notifyBottomCenter = () => {
     toast.warn("✅ User Updated !", {
@@ -42,26 +49,24 @@ const AppProfile = () => {
     });
   };
 
-  useEffect(() => {
-    const userr = JSON.parse(localStorage.getItem("connectedUser"));
-    console.log(userr);
-    axios.get("http://localhost:3000/users/" + userr._id).then((res) => {
-      setuser(res.data);
-    });
-  }, []);
+  const fetchPosts = async () => {
+    return await axios.get("http://localhost:3000/posts/myPosts/" + userr._id);
+  };
 
-  useEffect(() => {
-    axios.get("http://localhost:3000/posts/myPosts/" + user._id).then((res) => {
-      setposts(res.data);
+  const { status, data, error, refetch, isLoading, isRefetching, isSuccess } =
+    useQuery({
+      queryKey: ["posts"],
+      queryFn: fetchPosts,
     });
-  }, []);
+
+  console.log("isSuccess : ", isSuccess);
 
   function handleRegister(e) {
     e.preventDefault();
     const form = e.target;
     // console.log(form.email.value);
     const formUser = {
-      _id: user._id,
+      _id: uuser._id,
       firstname: form.firstname.value,
       lastname: form.lastname.value,
       username: form.username.value,
@@ -72,7 +77,7 @@ const AppProfile = () => {
     };
     console.log(formUser);
     axios
-      .post("http://localhost:3000/users/" + user._id, formUser, {
+      .post("http://localhost:3000/users/" + uuser._id, formUser, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -90,6 +95,74 @@ const AppProfile = () => {
       overlayColor: "#000000",
     },
   };
+
+  const hiddenFileInput = React.useRef(null);
+  const hiddenImageInput = React.useRef(null);
+
+  const handleClickFile = (event) => {
+    hiddenFileInput.current.click();
+  };
+
+  const handleClickImage = (event) => {
+    hiddenImageInput.current.click();
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      content: "",
+      link: "",
+      userId: "",
+      uuid: "",
+      image: null,
+      file: null,
+    },
+    validationSchema: Yup.object({
+      content: Yup.string()
+        .max(100, "Must be 100 characters or less")
+        .required("Required"),
+    }),
+    onSubmit: (values) => {
+      const randomId = Math.round(Math.random() * 1000000);
+
+      const post = {
+        content: values.content,
+        link: values.link,
+        userId: userr._id,
+        uuid: randomId,
+        file: values.file,
+        image: values.image,
+      };
+      console.log(post);
+
+      axios
+        .post("http://localhost:3000/posts/addPost", post, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          swal(
+            "Post added!",
+            "Thanks for sharing your thoughts with us!",
+            "success"
+          );
+          refetch();
+        })
+        .catch((err) => {
+          console.log(err);
+          swal("Oops", "Something is wrong!", "error");
+        });
+    },
+  });
+
+  if (isLoading) {
+    console.log("loading");
+    return <span>Loading...</span>;
+  }
+
+  if (isRefetching) {
+    console.log("refetching");
+  }
 
   return (
     <Fragment>
@@ -116,10 +189,10 @@ const AppProfile = () => {
                 <div className="profile-details">
                   <div className="profile-name px-3 pt-2">
                     <h4 className="text-primary mb-0">
-                      {user.firstname} {user.lastname}
+                      {userr.firstname} {userr.lastname}
                     </h4>
                     <p>
-                      {user.role} of {user.club}
+                      {userr.role} of {userr.club}
                     </p>
                   </div>
                   <Dropdown className="dropdown ml-auto">
@@ -556,122 +629,136 @@ const AppProfile = () => {
                     >
                       <div className="my-post-content pt-3">
                         <div className="post-input">
-                          <img
-                            src={profile07}
-                            alt="image"
-                            className="mr-3 rounded"
-                            width={75}
-                          />
-                          <textarea
-                            name="textarea"
-                            id="textarea"
-                            cols="30"
-                            rows="5"
-                            className="form-control bg-transparent"
-                            placeholder="Please type what you want...."
-                          />
-                          <Link
-                            to="/app-profile"
-                            className="btn btn-primary light px-3"
-                          >
-                            <i className="fa fa-link" />
-                          </Link>
-                          <Link
-                            to="/app-profile"
-                            className="btn btn-primary light mr-1 px-3 ml-1"
-                          >
-                            <i className="fa fa-camera" />
-                          </Link>
-                          <Link to="/app-profile" className="btn btn-primary">
-                            Post
-                          </Link>
+                          <form onSubmit={formik.handleSubmit} noValidate>
+                            <div className="d-flex justify-content-evenly">
+                              <img
+                                src={profile07}
+                                alt="image"
+                                className="mr-2 rounded mt-3 ml-1"
+                                width={40}
+                                height={40}
+                              />
+                              <textarea
+                                name="content"
+                                id="textarea"
+                                cols="30"
+                                rows="5"
+                                className="form-control bg-transparent border border-0"
+                                placeholder="Whats happening ?"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.content}
+                                isInvalid={
+                                  !!formik.touched.content &&
+                                  !!formik.errors.content
+                                }
+                              />
+                            </div>
+                            <Button className="btn btn-primary light px-3 ml-2">
+                              <input
+                                name="link"
+                                type="text"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.link}
+                                style={{ display: "none" }}
+                              />
+                              <i className="fa fa-link" />
+                            </Button>
+                            <Button
+                              className="btn btn-primary light px-3 ml-2"
+                              onClick={handleClickFile}
+                            >
+                              <input
+                                name="file"
+                                type="file"
+                                ref={hiddenFileInput}
+                                onChange={(e) =>
+                                  formik.setFieldValue(
+                                    "file",
+                                    e.currentTarget.files[0]
+                                  )
+                                }
+                                style={{ display: "none" }}
+                              />
+                              <i className="fa fa-file" />
+                            </Button>
+                            <Button
+                              className="btn btn-primary light mr-1 px-3 ml-1"
+                              onClick={handleClickImage}
+                            >
+                              <input
+                                name="image"
+                                type="file"
+                                ref={hiddenImageInput}
+                                onChange={(e) => {
+                                  formik.setFieldValue(
+                                    "image",
+                                    e.currentTarget.files[0]
+                                  );
+                                  console.log(e.currentTarget.files[0]);
+                                }}
+                                style={{ display: "none" }}
+                              />
+                              <i className="fa fa-camera" />
+                            </Button>
+                            <Button type="submit" className="btn btn-primary">
+                              Post
+                            </Button>
+                          </form>
                         </div>
-                        <div className="profile-uoloaded-post border-bottom-1 pb-5">
-                          <img src={profile08} alt="" className="img-fluid" />
-                          <Link className="post-title" to="/post-details">
-                            <h4>Collection of textile samples lay spread</h4>
-                          </Link>
-                          <p>
-                            A wonderful serenity has take possession of my
-                            entire soul like these sweet morning of spare which
-                            enjoy whole heart.A wonderful serenity has take
-                            possession of my entire soul like these sweet
-                            morning of spare which enjoy whole heart.
-                          </p>
-                          <button className="btn btn-primary mr-2">
-                            <span className="mr-2">
-                              <i className="fa fa-heart" />
-                            </span>
-                            Like
-                          </button>
-                          <button
-                            className="btn btn-secondary"
-                            onClick={() => setReplay(true)}
-                          >
-                            <span className="mr-2">
-                              <i className="fa fa-reply" />
-                            </span>
-                            Reply
-                          </button>
-                        </div>
-                        <div className="profile-uoloaded-post border-bottom-1 pb-5">
-                          <img src={profile09} alt="" className="img-fluid" />
-                          <Link className="post-title" to="/post-details">
-                            <h4>Collection of textile samples lay spread</h4>
-                          </Link>
-                          <p>
-                            A wonderful serenity has take possession of my
-                            entire soul like these sweet morning of spare which
-                            enjoy whole heart.A wonderful serenity has take
-                            possession of my entire soul like these sweet
-                            morning of spare which enjoy whole heart.
-                          </p>
-                          <button className="btn btn-primary mr-2">
-                            <span className="mr-2">
-                              <i className="fa fa-heart" />
-                            </span>
-                            Like
-                          </button>
-                          <button
-                            className="btn btn-secondary"
-                            onClick={() => setReplay(true)}
-                          >
-                            <span className="mr-2">
-                              <i className="fa fa-reply" />
-                            </span>
-                            Reply
-                          </button>
-                        </div>
-                        <div className="profile-uoloaded-post pb-3">
-                          <img src={profile08} alt="" className="img-fluid" />
-                          <Link className="post-title" to="/post-details">
-                            <h4>Collection of textile samples lay spread</h4>
-                          </Link>
-                          <p>
-                            A wonderful serenity has take possession of my
-                            entire soul like these sweet morning of spare which
-                            enjoy whole heart.A wonderful serenity has take
-                            possession of my entire soul like these sweet
-                            morning of spare which enjoy whole heart.
-                          </p>
-                          <button className="btn btn-primary mr-2">
-                            <span className="mr-2">
-                              <i className="fa fa-heart" />
-                            </span>
-                            Like
-                          </button>
-                          <button
-                            className="btn btn-secondary"
-                            onClick={() => setReplay(true)}
-                          >
-                            <span className="mr-2">
-                              <i className="fa fa-reply" />
-                            </span>
-                            Reply
-                          </button>
-                        </div>
+                        {data.data.map((post, index) => (
+                          <>
+                            <div className="profile-uoloaded-post border-bottom-1 pb-5 d-flex flex-column align-items-start">
+                              <p>{post.content}</p>
+
+                              <PostImage
+                                id={userr._id}
+                                uuid={post.uuid}
+                                image={post.image}
+                              />
+
+                              <button
+                                className="btn  mr-2"
+                                onClick={() =>
+                                  axios
+                                    .post(
+                                      "http://localhost:3000/posts/addLike",
+                                      {
+                                        postId: post._id,
+                                        userId: userr._id,
+                                      }
+                                    )
+                                    .then((res) => refetch())
+                                }
+                              >
+                                <span className="mr-2">
+                                  {post.likes.find(
+                                    (like) => like.userId === userr._id
+                                  ) ? (
+                                    <i className="fa fa-heart text-danger" />
+                                  ) : (
+                                    <i className="fa fa-heart " />
+                                  )}
+                                </span>
+                                {post.likes.length}
+                              </button>
+                              <button
+                                className="btn "
+                                onClick={() => setReplay(true)}
+                              >
+                                <span className="mr-2">
+                                  <i className="fa fa-reply" />
+                                </span>
+                                Reply
+                              </button>
+                            </div>
+                            <hr class="solid" />
+                          </>
+                        ))}
                       </div>
                     </div>
+
                     <div
                       id="about-me"
                       className={`tab-pane fade ${
@@ -862,7 +949,7 @@ const AppProfile = () => {
                                 <input
                                   type="email"
                                   placeholder="Email"
-                                  defaultValue={user.email}
+                                  defaultValue={userr.email}
                                   className="form-control"
                                   name="email"
                                 />
@@ -873,7 +960,7 @@ const AppProfile = () => {
                               <input
                                 type="text"
                                 placeholder="first name"
-                                defaultValue={user.firstname}
+                                defaultValue={userr.firstname}
                                 className="form-control"
                                 name="firstname"
                               />
@@ -883,7 +970,7 @@ const AppProfile = () => {
                               <input
                                 type="text"
                                 placeholder="last name"
-                                defaultValue={user.lastname}
+                                defaultValue={userr.lastname}
                                 className="form-control"
                                 name="lastname"
                               />
@@ -893,7 +980,7 @@ const AppProfile = () => {
                               <input
                                 type="text"
                                 placeholder="username"
-                                defaultValue={user.username}
+                                defaultValue={userr.username}
                                 className="form-control"
                                 name="username"
                               />
@@ -903,7 +990,7 @@ const AppProfile = () => {
                               <input
                                 type="text"
                                 placeholder="phone number"
-                                defaultValue={user.phonenumber}
+                                defaultValue={userr.phonenumber}
                                 className="form-control"
                                 name="phonenumber"
                               />
@@ -913,7 +1000,7 @@ const AppProfile = () => {
                               <input
                                 type="text"
                                 placeholder="club"
-                                defaultValue={user.club}
+                                defaultValue={userr.club}
                                 className="form-control"
                                 name="club"
                               />

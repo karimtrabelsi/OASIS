@@ -5,7 +5,40 @@ const app = express();
 const router = express.Router();
 
 module.exports = router;
+
+const multer = require("multer");
+let path = require("path");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "../OASIS-front/src/images/clubs");
+  },
+  filename: function (req, file, cb) {
+    cb(null, "clubImage-" + req.body.clubname + path.extname(file.originalname));
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowedFileTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "application/pdf",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ];
+  if (allowedFileTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+let upload = multer({ storage, fileFilter });
+
+
+
 const createclub = async (req, res) => {
+  try {
     const club = req.body;
     const takenclubname = await Club.findOne({ clubname: club.clubname });
     const takenEmail = await Club.findOne({ email: club.email });
@@ -23,20 +56,23 @@ const createclub = async (req, res) => {
         email: club.email,
         club: club.club,
         type: club.type,
-        image: club.image,
+        image: req.file.filename,
       });
       dbClub.save();
       res.status(200).send("Club created");
     }
+  } catch (err) {
+    console.log(err);
+  }
   };
-  router.route("/create").post(createclub);
+  router.route("/create").post(upload.single("image"),createclub);
 
   const updateclub = async (req, res) => {
     Club.findOne({ _id: req.params.id }).then((club) => {
-        // console.log(req.file);
+         console.log(req.files);
         club.clubname = req.body.clubname;
         club.email = req.body.email;
-        club.image= req.body.image;
+        club.image= req.file.filename;
         club.save();
         res.status(200).send("club updated");
       })
@@ -45,7 +81,7 @@ const createclub = async (req, res) => {
         }
         );
   }
-  router.route("/update/:id").put(updateclub);
+  router.route("/update/:id").put(upload.single("image"),updateclub);
 
   const getClubs = async (req, res) => {
     Club.find().then((clubs) => {
