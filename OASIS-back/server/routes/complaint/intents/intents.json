@@ -139,5 +139,12 @@
         "answers": [
           "To create a new post, go to the hompe page and post with filling out the required information and you can add some files or photos."
         ]
+      },
+      {
+        "name": "Unknown",
+        "questions": [".*"],
+        "answers": [
+          "I'm sorry, I don't understand. Can you please rephrase your question?"
+        ]
       }
 ]

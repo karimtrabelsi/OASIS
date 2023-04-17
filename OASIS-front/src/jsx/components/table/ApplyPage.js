@@ -39,6 +39,47 @@ const ApplyPage = () => {
       </svg>
    );
 
+   const handleVote = (candidacy) => {
+      Swal.fire({
+        title: "Confirm Vote",
+        text: "Are you sure you want to vote for "+candidacy.user.firstname+" "+candidacy.user.lastname+ " as "+candidacy.position+" ?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios
+            .post("http://localhost:3000/candidacy/vote", {
+              position: candidacy.position,
+              user: userr._id,
+              candidacies: candidacy._id,
+            })
+            .then((response) => {
+              console.log(response.data);
+              // handle success
+              Swal.fire({
+                title: "Success",
+                text: "Your vote has been recorded.",
+                icon: "success",
+              });
+            })
+            .catch((error) => {
+              if (
+                error.response.data.message ===
+                "You have already voted for this position."
+              ) {
+                Swal.fire({
+                  title: "Already Voted",
+                  text: "You have already voted for "+candidacy.position+" position.",
+                  icon: "info",
+                });
+              }
+            });
+        }
+      });
+    };
+
    const images = require.context('../../../images/users/', true, /\.(png|jpe?g|gif|svg)$/);
    const [search, setSearch] = useState("");
    const [candidacies, setCandidacies] = useState([]);
@@ -47,6 +88,7 @@ const ApplyPage = () => {
    const urlParams = new URLSearchParams(queryString);
    const idelection = urlParams.get("id");
    const [selectedType, setSelectedType] = useState('');
+   const [hasVoted, setHasVoted] = useState();
    const userr = JSON.parse(localStorage.getItem("connectedUser"));
    useEffect(() => {
       axios
@@ -63,7 +105,6 @@ const ApplyPage = () => {
          .then((res) => {
             const selectedType = res.data.type;
             setSelectedType(selectedType);
-            console.log(selectedType);
          })
          .catch((err) => {
             console.log(err);
@@ -123,7 +164,7 @@ const ApplyPage = () => {
                                     Swal.fire({
                                        title: "Apply",
                                        html:
-                                          `<input type="textarea" required class="swal2-input" name="description" placeholder="Description" />
+                                          `<textarea name="description" class="swal2-textarea" placeholder="Something to add"></textarea>
     <div class="form-group">
         <label for="position">Position:</label>
         <select id="position" name="position" class="swal2-input">
@@ -133,7 +174,7 @@ const ApplyPage = () => {
             <option value="Secretary">Secretary</option>
             <option value="Treasurer">Treasurer</option>
             <option value="Protocol">Protocol</option>` :
-           `<option value="ChiefExecutiveOfficer">Chief Executive Officer</option>
+                                             `<option value="ChiefExecutiveOfficer">Chief Executive Officer</option>
             <option value="ChiefOperatingOfficer">Chief Operating Officer</option>
             <option value="ChiefFinancialOfficer">Chief Financial Officer</option>
             <option value="ChiefMarketingOfficer">Chief Marketing Officer</option>
@@ -149,10 +190,9 @@ const ApplyPage = () => {
                                        icon: "info",
                                        buttons: false,
                                        dangerMode: true,
-                                       showCloseButton: true,
                                        preConfirm: () => {
                                           const description = Swal.getPopup().querySelector(
-                                             'input[name="description"]'
+                                             'textarea[name="description"]'
                                           ).value;
                                           const position = Swal.getPopup().querySelector(
                                              'select[name="position"]'
@@ -254,41 +294,58 @@ const ApplyPage = () => {
                                        variant="primary"><i className="fa fa-close"></i></button>
 
                                  </Card.Header>
-                                 <Card.Img variant="top" src={images('./' + candidacy.user.image)} style={{ maxWidth: "50%", maxHeight: "50%", margin: "auto" }} />
+                                 <Card.Img variant="top" src={images('./' + candidacy.user.image)} style={{ maxWidth: "250px", maxHeight: "250px", margin: "auto" }} />
 
                                  <Card.Body>
                                     <Card.Title>Name : {candidacy.user.firstname}</Card.Title>
                                     <Card.Text>Description : {candidacy.description}</Card.Text>
                                     <Card.Text className="card-text-link" onClick={() => window.open(`http://localhost:3000/uploads/${candidacy.file}`, '_blank')}>Presentation: {candidacy.file}</Card.Text>
-                                    <Card.Text>Vote : {candidacy.vote}</Card.Text>
+                                    <Card.Text>Votes : {candidacy.vote}</Card.Text>
                                     <div className="d-flex justify-content-between">
-                                       <button type="button" className="btn btn-outline-info btn-rounded" variant="primary" >Vote</button>
+                                       <button type="button" className="btn btn-outline-info btn-rounded" onClick={() => handleVote(candidacy)} variant="primary" disabled={hasVoted}>
+      {hasVoted ? 'Voted' : 'Vote'}</button>
                                        <button type="button" className="btn btn-outline-info btn-rounded"
                                           onClick={() =>
                                              Swal.fire({
                                                 title: "Update Candidacy",
                                                 html:
-                                                   '<input type="textarea" required class="swal2-input" name="description" value="' +
+                                                   '<textarea name="description" class="swal2-textarea" placeholder="Something to add"  placeholder="Description">' +
                                                    candidacy.description +
-                                                   '" placeholder="Description" />' +
+                                                   '</textarea>' +
                                                    '<div class="form-group">' +
                                                    '<label for="position" >Position:</label>' +
                                                    '<select id="position" name="position" class="swal2-input">' +
-                                                   '<option value="President"' +
-                                                   (candidacy.position === "President" ? "selected" : "") +
-                                                   '>President</option>' +
-                                                   '<option value="Vice-President"' +
-                                                   (candidacy.position === "Vice-President" ? "selected" : "") +
-                                                   '>Vice-President</option>' +
-                                                   '<option value="Secretary"' +
-                                                   (candidacy.position === "Secretary" ? "selected" : "") +
-                                                   '>Secretary</option>' +
-                                                   '<option value="Treasurer"' +
-                                                   (candidacy.position === "Treasurer" ? "selected" : "") +
-                                                   '>Treasurer</option>' +
-                                                   '<option value="Protocol"' +
-                                                   (candidacy.position === "Protocol" ? "selected" : "") +
-                                                   '>Protocol</option>' +
+                                                   (selectedType === "expandedBoard" ?
+                                                      '<option value="President"' +
+                                                      (candidacy.position === "President" ? "selected" : "") +
+                                                      '>President</option>' +
+                                                      '<option value="Vice-President"' +
+                                                      (candidacy.position === "Vice-President" ? "selected" : "") +
+                                                      '>Vice-President</option>' +
+                                                      '<option value="Secretary"' +
+                                                      (candidacy.position === "Secretary" ? "selected" : "") +
+                                                      '>Secretary</option>' +
+                                                      '<option value="Treasurer"' +
+                                                      (candidacy.position === "Treasurer" ? "selected" : "") +
+                                                      '>Treasurer</option>' +
+                                                      '<option value="Protocol"' +
+                                                      (candidacy.position === "Protocol" ? "selected" : "") +
+                                                      '>Protocol</option>' :
+                                                      '<option value="ChiefExecutiveOfficer"' +
+                                                      (candidacy.position === "Chief Executive Officer" ? "selected" : "") +
+                                                      '>Chief Executive Officer</option>' +
+                                                      '<option value="ChiefOperatingOfficer"' +
+                                                      (candidacy.position === "Chief Operating Officer" ? "selected" : "") +
+                                                      '>Chief Operating Officer</option>' +
+                                                      '<option value="ChiefFinancialOfficer"' +
+                                                      (candidacy.position === "Chief Financial Officer" ? "selected" : "") +
+                                                      '>Chief Financial Officer</option>' +
+                                                      '<option value="ChiefMarketingOfficer"' +
+                                                      (candidacy.position === "Chief Marketing Officer" ? "selected" : "") +
+                                                      '>Chief Marketing Officer</option>' +
+                                                      '<option value="ChiefTechnologyOfficer"' +
+                                                      (candidacy.position === "Chief Technology Officer" ? "selected" : "") +
+                                                      '>Chief Technology Officer</option>') +
                                                    '</select>' +
                                                    '</div>' +
                                                    '<br></br>' +
@@ -299,9 +356,10 @@ const ApplyPage = () => {
                                                 icon: "info",
                                                 buttons: false,
                                                 dangerMode: true,
+
                                                 preConfirm: () => {
                                                    const description = Swal.getPopup().querySelector(
-                                                      'input[name="description"]'
+                                                      'textarea[name="description"]'
                                                    ).value;
                                                    const position = Swal.getPopup().querySelector(
                                                       'select[name="position"]'
