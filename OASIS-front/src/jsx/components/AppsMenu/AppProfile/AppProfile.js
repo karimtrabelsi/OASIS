@@ -171,7 +171,6 @@ const AppProfile = (props) => {
                 </div>
                 <div className="profile-details">
                   <div className="profile-name px-3 pt-2">
-
                     <h4 className="text-primary mb-0">
                       {user.firstname} {user.lastname}
                     </h4>

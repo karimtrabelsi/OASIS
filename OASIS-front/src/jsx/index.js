@@ -102,6 +102,9 @@ import JqvMap from "./components/PluginsMenu/Jqv Map/JqvMap";
 import RechartJs from "./components/charts/rechart";
 
 import Client from "./pages/client";
+import useAuthStore from "../utils/zustand";
+import FrontLayout from "./layouts/frontLayout";
+import HomeFront from "./components/frontOffice/home";
 
 const Markup = () => {
   const authRoutes = [
@@ -208,6 +211,23 @@ const Markup = () => {
     { url: "page-error-503", component: Error503 },
   ];
 
+  const { user } = useAuthStore();
+
+  if (user && JSON.parse(user).role === "Member")
+    return (
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Registration />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/new-password" element={<NewPassword />} />
+        <Route path="/twofactor-auth" element={<TwoFactorAuth />} />
+        <Route path="/client" element={<FrontLayout />}>
+          <Route path="profile" element={<FrontProfile />} />
+          <Route path="home" element={<HomeFront />} />
+        </Route>
+        <Route path="*" element={<Error404 />} />
+      </Routes>
+    );
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
@@ -217,7 +237,7 @@ const Markup = () => {
       <Route path="/twofactor-auth" element={<TwoFactorAuth />} />
       <Route path="/client" element={<Client />}>
         <Route path="home" element={<Home />} />
-        <Route path="profile" element={<FrontProfile />} />
+        <Route path="profile" element={<AppProfile />} />
         <Route path="users" element={<BootstrapTable />} />
         <Route path="members" element={<DataTable />} />
         <Route path="Event-Table" element={<FeesCollection />} />
