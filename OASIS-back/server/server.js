@@ -18,7 +18,7 @@ const deleteElection = require("./routes/election/deleteElection");
 const updateElection = require("./routes/election/updateElection");
 const getElections = require("./routes/election/getElections");
 const getElection = require("./routes/election/getElection");
-const creatEvent = require ("./routes/event/event");
+const creatEvent = require("./routes/event/event");
 const updatedEvent = require("./routes/event/updateEvent");
 const deletEvent = require("./routes/event/deleteEvent");
 const getEvent = require("./routes/event/getEvent");
@@ -99,7 +99,7 @@ let upload = multer({ storage, fileFilter });
 
 const storageFile = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '../OASIS-front/src/uploads');
+    cb(null, "../OASIS-front/src/uploads");
   },
   filename: function (req, file, cb) {
     cb(null, `${Date.now()}-${file.originalname}`);
@@ -109,7 +109,11 @@ const storageFile = multer.diskStorage({
 const uploadFile = multer({ storage: storageFile, fileFilter: fileFilter });
 
 app.get("/uploads/:filename", (req, res) => {
-  const file = path.join(__dirname, "../../OASIS-front/src/uploads", req.params.filename);
+  const file = path.join(
+    __dirname,
+    "../../OASIS-front/src/uploads",
+    req.params.filename
+  );
   res.sendFile(file);
 });
 
@@ -156,8 +160,12 @@ app.delete("/deletEvent/:id", deletEvent);
 app.get("/getEvent", getEvent);
 
 app.post("/candidacy/newCandidacy", uploadFile.single("file"), newCandidacy);
-app.put("/candidacy/updateCandidacy/:id", uploadFile.single("file") , updateCandidacy);
-app.put('/candidacy/vote/:id', voteCandidacy);
+app.put(
+  "/candidacy/updateCandidacy/:id",
+  uploadFile.single("file"),
+  updateCandidacy
+);
+app.put("/candidacy/vote/:id", voteCandidacy);
 app.delete("/candidacy/deleteCandidacy/:id", deleteCandidacy);
 app.get("/candidacy", getCandidacies);
 app.get("/candidacy/:userId/:electionId", checkUser);

@@ -41,7 +41,7 @@ const Login = () => {
           console.log(res.data.user);
           JSON.parse(res.data.user).role === "SuperAdmin"
             ? navigate("/client/home")
-            : navigate("/front-profile");
+            : navigate("/profile");
           // history.go(0);
         })
         .catch((err) => {

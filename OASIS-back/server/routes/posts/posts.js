@@ -112,4 +112,26 @@ router.post("/addComment", (req, res) => {
     });
 });
 
+router.post("/addLike", (req, res) => {
+  const like = {
+    userId: req.body.userId,
+    postId: req.body.postId,
+  };
+  Post.findById({ _id: req.body.postId })
+    .then((post) => {
+      if (post.likes.find((l) => l.userId === like.userId)) {
+        console.log("like already exists");
+        post.likes.pull(like);
+      } else {
+        console.log("like does not exist");
+        post.likes.push(like);
+      }
+      post.save();
+      res.status(200).send(post);
+    })
+    .catch((error) => {
+      res.status(400).send(error);
+    });
+});
+
 module.exports = router;
