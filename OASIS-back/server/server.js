@@ -25,9 +25,13 @@ const newCandidacy = require("./routes/candidacy/newCandidacy");
 const updateCandidacy = require("./routes/candidacy/updateCandidacy");
 const deleteCandidacy = require("./routes/candidacy/deleteCandidacy");
 const getCandidacies = require("./routes/candidacy/getCandidacy");
-
+const createRecrutement = require("./routes/recrutement/createRecrutement");
+const getRecrutements = require("./routes/recrutement/getRecrutements");
+const getRecrutement = require("./routes/recrutement/getRecrutement");
+const updateRecrutement = require("./routes/recrutement/updateRecrutement");
+const deleteRecrutement = require("./routes/recrutement/deleteRecrutement");
 const financialManagement = require("./routes/event/financialManagement");
-
+const sendMail= require("./utils/sendMail");
 const app = express();
 const club = require("./routes/club/club");
 app.use(cors());
@@ -104,6 +108,16 @@ const fileFilter = (req, file, cb) => {
 let upload = multer({ storage, fileFilter });
 
 let uploadFile = multer({ storageFile, fileFilter });
+
+
+app.post('/recrutements', createRecrutement);
+app.get('/recrutements', getRecrutements);
+app.get('/recrutements/:id', getRecrutement);
+app.put('/recrutements/:id', updateRecrutement);
+app.delete('/recrutements/:id', deleteRecrutement);
+
+app.post('/sendMail', sendMail);
+
 
 app.post("/register", upload.single("image"), register);
 
