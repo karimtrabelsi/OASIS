@@ -76,6 +76,10 @@ import BtcChart from "./components/charts/apexcharts/ApexChart";
 /// Table
 import DataTable from "./components/table/DataTable";
 import BootstrapTable from "./components/table/BootstrapTable";
+import ClubTable from "./components/table/ClubTable";
+import Club from "./components/table/Club";
+
+
 import ElectionTable from "./components/table/ElectionTable";
 import ApplyPage from "./components/table/ApplyPage";
 import ApexChart from "./components/charts/apexcharts";
@@ -165,6 +169,10 @@ const Markup = () => {
     { url: "table-election", component: ElectionTable },
     { url: "table-apply", component: ApplyPage },
     { url: "table-bootstrap-basic", component: BootstrapTable },
+    { url: "table-club", component: Club },
+    { url: "table-club-front", component: ClubTable },
+
+
 
     /// Form
     { url: "form-element", component: Element },
@@ -214,7 +222,8 @@ const Markup = () => {
         <Route path="members" element={<DataTable />} />
         <Route path="Event-Table" element={<FeesCollection />} />
         <Route path="elections" element={<ElectionTable />} />
-        <Route path="table-apply" element={<ApplyPage />} />
+        <Route path="table-club" element={<Club />} />
+        <Route path="table-club-front" element={<ClubTable />} />
         <Route path="*" element={<Error404 />} />
       </Route>
     </Routes>
