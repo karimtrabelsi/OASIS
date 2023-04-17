@@ -102,7 +102,7 @@ const ElectionTable = () => {
                                     <Card.Text>Start Date : {moment(election.startDate).format('MM/DD/YYYY')}</Card.Text>
                                     <Card.Text>End Date : {moment(election.endDate).format('MM/DD/YYYY')}</Card.Text>
                                     <Card.Text>Candidates : {election.candidates}</Card.Text>
-                                    <Button variant="primary">View Details</Button>
+                                    <Button  variant="primary">View Details</Button>
                                  <Button
                                     onClick={() =>
                                        swal({
