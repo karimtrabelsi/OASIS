@@ -94,84 +94,115 @@ import React, {
                     New Clubs{" "}
                   </Badge>
                   <Button onClick={() => Swal.fire({
-                        title:  '<p> Add Club </p>',
-                        html:
-                        '<br> </br>'+
-                        '<div className="mb-3">'+
-                        '<div className="input_wrap ">' +
-                         '<input type="text"  id="clubname" class="form-control "/> <label className="text-center ">Club name</label> </div>' +
-                         '<div className="input_wrap ">' +
-                         '<input type="text"   id="foundingpresident" class="form-control "/> <label>Founding president</label></div>' +
-                         '<div className="input_wrap ">' +
-                         '<input type="text"   id="city" class="form-control "/> <label>City</label></div>'+
-                         '<div className="input_wrap ">' +
-                         '<input type="text"  id="region" class="form-control "/> <label>Region</label></div>'+
-                         '<div className="input_wrap ">' +
-                         '<input type="email" id="email" class="form-control "/> <label>Email</label></div>'+
-                         '<div className="input_wrap ">' +
-                         '<input type="text"  id="club" class="form-control "/> <label>Club </label></div>'+
-                         '<div className="input_wrap ">' +
-                         '<select id="type" name="type" class="form-control>'+
-                         '<option value="Rotary">Rotary</option>' +
-                         '<option value="Rotaract">Rotaract</option>'+
-                         '<option value="Interact">Interact</option>'+
-                         '<option value="Lions">Lions</option>'+
-                         '<option value="Leo">Leo</option>'+
-                         '</select> '+
-                         '<label>Type</label></div>'+
-                         '</div>'+
-                        '<div className="input_wrap ">' +
-                            '<input type="file"  id="image" class="form-control "/> <label>Image</label></div>'+
-                          '</div>',
-              
-                            
-                        focusConfirm: false,
-                        preConfirm: () => {
-                           const clubname = document.getElementById('clubname').value;
-                           const foundingpresident = document.getElementById('foundingpresident').value;
-                           const city = document.getElementById('city').value;
-                           const region = document.getElementById('region').value;
-                           const email = document.getElementById('email').value;
-                           const club = document.getElementById('club').value;
-                           const type = document.getElementById('type').value;
-                           const image = document.getElementById('image').value;
+                                    title: "Add Club",
+                                    html:
+                                    '<br></br>'+
+                                    '<div class="input_wrap">' +
+                                    '<input type="text" required  class="form-control" name="clubname">' +
+                                    '<label>Club name</label>' +
+                                       '</div>'+
+                                       '<br></br>'+
+                                       '<div class="input_wrap">' +
+                                       '<input type="text" required  class="form-control" name="fp">' +
+                                       '<label>Founding President</label>' +
+                                          '</div>'+
+                                          '<br></br>'+
+                                          '<div class="input_wrap">' +
+                                          '<input type="text" required  class="form-control" name="city">' +
+                                          '<label>City</label>' +
+                                             '</div>'+
 
-                           if (!clubname || !foundingpresident || !city || !region || !email || !club || !type || !image) {
-                              Swal.showValidationMessage('Please fill in all fields');
-                           }
-                           return { clubname: clubname, fp: foundingpresident, city: city, region: region, email: email, club: club , type: type, image: image };
-                        }
-                     }).then(result => {
-                        if (result.isConfirmed) {
-                           console.log(result.value);
-                           fetch('http://localhost:3000/clubs/create', {
-                              method: 'POST',
-                              headers: {
-                                 'Content-Type': 'application/json'
-                              },
-                              body: JSON.stringify(result.value)
-                           })
-                              .then(response => {
-                                 if (!response.ok) {
-                                    throw new Error('Network response was not ok');
-                                 }
-                                 Swal.fire({
-                                    icon: 'success',
-                                    title: 'Club added successfully',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                 });
-                              })
-                              .catch(error => {
-                                 console.error('There was an error adding the club:', error);
-                                 Swal.fire({
-                                    icon: 'error',
-                                    title: 'Oops...',
-                                    text: 'Something went wrong!'
-                                 });
-                              });
-                        }
-                     })
+                                             '<br></br>'+
+                                             '<div class="input_wrap ">' +
+                                             '<input type="text" required  class="form-control" name="region">' +
+                                             '<label>Region</label>' +
+                                                '</div>'+
+
+                                                '<br></br>'+
+                                               ' <div class="select_wrap">'+
+                                             '<select id="type" name="type" class="form-control"  >'+
+                                             '<option value="">Select a type</option>'+
+'    <option value="Rotary">Rotary</option>'+
+   ' <option value="Rotaract">Rotaract </option>'+
+    '<option value="Interact">Interact </option>'+
+    '<option value="Lions">Lions </option>'+
+    '<option value="Leo">Leo </option>'+
+ ' </select>'+
+ 
+'</div'+
+                                                   '<br></br>'+
+                                                   '<div class="input_wrap">' +
+                                                   '<input type="text" required  class="form-control" name="club">' +
+                                                   '<label>Sponsor Club </label>' +
+                                                      '</div>'+
+                                  '<br></br>'+
+                                  '<div class="input_wrap">' +
+                                  '<input type="text" required  class="form-control" name="email">' +
+                                  '<label>Email</label>' +
+                                '</div>'+
+                                '<br></br>'+
+                                '<div class="input_wrap">' +
+                                '<input type="file"   class="form-control" name="image">' +
+                                '<label>image</label>' +
+                              '</div>',
+                                    icon: "info",
+                                    buttons: false,
+                                    dangerMode: true,
+                                    preConfirm: () => {
+                                      const clubname = Swal.getPopup().querySelector(
+                                        'input[name="clubname"]'
+                                      ).value;
+                                      const fp = Swal.getPopup().querySelector(
+                                        'input[name="fp"]'
+                                      ).value;
+                                      const city = Swal.getPopup().querySelector(
+                                        'input[name="city"]'
+                                      ).value;
+                                      const region = Swal.getPopup().querySelector(
+                                        'input[name="region"]'
+                                      ).value;
+                                      const type = Swal.getPopup().querySelector(
+                                        'select[name="type"]'
+                                      ).value;
+                                      const club = Swal.getPopup().querySelector(
+                                        'input[name="club"]'
+                                      ).value;
+                                      const email = Swal.getPopup().querySelector(
+                                        'input[name="email"]'
+                                      ).value;
+                                      const image = Swal.getPopup().querySelector(
+                                        'input[name="image"]'
+                                      )
+                                      const file= image.files[0]
+           
+                                      if (!clubname ||!fp ||!city ||!region ||!type ||!club || !email || !image ) {
+                                         Swal.showValidationMessage('Please fill in all fields');
+                                      }
+                                      return { clubname: clubname, fp: fp, city: city, region: region, type: type, club: club, email: email,  image: file };
+                                   }
+                                  }) .then((result) => {
+
+                                    console.log(result)
+                                       axios
+                                         .post(
+                                           "http://localhost:3000/clubs/create" ,
+                                                 result.value,{
+                                               headers: { 
+                                                 'Content-Type': 'multipart/form-data',
+                                               }
+                                             }
+                                         )
+                                         .then((res) => {
+                                           // console.log(res)
+                                           if ((res.respone = 200)) {
+                                             Swal.fire("Club has been added!", {
+                                               icon: "success",
+                                             });
+                                           } else {
+                                             Swal.fire("something wrong !");
+                                           }
+                                         })
+                                        } )
                      }
                         variant="primary">+ Add</Button>
                   <div className="input-group search-area d-lg-inline-flex d-none ">
@@ -202,6 +233,9 @@ import React, {
                 <Table responsive>
                   <thead>
                     <tr>
+                    <th >
+                        <strong></strong>
+                      </th>
                       <th className="width80">
                         <strong>Club Name</strong>
                       </th>
@@ -245,7 +279,9 @@ import React, {
                       .filter((club) => club.type !== "SuperAdmin")
                       .map((club, index) => (
                         <tr key={club._id}>
-                         
+
+                         <td> <img  width={70} 
+                         height={60}  alt="image" src={require("../../../images/clubs/" + club.image) }  /></td>
                           <td>{club.clubname}</td>
                           <td>{club.foundingpresident.firstname}</td>
                           <td></td>
@@ -305,7 +341,7 @@ import React, {
                             )}
                           </td>
                             <td></td>
-                          <td>100</td>
+                          <td>{club.members.length}</td>
                             <td></td>
                           <td>{club.club}</td>
                           <Badge
@@ -341,12 +377,13 @@ import React, {
                                       ).value;
                                       const image = Swal.getPopup().querySelector(
                                         'input[name="image"]'
-                                      ).value;
+                                      )
+                                      const file= image.files[0]
            
                                       if (!clubname || !email || !image ) {
                                          Swal.showValidationMessage('Please fill in all fields');
                                       }
-                                      return { clubname: clubname, email: email,  image: image };
+                                      return { clubname: clubname, email: email,  image: file };
                                    }
                                   })
                                   .then((result) => {
@@ -355,7 +392,11 @@ import React, {
                                     axios
                                       .put(
                                         "http://localhost:3000/clubs/update/" +
-                                          club._id,result.value
+                                          club._id,result.value,{
+                                            headers: { 
+                                              'Content-Type': 'multipart/form-data'
+                                            }
+                                          }
                                       )
                                       .then((res) => {
                                         // console.log(res)
@@ -384,6 +425,7 @@ import React, {
         </Row>
       </Fragment>
     );
+   
   };
   
   export default Club;

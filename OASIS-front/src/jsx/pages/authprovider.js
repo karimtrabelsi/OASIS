@@ -1,9 +1,12 @@
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import useAuthStore from "../../utils/zustand";
 
 export const RequireAuth = ({ children }) => {
+  const { user } = useAuthStore();
+  console.log("test");
   const isAuthenticated = localStorage.getItem("connectedUser") ? true : false;
-  if (!isAuthenticated) {
-    return <Redirect to="/page-login" />;
+  if (!user) {
+    return <Navigate to="/page-login" />;
   }
   return children;
 };

@@ -3948,7 +3948,7 @@ input[type="button"].btn-block {
       margin-right: 15px;
       margin-bottom: 0;
       margin-left: 15px; } }
-
+      
 .card-group > .card {
   margin-bottom: 15px; }
 @media (min-width: 576px) {
@@ -30691,8 +30691,26 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
         padding-left: 20px;
         box-shadow: none;  
       }
+      select[type="select"] {
+        border: 2px solid #E54927;
+        border-radius: 5px;
+        height: 47px;
+        width: 100%;
+        color: #000000;
+        font-size: 14px;
+        padding-left: 20px;
+        box-shadow: none;  
+      }
 
       input:focus + label, input:valid + label{
+        font-size: 12px;
+        color: #e39b96;
+        top: -5px;
+        left:10px;
+        background: #ffffff;
+        padding: 0px 5px 0px 5px;
+      }
+      select:focus + label, select:valid + label{
         font-size: 12px;
         color: #e39b96;
         top: -5px;
@@ -30703,8 +30721,25 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 
       .input_wrap {width:100%; height:auto; position:relative;
       }
+      .select_wrap {width:100%; height:auto; position:relative;
+      }
 
       .input_wrap label {
+        font-family:arial;
+        font-size:16px;
+        color: #6c757d;
+        padding: 14px;
+        position: absolute;
+        top: 0;
+        left: 10px;
+        transition:0.2s ease all; 
+        -moz-transition:0.2s ease all; 
+        -webkit-transition:0.2s ease all;
+        pointer-events: none;
+       
+      
+      }
+      .select_wrap label {
         font-family:arial;
         font-size:16px;
         color: #6c757d;
@@ -30723,11 +30758,35 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
       input[type="password"]:focus {outline:none;}
       input[type="email"]:focus {outline:none;}
       input[type="number"]:focus {outline:none;}
+      select[type="select"]:focus {outline:none;}
+
 
       @media screen and (min-width: 769px) {
         .logo-abbr {
           display: none;
         }
+      }
+
+      @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+      }
+
+      .typing-animation {
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      animation: typing 1s steps(40, end) infinite alternate;
+      }
+
+      .card-text-link:hover {
+        color: grey;
+        text-decoration: none;
+      }
+      .card-text-link {
+        color: #E23D19;
+        text-decoration: underline;
+        cursor: pointer;
       }
 
 /*# sourceMappingURL=style.css.map */

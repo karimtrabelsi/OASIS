@@ -125,8 +125,7 @@ const ClubTable = () => {
             <p>Bord: ${club.board}</p>
             <p>City: ${club.city}</p>
             <p>Region: ${club.region}</p>
-            <p>Members: ${club.members}</p>
-            <p>Number of Mumbers: ${club.membersN}</p>
+            <p>Members: ${club.members.length}</p>
             <p>Email: ${club.email}</p>
             <p>Type: ${club.type}</p>
 

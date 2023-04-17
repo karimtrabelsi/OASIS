@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Col,
   Button,
@@ -34,7 +34,7 @@ const Register = () => {
     { value: "President", label: "President" },
   ];
 
-  const history = useHistory();
+  const navigate = useNavigate();
   // min 5 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit.
   const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
   const emailRules = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -54,9 +54,7 @@ const Register = () => {
       image: null,
     },
     validationSchema: Yup.object({
-      cin: Yup.string()
-        .max(8, "Must be 8 characters")
-        .required("Required"),
+      cin: Yup.string().max(8, "Must be 8 characters").required("Required"),
       firstName: Yup.string().required("Required"),
       lastName: Yup.string().required("Required"),
       username: Yup.string()
@@ -79,8 +77,6 @@ const Register = () => {
       image: Yup.mixed().required(),
     }),
     onSubmit: (values) => {
-      console.log("aaaaaaaaaaaaaaaaa");
-      console.log(values);
       getData();
       const formUser = {
         _id: values.cin,
@@ -108,7 +104,7 @@ const Register = () => {
             "Please wait untill an admin approves your account! We will notify you with an Email",
             "success"
           );
-          history.push("/page-login");
+          navigate("/page-login");
         })
         .catch((err) => {
           console.log("err");

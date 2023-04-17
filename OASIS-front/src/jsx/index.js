@@ -1,25 +1,11 @@
-import React, { useEffect, useState, useMemo, useCallback } from "react";
+import React from "react";
 
 /// React router dom
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useHistory,
-  Redirect,
-  Link,
-  withRouter,
-} from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { Route, Routes } from "react-router-dom";
 
 /// Css
 import "./index.css";
 import "./chart.css";
-
-/// Layout
-import Nav from "./layouts/nav";
-import Navf from "./layouts/navf";
-import Footer from "./layouts/Footer";
 
 /// Pages
 import Registration from "./pages/Registration";
@@ -94,7 +80,10 @@ import ClubTable from "./components/table/ClubTable";
 import Club from "./components/table/Club";
 
 
+import ElectionTable from "./components/table/ElectionTable";
+import ApplyPage from "./components/table/ApplyPage";
 import ApexChart from "./components/charts/apexcharts";
+import FeesCollection from "./components/table/FeesCollection";
 
 /// Form
 import Element from "./components/Forms/Element/Element";
@@ -111,11 +100,8 @@ import MainSweetAlert from "./components/PluginsMenu/Sweet Alert/SweetAlert";
 import Toastr from "./components/PluginsMenu/Toastr/Toastr";
 import JqvMap from "./components/PluginsMenu/Jqv Map/JqvMap";
 import RechartJs from "./components/charts/rechart";
-import axios from "axios";
-import Header from "./layouts/nav/Header";
-import Register from "./pages/Registration";
-import { formatRelativeWithOptions } from "date-fns/esm/fp";
-import { RequireAuth } from "./pages/authprovider";
+
+import Client from "./pages/client";
 
 const Markup = () => {
   const authRoutes = [
@@ -126,25 +112,6 @@ const Markup = () => {
     { url: "page-login", component: Login },
     // { url: "*", component: Login },
   ];
-  let path = window.location.pathname;
-  path = path.split("/");
-  path = path[path.length - 1];
-  let pagePath = path.split("-").includes("page");
-
-  const history = useHistory();
-
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [role, setRole] = useState("");
-  let frontPath = path.split("-").includes("app");
-
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("connectedUser"));
-    if (user) {
-      setRole(user.role);
-    }
-  }, [pagePath]);
-
-  const cond = !pagePath && role !== "Member";
 
   const routes = [
     /// Deshborad
@@ -199,6 +166,8 @@ const Markup = () => {
 
     /// table
     { url: "table-datatable-basic", component: DataTable },
+    { url: "table-election", component: ElectionTable },
+    { url: "table-apply", component: ApplyPage },
     { url: "table-bootstrap-basic", component: BootstrapTable },
     { url: "table-club", component: Club },
     { url: "table-club-front", component: ClubTable },
@@ -239,245 +208,26 @@ const Markup = () => {
     { url: "page-error-503", component: Error503 },
   ];
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [cancel, setCancel] = useState(null);
-  const getUsername = useCallback(() => {
-    console.log("before :", isAuthenticated);
-    setIsLoading(true);
-    setError(null);
-
-    // axios
-    //   .get("http://localhost:3000/getUsername", {
-    //     headers: {
-    //       Authorization: localStorage.getItem("token"),
-    //       cancelToken: new axios.CancelToken((c) => setCancel(c)),
-    //     },
-    //   })
-    //   .then((res) => {
-    //     console.log(res.data.isLoggedIn);
-    //     setIsAuthenticated(true);
-    //     console.log("after :", isAuthenticated);
-    //     console.log(res.data);
-
-    //     setIsLoading(false);
-    //   })
-    //   .catch((err) => {
-    //     if (axios.isCancel(err)) {
-    //       console.log("Request canceled:", err.message);
-    //     } else {
-    //       console.error(err);
-    //     }
-    //     setIsLoading(false);
-    //     setError(err.message);
-    //     setIsAuthenticated(false);
-    //   });
-
-    const user = localStorage.getItem("connectedUser");
-    console.log("user :", user);
-    user ? setIsAuthenticated(true) : setIsAuthenticated(false);
-    console.log("after :", isAuthenticated);
-  }, []);
-
-  useEffect(() => {
-    // const cancelToken = new axios.CancelToken((c) => setCancel(c));
-
-    getUsername();
-    console.log("useeffect ", isAuthenticated);
-    return () => {
-      // cancelToken();
-      console.log("cancelling");
-    };
-  }, [getUsername]);
-
-  function PrivateRoute({ children, ...rest }) {
-    const [auth, setAuth] = useState(isAuthenticated); // use state to store auth status
-
-    useEffect(() => {
-      setAuth(isAuthenticated); // update state only when isAuthenticated changes
-    }, [children]);
-
-    console.log(auth);
-    return (
-      <Route
-        exact
-        {...rest}
-        render={(props) => {
-          return auth === true ? (
-            children
-          ) : (
-            <Redirect
-              to={{
-                pathname: "/page-login",
-              }}
-            />
-          );
-        }}
-      />
-    );
-  }
-
-  useEffect(() => {
-    console.log("mounting");
-    return () => {
-      console.log("unmounting");
-    };
-  }, []);
-
-  // return (
-  //   <Router basename="/react">
-  //     <div id="main-wrapper" className="show">
-  //       {cond && <Nav />}
-  //       <div className={cond && "content-body"}>
-  //         <div className="container-fluid">
-  //           <Switch>
-  //             {routes.map((data, i) => (
-  //               <PrivateRoute
-  //                 key={i}
-  //                 exact
-  //                 path={`/${data.url}`}
-  //                 component={data.component}
-  //                 isLoggedIn={loggedIn}
-  //               />
-  //             ))}
-  //           </Switch>
-  //         </div>
-  //       </div>
-
-  //       {cond && <Footer />}
-  //     </div>
-  //   </Router>
-  // );
-
   return (
-    <Router basename="/react">
-      <div id="main-wrapper" className="show">
-        {cond && <Nav />}
-        {role === "Member" && <Navf />}
-        <div className={cond && "content-body"}>
-          <div className="container-fluid">
-            <Switch>
-              {routes.map((data, i) => (
-                <Route key={i} exact path={`/${data.url}`}>
-                  <RequireAuth>
-                    <data.component key={i} />
-                  </RequireAuth>
-                </Route>
-              ))}
-              <Route
-                path="/page-login"
-                render={(props) => {
-                  return isAuthenticated === true ? (
-                    <Redirect
-                      to={{
-                        pathname: "/",
-                        state: { message: "Already logged in" },
-                      }}
-                    />
-                  ) : (
-                    <Login />
-                  );
-                }}
-              />
-              <Route path="/page-register" component={Register} />
-              <Route path="/page-reset-password" component={ResetPassword} />
-              <Route path="/page-new-password" component={NewPassword} />
-              <Route path="/page-twofactor-auth" component={TwoFactorAuth} />
-              {/* <Route path="/table-bootstrap-basic">
-                <RequireAuth>
-                  <BootstrapTable />
-                </RequireAuth>
-              </Route> */}
-
-              {/* <PrivateRoute path="/table-bootstrap-basic">
-                <BootstrapTable />
-              </PrivateRoute> */}
-              {/* <Route path="/table-datatable-basic" component={DataTable} />
-              <Route path="/front-profile" component={AppProfile} /> */}
-            </Switch>
-          </div>
-        </div>
-        {cond && <Footer />}
-      </div>
-    </Router>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Registration />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/new-password" element={<NewPassword />} />
+      <Route path="/twofactor-auth" element={<TwoFactorAuth />} />
+      <Route path="/client" element={<Client />}>
+        <Route path="home" element={<Home />} />
+        <Route path="profile" element={<FrontProfile />} />
+        <Route path="users" element={<BootstrapTable />} />
+        <Route path="members" element={<DataTable />} />
+        <Route path="Event-Table" element={<FeesCollection />} />
+        <Route path="elections" element={<ElectionTable />} />
+        <Route path="table-club" element={<Club />} />
+        <Route path="table-club-front" element={<ClubTable />} />
+        <Route path="*" element={<Error404 />} />
+      </Route>
+    </Routes>
   );
-
-  // return (
-  //   <>
-  //     {loggedIn ? (
-  //       role === "SuperAdmin" ? (
-  //         <Router basename="/react">
-  //           <div id="main-wrapper" className="show">
-  //             <Nav />
-  //             <div className="content-body">
-  //               <div className="container-fluid">
-  //                 <Switch>
-  //                   {routes.map((data, i) => (
-  //                     <Route
-  //                       key={i}
-  //                       exact
-  //                       path={`/${data.url}`}
-  //                       component={data.component}
-  //                       isLoggedIn={loggedIn}
-  //                     />
-  //                   ))}
-  //                 </Switch>
-  //               </div>
-  //             </div>
-  //             <Footer />
-  //           </div>
-  //         </Router>
-  //       ) : (
-  //         <Router basename="/react">
-  //           <Route name="/front-profile">
-  //             <div id="main-wrapper" className="show">
-  //               <Navf />
-
-  //               <div className={!frontPath && "content-body"}>
-  //                 <div className="container-fluid">
-  //                   <FrontProfile />
-  //                 </div>
-  //               </div>
-  //             </div>
-  //           </Route>
-  //         </Router>
-  //       )
-  //     ) : (
-  //       <Router basename="/react">
-  //         <div id="main-wrapper" className="show">
-  //           {!pagePath && !frontPath && <Nav />}
-
-  //           <div className={!pagePath && !frontPath && "content-body"}>
-  //             <div className="container-fluid">
-  //               <Switch>
-  //                 {routes.map((data, i) => (
-  //                   <Route
-  //                     key={i}
-  //                     exact
-  //                     path={`/${data.url}`}
-  //                     component={data.component}
-  //                   />
-  //                 ))}
-  //               </Switch>
-  //             </div>
-  //           </div>
-
-  //           {!pagePath && <Footer />}
-  //         </div>
-  //         {/* <Route name="/front-profile">
-  //           <div id="main-wrapper" className="show">
-  //             {!pagePath && <Navf />}
-
-  //             <div className={!pagePath && "content-body"}>
-  //               <div className="container-fluid"></div>
-  //             </div>
-  //           </div>
-  //         </Route> */}
-  //       </Router>
-  //     )}
-  //   </>
-  // );
 };
 
 export default Markup;
