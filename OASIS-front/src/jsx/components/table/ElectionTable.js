@@ -42,6 +42,29 @@ const ElectionTable = () => {
    const [search, setSearch] = useState("");
    const [searchS, setSearchS] = useState("");
    const [searchE, setSearchE] = useState("");
+
+   const startDate = document.getElementById("startDate");
+   const endDate = document.getElementById("endDate");
+
+
+   function validateStartDate() {
+      const currentDate = new Date().toISOString().split("T")[0];
+      const selectedDate = startDate.value;
+
+      if (selectedDate < currentDate) {
+         Swal.showValidationMessage("Start Date must be after or equal to the current date.");
+      }
+   }
+
+   function validateEndDate() {
+      const startDateValue = startDate.value;
+      const endDateValue = endDate.value;
+
+      if (endDateValue < startDateValue) {
+         Swal.showValidationMessage("End Date must be after Start Date.");
+      }
+   }
+
    const userr = JSON.parse(localStorage.getItem("connectedUser"));
    useEffect(() => {
       axios
@@ -115,8 +138,13 @@ const ElectionTable = () => {
                               const description = document.getElementById('description').value;
                               const startDate = document.getElementById('startDate').value;
                               const endDate = document.getElementById('endDate').value;
+                              const currentDate = new Date().toISOString().split('T')[0];
                               if (!name || !club || !description || !startDate || !endDate) {
                                  Swal.showValidationMessage('Please fill in all fields');
+                              } else if (startDate < currentDate) {
+                                 Swal.showValidationMessage('Start date cannot be before current date');
+                              } else if (endDate <= startDate) {
+                                 Swal.showValidationMessage('End date must be after start date');
                               }
                               return { name: name, club: club, type: type, description: description, startDate: startDate, endDate: endDate };
                            }
@@ -252,8 +280,13 @@ const ElectionTable = () => {
                                                 const description = document.getElementById('description').value;
                                                 const startDate = document.getElementById('startDate').value;
                                                 const endDate = document.getElementById('endDate').value;
+                                                const currentDate = new Date().toISOString().split('T')[0];
                                                 if (!name || !club || !description || !startDate || !endDate) {
                                                    Swal.showValidationMessage('Please fill in all fields');
+                                                } else if (startDate < currentDate) {
+                                                   Swal.showValidationMessage('Start date cannot be before current date');
+                                                } else if (endDate <= startDate) {
+                                                   Swal.showValidationMessage('End date must be after start date');
                                                 }
                                                 return { name: name, club: club, type: type, description: description, startDate: startDate, endDate: endDate };
                                              }

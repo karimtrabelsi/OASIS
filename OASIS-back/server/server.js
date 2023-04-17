@@ -24,7 +24,7 @@ const deletEvent = require("./routes/event/deleteEvent");
 const getEvent = require("./routes/event/getEvent");
 const newCandidacy = require("./routes/candidacy/newCandidacy");
 const updateCandidacy = require("./routes/candidacy/updateCandidacy");
-const voteCandidacy = require("./routes/candidacy/vote");
+const voteCandidacy = require("./routes/candidacy/voteCandidacy");
 const deleteCandidacy = require("./routes/candidacy/deleteCandidacy");
 const getCandidacies = require("./routes/candidacy/getCandidacy");
 const checkUser = require("./routes/candidacy/checkUser");
@@ -48,10 +48,6 @@ app.post("/chat", async (req, res) => {
   const { message } = req.body;
   const response = await manager.process("en", message);
   res.json({ message: response.answer });
-});
-
-app.listen(3002, () => {
-  console.log("Chatbot API is running on port 3002");
 });
 
 mongoose
@@ -102,7 +98,7 @@ const storageFile = multer.diskStorage({
     cb(null, "../OASIS-front/src/uploads");
   },
   filename: function (req, file, cb) {
-    cb(null, `${Date.now()}-${file.originalname}`);
+    cb(null, `${file.originalname}`);
   },
 });
 
@@ -160,12 +156,10 @@ app.delete("/deletEvent/:id", deletEvent);
 app.get("/getEvent", getEvent);
 
 app.post("/candidacy/newCandidacy", uploadFile.single("file"), newCandidacy);
-app.put(
-  "/candidacy/updateCandidacy/:id",
-  uploadFile.single("file"),
-  updateCandidacy
-);
-app.put("/candidacy/vote/:id", voteCandidacy);
+
+app.put("/candidacy/updateCandidacy/:id", uploadFile.single("file") , updateCandidacy);
+app.post("/candidacy/vote", voteCandidacy);
+
 app.delete("/candidacy/deleteCandidacy/:id", deleteCandidacy);
 app.get("/candidacy", getCandidacies);
 app.get("/candidacy/:userId/:electionId", checkUser);
