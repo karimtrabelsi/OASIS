@@ -41,44 +41,70 @@ const ApplyPage = () => {
 
    const handleVote = (candidacy) => {
       Swal.fire({
-        title: "Confirm Vote",
-        text: "Are you sure you want to vote for "+candidacy.user.firstname+" "+candidacy.user.lastname+ " as "+candidacy.position+" ?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        cancelButtonText: "No",
+         title: "Confirm Vote",
+         text: "Are you sure you want to vote for " + candidacy.user.firstname + " " + candidacy.user.lastname + " as " + candidacy.position + " ?",
+         icon: "question",
+         showCancelButton: true,
+         confirmButtonText: "Yes",
+         cancelButtonText: "No",
       }).then((result) => {
-        if (result.isConfirmed) {
-          axios
-            .post("http://localhost:3000/candidacy/vote", {
-              position: candidacy.position,
-              user: userr._id,
-              candidacies: candidacy._id,
-            })
-            .then((response) => {
-              console.log(response.data);
-              // handle success
-              Swal.fire({
-                title: "Success",
-                text: "Your vote has been recorded.",
-                icon: "success",
-              });
-            })
-            .catch((error) => {
-              if (
-                error.response.data.message ===
-                "You have already voted for this position."
-              ) {
-                Swal.fire({
-                  title: "Already Voted",
-                  text: "You have already voted for "+candidacy.position+" position.",
-                  icon: "info",
+         if (result.isConfirmed) {
+            axios
+               .post("http://localhost:3000/candidacy/vote", {
+                  position: candidacy.position,
+                  user: userr._id,
+                  electionSelected: idelection,
+                  candidacies: candidacy._id,
+               })
+               .then((response) => {
+                  console.log(response.data);
+                  // handle success
+                  Swal.fire({
+                     title: "Success",
+                     text: "Your vote has been recorded.",
+                     icon: "success",
+                  });
+               })
+               .catch((error) => {
+                  if (
+                    error.response.data.message ===
+                    "You have already voted for this position."
+                  ) {
+                    Swal.fire({
+                      title: "Already Voted",
+                      text: "You have already voted for " + candidacy.position + " position.",
+                      icon: "info",
+                    });
+                  } else if (error.response.data.message === "Election is not active.") {
+                    axios
+                      .get(`http://localhost:3000/election/${idelection}`)
+                      .then((response) => {
+                        const election = response.data;
+                        Swal.fire({
+                          title: "Election not active",
+                          text: "The election starts " + election.startDate.substring(0, 10) + " and ends " + election.endDate.substring(0, 10) + ".",
+                          icon: "info",
+                        });
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                        Swal.fire({
+                          title: "Error",
+                          text: "Failed to fetch election information.",
+                          icon: "error",
+                        });
+                      });
+                  } else {
+                    Swal.fire({
+                      title: "Error",
+                      text: "An error occurred while processing your vote. Please try again later.",
+                      icon: "error",
+                    });
+                  }
                 });
-              }
-            });
-        }
+         }
       });
-    };
+   };
 
    const images = require.context('../../../images/users/', true, /\.(png|jpe?g|gif|svg)$/);
    const [search, setSearch] = useState("");
@@ -303,7 +329,7 @@ const ApplyPage = () => {
                                     <Card.Text>Votes : {candidacy.vote}</Card.Text>
                                     <div className="d-flex justify-content-between">
                                        <button type="button" className="btn btn-outline-info btn-rounded" onClick={() => handleVote(candidacy)} variant="primary" disabled={hasVoted}>
-      {hasVoted ? 'Voted' : 'Vote'}</button>
+                                          {hasVoted ? 'Voted' : 'Vote'}</button>
                                        <button type="button" className="btn btn-outline-info btn-rounded"
                                           onClick={() =>
                                              Swal.fire({

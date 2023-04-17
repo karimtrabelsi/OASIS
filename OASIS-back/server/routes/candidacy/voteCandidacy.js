@@ -1,6 +1,7 @@
 const Candidacy = require("../../models/candidacy");
 const Vote = require("../../models/vote");
 const User = require("../../models/user");
+const Election = require("../../models/election");
 
 module.exports = async (req, res) => {
   try {
@@ -18,6 +19,12 @@ module.exports = async (req, res) => {
     if (existingVote) {
       return res.status(409).json({ message: 'You have already voted for this position.' });
     }
+ 
+     const election = await Election.findById(req.body.electionSelected);
+     const currentDate = new Date();
+     if (currentDate < election.startDate || currentDate > election.endDate) {
+       return res.status(400).json({ message: 'Election is not active.' });
+     }
 
     // Create a new vote object
     const vote = new Vote({
