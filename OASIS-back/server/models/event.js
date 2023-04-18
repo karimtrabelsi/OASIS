@@ -18,7 +18,7 @@ const eventSchema = new mongoose.Schema(
       
       eventname: {
         type: String,
-        required: true,
+        required: false,
       },
       image: {
         type: String,
@@ -26,15 +26,15 @@ const eventSchema = new mongoose.Schema(
       },
       startdate: {
         type: Date,
-        required: true,
+        required: false,
       },
       enddate: {
         type: Date,
-        required: true,
+        required: false,
       },
       place: {
         type: String,
-        required: true,
+        required: false,
       },
       collaborateur: {
         type: String,
@@ -42,7 +42,6 @@ const eventSchema = new mongoose.Schema(
       },
       cotisation: {
         type: String,
-        required: false,
       },
       typeEvent: {
         type: String,

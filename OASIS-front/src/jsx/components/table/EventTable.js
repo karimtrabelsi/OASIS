@@ -64,7 +64,7 @@ const EventTable = () => {
 
     useEffect(() => {
         axios
-           .get("http://localhost:3001/Table-Event")
+           .get("http://localhost:3000/getEvent")
            .then((res) => {
             setEvents(res.data);
            })
@@ -87,40 +87,7 @@ const EventTable = () => {
     return eventnameMatch || placeMatch;
   });
      // On crée une fonction qui va ajouter un événement à la base de données
-const addEvent = (event) => {
-    // On envoie une requête POST à l'API pour ajouter l'événement
-    axios.post('http://localhost:3001/Table-Event/addEvent', event, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(response => {
-      // Si la requête a réussi, on affiche un message de succès
-      if (response.status === 200) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Event added successfully',
-          showConfirmButton: false,
-          timer: 1500
-        }).then(() => {
-          // On recharge la page pour afficher l'événement ajouté
-          window.location.reload();
-        });
-      } else {
-        // Si la requête a échoué, on affiche un message d'erreur
-        Swal.fire({
-          icon: 'error',
-          title: 'Failed to add your event',
-        });
-      }
-    }).catch(error => {
-      // Si une erreur s'est produite lors de la requête, on affiche un message d'erreur
-      console.error(error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Failed to add your event',
-      });
-    });
-  };
+
   
    return (
     <Fragment>
@@ -197,7 +164,7 @@ const addEvent = (event) => {
                                  const typeEvent =document.getElementById("typeEvent").addEventListener("change", function() {
                                    alert("Vous avez sélectionné " + this.value);
                                  });
-                                 const axes = Array.from(document.querySelectorAll('input[name="axes"]:checked')).map(e => e.value);
+                                 const axes = document.getElementById("axes").value;
                                 //  if (!eventname || !startDate || !enddate || !place  || !collaborateur || !typeEvent || !axes ) {
                                 //     Swal.showValidationMessage('Please fill in all fields');
                                 //  }
@@ -225,7 +192,7 @@ const addEvent = (event) => {
                             .then(result => {
                                 if (result.isConfirmed) {
                                    console.log(result.value);
-                                   fetch('http://localhost:3000/Table-Event/event/newEvent', {
+                                   fetch('http://localhost:3000/event', {
                                       method: 'POST',
                                       headers: {
                                          'Content-Type': 'application/json'

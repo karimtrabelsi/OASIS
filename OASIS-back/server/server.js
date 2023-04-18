@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const multer = require('multer');
 var cors = require("cors");
 const register = require("./routes/user/register");
 const login = require("./routes/user/login");
@@ -56,7 +57,6 @@ mongoose
   })
   .catch((err) => console.log(err));
 
-const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 let path = require("path");
 const updateEvent = require("./routes/event/updateEvent");
@@ -114,7 +114,18 @@ app.get("/getUsername", verifyJWt, (req, res) => {
 
 app.get("/users/:id", getUser);
 
-app.post("/event", creatEvent);
+const eventStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "../OASIS-front/src/images/events");
+  },
+  filename: function (req, file, cb) {
+    cb(null, "eventImage-" + Date.now() + path.extname(file.originalname));
+  },
+});
+
+const uploads = multer({ storage: eventStorage });
+
+app.post("/event", uploads.single('file'), creatEvent);
 app.put("/updateEvent/:id", updatedEvent);
 app.delete("/deletEvent/:id", deletEvent);
 app.get("/getEvent",getEvent);
