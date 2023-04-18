@@ -9,12 +9,14 @@ import profile from "../../../images/profile/17.jpg";
 import avatar from "../../../images/avatar/1.jpg";
 import { Button } from "react-bootstrap";
 import AppProfile from "../../components/AppsMenu/AppProfile/AppProfile";
+import useAuthStore from "../../../utils/zustand";
 
 const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("connectedUser"));
   // const profilePic = {require(src="../../../images/users/" + user.image)};
   const isAuthenticated = localStorage.getItem("connectedUser") ? true : false;
+  const clearUser = useAuthStore((state) => state.clearUser);
   const test = false;
 
   var path = window.location.pathname.split("/");
@@ -23,40 +25,44 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
   var finalName = filterName.includes("app")
     ? filterName.filter((f) => f !== "app")
     : filterName.includes("ui")
-    ? filterName.filter((f) => f !== "ui")
-    : filterName.includes("uc")
-    ? filterName.filter((f) => f !== "uc")
-    : filterName.includes("basic")
-    ? filterName.filter((f) => f !== "basic")
-    : filterName.includes("form")
-    ? filterName.filter((f) => f !== "form")
-    : filterName.includes("table")
-    ? filterName.filter((f) => f !== "table")
-    : filterName.includes("page")
-    ? filterName.filter((f) => f !== "page")
-    : filterName.includes("email")
-    ? filterName.filter((f) => f !== "email")
-    : filterName.includes("ecom")
-    ? filterName.filter((f) => f !== "ecom")
-    : filterName.includes("chart")
-    ? filterName.filter((f) => f !== "chart")
-    : filterName.includes("editor")
-    ? filterName.filter((f) => f !== "editor")
-    : filterName;
+      ? filterName.filter((f) => f !== "ui")
+      : filterName.includes("uc")
+        ? filterName.filter((f) => f !== "uc")
+        : filterName.includes("basic")
+          ? filterName.filter((f) => f !== "basic")
+          : filterName.includes("form")
+            ? filterName.filter((f) => f !== "form")
+            : filterName.includes("table")
+              ? filterName.filter((f) => f !== "table")
+              : filterName.includes("page")
+                ? filterName.filter((f) => f !== "page")
+                : filterName.includes("email")
+                  ? filterName.filter((f) => f !== "email")
+                  : filterName.includes("ecom")
+                    ? filterName.filter((f) => f !== "ecom")
+                    : filterName.includes("chart")
+                      ? filterName.filter((f) => f !== "chart")
+                      : filterName.includes("editor")
+                        ? filterName.filter((f) => f !== "editor")
+                        : filterName;
   return (
     <div className="header">
       <div className="header-content">
         <nav className="navbar navbar-expand">
           <div className="collapse navbar-collapse justify-content-between">
             <div className="header-left">
-              {/* <div
-                className="dashboard_bar"
-                style={{ textTransform: "capitalize" }}
-              >
-                {finalName.join(" ").length === 0
-                  ? "Dashboard"
-                  : finalName.join(" ")}
-              </div> */}
+              <Link to="/client/home" className="header-link">
+                Home
+              </Link>
+              <Link to="/client/home" className="header-link">
+                Events
+              </Link>
+              <Link to="/client/table-club-front" className="header-link">
+                Clubs
+              </Link>
+              <Link to="elections" className="header-link">
+                Elections
+              </Link>
             </div>
             <ul className="navbar-nav header-right">
               <li className="nav-item dropdown notification_dropdown">
@@ -82,15 +88,13 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                   {/* <span className="badge light text-white bg-primary">12</span> */}
                 </Link>
                 <div
-                  className={`dropdown-menu dropdown-menu-right ${
-                    toggle === "notification" ? "show" : ""
-                  }`}
+                  className={`dropdown-menu dropdown-menu-right ${toggle === "notification" ? "show" : ""
+                    }`}
                 >
                   <PerfectScrollbar
                     id="DZ_W_Notification1"
-                    className={` widget-media dz-scroll p-3 height380 ${
-                      toggle === "notification" ? "ps ps--active-y" : ""
-                    }`}
+                    className={` widget-media dz-scroll p-3 height380 ${toggle === "notification" ? "ps ps--active-y" : ""
+                      }`}
                   >
                     <ul className="timeline">
                       <li>
@@ -229,15 +233,13 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                   {/* <span className="badge light text-white bg-primary">2</span> */}
                 </Link>
                 <div
-                  className={`dropdown-menu dropdown-menu-right ${
-                    toggle === "box" ? "show" : ""
-                  }`}
+                  className={`dropdown-menu dropdown-menu-right ${toggle === "box" ? "show" : ""
+                    }`}
                 >
                   <PerfectScrollbar
                     id="DZ_W_TimeLine02"
-                    className={`widget-timeline dz-scroll style-1 p-3 height370 ${
-                      toggle === "box" ? "ps ps--active-y" : ""
-                    }`}
+                    className={`widget-timeline dz-scroll style-1 p-3 height370 ${toggle === "box" ? "ps ps--active-y" : ""
+                      }`}
                   >
                     <ul className="timeline">
                       <li>
@@ -309,9 +311,8 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                 <a
                   role="button"
                   data-toggle="dropdown"
-                  className={`nav-item dropdown header-profile ${
-                    toggle === "profile" ? "show" : ""
-                  }`}
+                  className={`nav-item dropdown header-profile ${toggle === "profile" ? "show" : ""
+                    }`}
                   onClick={() => onProfile()}
                 >
                   {isAuthenticated ? (
@@ -324,11 +325,10 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                   )}
                 </a>
                 <div
-                  className={`dropdown-menu dropdown-menu-right ${
-                    toggle === "profile" ? "show" : ""
-                  }`}
+                  className={`dropdown-menu dropdown-menu-right ${toggle === "profile" ? "show" : ""
+                    }`}
                 >
-                  <Link to="/front-profile" className="dropdown-item ai-icon">
+                  <Link to="/client/profile" className="dropdown-item ai-icon">
                     <svg
                       id="icon-user1"
                       xmlns="http://www.w3.org/2000/svg"
@@ -373,6 +373,7 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                       // localStorage.removeItem("token");
                       // localStorage.removeItem("connectedUser");
                       localStorage.clear();
+                      clearUser();
                       navigate("/login");
                     }}
                   >

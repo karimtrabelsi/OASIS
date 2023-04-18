@@ -8,12 +8,11 @@ const Position = {
     Treasurer: "Treasurer",
     Protocol: "Protocol",
     VicePresident: "Vice-President",
-    ChiefExecutiveOfficer : "ChiefExecutiveOfficer", 
-    ChiefOperatingOfficer :"ChiefOperatingOfficer",
-    ChiefFinancialOfficer: "ChiefFinancialOfficer",
-    ChiefMarketingOfficer: "ChiefMarketingOfficer",
-    ChiefTechnologyOfficer: "ChiefTechnologyOfficer",
-    ChiefHumanResourcesOfficer: "ChiefHumanResourcesOfficer",
+    PublicInterestChief : "Public Interest Chief", 
+    InternationalServiceChief :"International Service Chief",
+    InteriorServiceChief: "Interior Service Chief",
+    PersonalDevelopmentManager: "Personal Development Manager",
+    HumanResourcesChief: "Human Resources Chief",
 };
 
 const candidacySchema = new mongoose.Schema(

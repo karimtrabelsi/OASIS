@@ -224,6 +224,9 @@ const Markup = () => {
         <Route path="/client" element={<FrontLayout />}>
           <Route path="profile" element={<FrontProfile />} />
           <Route path="home" element={<HomeFront />} />
+          <Route path="elections" element={<ElectionTable />} />
+          <Route path="table-apply" element={<ApplyPage />} />
+          <Route path="table-club-front" element={<ClubTable />} />
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>
@@ -242,6 +245,7 @@ const Markup = () => {
         <Route path="members" element={<DataTable />} />
         <Route path="Event-Table" element={<FeesCollection />} />
         <Route path="elections" element={<ElectionTable />} />
+        <Route path="table-apply" element={<ApplyPage />} />
         <Route path="table-club" element={<Club />} />
         <Route path="table-club-front" element={<ClubTable />} />
         <Route path="*" element={<Error404 />} />

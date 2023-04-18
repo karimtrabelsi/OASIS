@@ -6,6 +6,7 @@ import swalMessage from "@sweetalert/with-react";
 import moment from 'moment';
 import { Redirect } from 'react-router-dom';
 import { Field, useFormik } from "formik";
+import useAuthStore from "../../../utils/zustand";
 
 
 import {
@@ -39,46 +40,76 @@ const ApplyPage = () => {
       </svg>
    );
 
+   const { user } = useAuthStore();
+   
+
+   // Determine if the logged-in user has the role "Member"
+
    const handleVote = (candidacy) => {
       Swal.fire({
-        title: "Confirm Vote",
-        text: "Are you sure you want to vote for "+candidacy.user.firstname+" "+candidacy.user.lastname+ " as "+candidacy.position+" ?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        cancelButtonText: "No",
+         title: "Confirm Vote",
+         text: "Are you sure you want to vote for " + candidacy.user.firstname + " " + candidacy.user.lastname + " as " + candidacy.position + " ?",
+         icon: "question",
+         showCancelButton: true,
+         confirmButtonText: "Yes",
+         cancelButtonText: "No",
       }).then((result) => {
-        if (result.isConfirmed) {
-          axios
-            .post("http://localhost:3000/candidacy/vote", {
-              position: candidacy.position,
-              user: userr._id,
-              candidacies: candidacy._id,
-            })
-            .then((response) => {
-              console.log(response.data);
-              // handle success
-              Swal.fire({
-                title: "Success",
-                text: "Your vote has been recorded.",
-                icon: "success",
-              });
-            })
-            .catch((error) => {
-              if (
-                error.response.data.message ===
-                "You have already voted for this position."
-              ) {
-                Swal.fire({
-                  title: "Already Voted",
-                  text: "You have already voted for "+candidacy.position+" position.",
-                  icon: "info",
-                });
-              }
-            });
-        }
+         if (result.isConfirmed) {
+            axios
+               .post("http://localhost:3000/candidacy/vote", {
+                  position: candidacy.position,
+                  user: userr._id,
+                  electionSelected: idelection,
+                  candidacies: candidacy._id,
+               })
+               .then((response) => {
+                  // handle success
+                  Swal.fire({
+                     title: "Success",
+                     text: "Your vote has been recorded.",
+                     icon: "success",
+                  });
+               })
+               .catch((error) => {
+                  if (
+                     error.response.data.message ===
+                     "You have already voted for this position."
+                  ) {
+                     Swal.fire({
+                        title: "Already Voted",
+                        text: "You have already voted for " + candidacy.position + " position.",
+                        icon: "info",
+                     });
+                  } else if (error.response.data.message === "Election is not active.") {
+                     axios
+                        .get(`http://localhost:3000/election/${idelection}`)
+                        .then((response) => {
+                           const election = response.data;
+                           Swal.fire({
+                              title: "Election not active",
+                              text: "The election starts " + election.startDate.substring(0, 10) + " and ends " + election.endDate.substring(0, 10) + ".",
+                              icon: "info",
+                           });
+                        })
+                        .catch((error) => {
+                           console.log(error);
+                           Swal.fire({
+                              title: "Error",
+                              text: "Failed to fetch election information.",
+                              icon: "error",
+                           });
+                        });
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: "An error occurred while processing your vote. Please try again later.",
+                        icon: "error",
+                     });
+                  }
+               });
+         }
       });
-    };
+   };
 
    const images = require.context('../../../images/users/', true, /\.(png|jpe?g|gif|svg)$/);
    const [search, setSearch] = useState("");
@@ -174,12 +205,11 @@ const ApplyPage = () => {
             <option value="Secretary">Secretary</option>
             <option value="Treasurer">Treasurer</option>
             <option value="Protocol">Protocol</option>` :
-                                             `<option value="ChiefExecutiveOfficer">Chief Executive Officer</option>
-            <option value="ChiefOperatingOfficer">Chief Operating Officer</option>
-            <option value="ChiefFinancialOfficer">Chief Financial Officer</option>
-            <option value="ChiefMarketingOfficer">Chief Marketing Officer</option>
-            <option value="ChiefTechnologyOfficer">Chief Technology Officer</option>
-            <option value="ChiefHumanResourcesOfficer">Chief Human Resources Officer</option>`}
+                                             `<option value="Public Interest Chief">Public Interest Chief</option>
+            <option value="International Service Chief">International Service Chief</option>
+            <option value="Interior Service Chief">Interior Service Chief</option>
+            <option value="Personal Development Manager">Personal Development Manager</option>
+            <option value="Human Resources Chief">Human Resources Chief</option>`}
         </select>
     </div>
     <br></br>
@@ -188,8 +218,9 @@ const ApplyPage = () => {
         <label>File</label>
     </div>`,
                                        icon: "info",
-                                       buttons: false,
+                                       buttons: true,
                                        dangerMode: true,
+                                       cancelButtonText: "Cancel",
                                        preConfirm: () => {
                                           const description = Swal.getPopup().querySelector(
                                              'textarea[name="description"]'
@@ -206,31 +237,41 @@ const ApplyPage = () => {
                                           return { electionSelected: idelection, user: userr._id, description: description, position: position, file: file, idElection: idelection };
                                        },
                                     }).then((result) => {
-                                       axios.post("http://localhost:3000/candidacy/newCandidacy", result.value, {
-                                          headers: {
-                                             "Content-Type": "multipart/form-data",
-                                          },
-                                       }).then((response) => {
-                                          if (response.status !== 200) {
-                                             throw new Error("Network response was not ok");
-                                          }
-                                          Swal.fire({
-                                             icon: "success",
-                                             title: "Applied successfully",
-                                             showConfirmButton: false,
-                                             timer: 1500,
-                                          });
-                                       }).catch((error) => {
-                                          console.error("There was an error applying", error);
-                                          swal({
-                                             title: 'Oops!',
-                                             text: 'Something went wrong. Please try again later.',
-                                             icon: 'error',
-                                             button: 'OK'
-                                          });
-                                       });
-                                    })
+                                       if (!result.dismiss) {
+                                           axios.post("http://localhost:3000/candidacy/newCandidacy", result.value, {
+                                               headers: {
+                                                   "Content-Type": "multipart/form-data",
+                                               },
+                                           }).then((response) => {
+                                               if (response.status !== 200) {
+                                                   throw new Error("Network response was not ok");
+                                               }
+                                               Swal.fire({
+                                                   icon: "success",
+                                                   title: "Applied successfully",
+                                                   showConfirmButton: false,
+                                                   timer: 1500,
+                                               });
+                                           }).catch((error) => {
+                                               console.error("There was a problem with the network:", error);
+                                               Swal.fire({
+                                                   icon: "error",
+                                                   title: "Oops...",
+                                                   text: "Something went wrong!",
+                                                   footer: "Please try again later",
+                                                 });
+                                             });
+                                       }
+                                    });
                                  }
+                              })
+                              .catch((error) => {
+                                 console.error("There was a problem with the network:", error);
+                                 Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: "Something went wrong!",
+                                 });
                               })
                         }
                         variant="primary"
@@ -247,6 +288,9 @@ const ApplyPage = () => {
                      {candidacies
                         .filter((candidacy) => candidacy.electionSelected === idelection)
                         .reduce((accumulator, candidacy, index) => {
+                           const isMember = user && (JSON.parse(user).role === "Member" || JSON.parse(user).role === "President") && JSON.parse(user)._id === candidacy.user._id;
+                           // const isPresident = user && JSON.parse(user).role === "President" && JSON.parse(user)._id === candidacy.user._id;
+
                            if (index % 3 === 0) {
                               accumulator.push([]);
                            }
@@ -254,9 +298,9 @@ const ApplyPage = () => {
                               <Card className="my-3" style={{ width: "30px" }}>
                                  <Card.Header>
                                     <div className="d-flex justify-content-between">
-                                       <h5>Position : {candidacy.position}</h5>
+                                       <h5>Position: {candidacy.position}</h5>
                                     </div>
-                                    <button type="button" className="btn btn-outline-danger btn-rounded" onClick={() =>
+                                    {isMember && (<button type="button" className="btn btn-outline-danger btn-rounded" onClick={() =>
                                        swal({
                                           title: "Are you sure?",
                                           text: "Once deleted, your apply will not be available anymore and your votes will be removed !",
@@ -292,9 +336,10 @@ const ApplyPage = () => {
                                        })
                                     }
                                        variant="primary"><i className="fa fa-close"></i></button>
+                                    )}
 
                                  </Card.Header>
-                                 <Card.Img variant="top" src={images('./' + candidacy.user.image)} style={{ maxWidth: "250px", maxHeight: "250px", margin: "auto" }} />
+                                 <Card.Img variant="top" src={images('./' + candidacy.user.image)} style={{ width: "250px", height: "250px", margin: "auto" }} />
 
                                  <Card.Body>
                                     <Card.Title>Name : {candidacy.user.firstname}</Card.Title>
@@ -303,118 +348,121 @@ const ApplyPage = () => {
                                     <Card.Text>Votes : {candidacy.vote}</Card.Text>
                                     <div className="d-flex justify-content-between">
                                        <button type="button" className="btn btn-outline-info btn-rounded" onClick={() => handleVote(candidacy)} variant="primary" disabled={hasVoted}>
-      {hasVoted ? 'Voted' : 'Vote'}</button>
-                                       <button type="button" className="btn btn-outline-info btn-rounded"
-                                          onClick={() =>
-                                             Swal.fire({
-                                                title: "Update Candidacy",
-                                                html:
-                                                   '<textarea name="description" class="swal2-textarea" placeholder="Something to add"  placeholder="Description">' +
-                                                   candidacy.description +
-                                                   '</textarea>' +
-                                                   '<div class="form-group">' +
-                                                   '<label for="position" >Position:</label>' +
-                                                   '<select id="position" name="position" class="swal2-input">' +
-                                                   (selectedType === "expandedBoard" ?
-                                                      '<option value="President"' +
-                                                      (candidacy.position === "President" ? "selected" : "") +
-                                                      '>President</option>' +
-                                                      '<option value="Vice-President"' +
-                                                      (candidacy.position === "Vice-President" ? "selected" : "") +
-                                                      '>Vice-President</option>' +
-                                                      '<option value="Secretary"' +
-                                                      (candidacy.position === "Secretary" ? "selected" : "") +
-                                                      '>Secretary</option>' +
-                                                      '<option value="Treasurer"' +
-                                                      (candidacy.position === "Treasurer" ? "selected" : "") +
-                                                      '>Treasurer</option>' +
-                                                      '<option value="Protocol"' +
-                                                      (candidacy.position === "Protocol" ? "selected" : "") +
-                                                      '>Protocol</option>' :
-                                                      '<option value="ChiefExecutiveOfficer"' +
-                                                      (candidacy.position === "Chief Executive Officer" ? "selected" : "") +
-                                                      '>Chief Executive Officer</option>' +
-                                                      '<option value="ChiefOperatingOfficer"' +
-                                                      (candidacy.position === "Chief Operating Officer" ? "selected" : "") +
-                                                      '>Chief Operating Officer</option>' +
-                                                      '<option value="ChiefFinancialOfficer"' +
-                                                      (candidacy.position === "Chief Financial Officer" ? "selected" : "") +
-                                                      '>Chief Financial Officer</option>' +
-                                                      '<option value="ChiefMarketingOfficer"' +
-                                                      (candidacy.position === "Chief Marketing Officer" ? "selected" : "") +
-                                                      '>Chief Marketing Officer</option>' +
-                                                      '<option value="ChiefTechnologyOfficer"' +
-                                                      (candidacy.position === "Chief Technology Officer" ? "selected" : "") +
-                                                      '>Chief Technology Officer</option>') +
-                                                   '</select>' +
-                                                   '</div>' +
-                                                   '<br></br>' +
-                                                   '<div className="input_wrap">' +
-                                                   '<input type="file" className="form-control" name="file" id="file" />' +
-                                                   '<label>File</label>' +
-                                                   "</div>",
-                                                icon: "info",
-                                                buttons: false,
-                                                dangerMode: true,
+                                          {hasVoted ? 'Voted' : 'Vote'}</button>
+                                       {isMember && (
+                                          <button type="button" className="btn btn-outline-info btn-rounded"
+                                             onClick={() =>
+                                                Swal.fire({
+                                                   title: "Update Candidacy",
+                                                   html:
+                                                      '<textarea name="description" class="swal2-textarea" placeholder="Something to add"  placeholder="Description">' +
+                                                      candidacy.description +
+                                                      '</textarea>' +
+                                                      '<div class="form-group">' +
+                                                      '<label for="position" >Position:</label>' +
+                                                      '<select id="position" name="position" class="swal2-input">' +
+                                                      (selectedType === "ExecutiveBoard" ?
+                                                         '<option value="President"' +
+                                                         (candidacy.position === "President" ? "selected" : "") +
+                                                         '>President</option>' +
+                                                         '<option value="Vice-President"' +
+                                                         (candidacy.position === "Vice-President" ? "selected" : "") +
+                                                         '>Vice-President</option>' +
+                                                         '<option value="Secretary"' +
+                                                         (candidacy.position === "Secretary" ? "selected" : "") +
+                                                         '>Secretary</option>' +
+                                                         '<option value="Treasurer"' +
+                                                         (candidacy.position === "Treasurer" ? "selected" : "") +
+                                                         '>Treasurer</option>' +
+                                                         '<option value="Protocol"' +
+                                                         (candidacy.position === "Protocol" ? "selected" : "") +
+                                                         '>Protocol</option>' 
+                                                         :
+                                                         '<option value="Public Interest Chief"' +
+                                                         (candidacy.position === "Public Interest Chief" ? "selected" : "") +
+                                                         '>Public Interest Chief</option>' +
+                                                         '<option value="International Service Chief"' +
+                                                         (candidacy.position === "International Service Chief" ? "selected" : "") +
+                                                         '>International Service Chief</option>' +
+                                                         '<option value="Interior Service Chief"' +
+                                                         (candidacy.position === "Interior Service Chief" ? "selected" : "") +
+                                                         '>Interior Service Chief</option>' +
+                                                         '<option value="Personal Development Manager"' +
+                                                         (candidacy.position === "Personal Development Manager" ? "selected" : "") +
+                                                         '>Personal Development Manager</option>' +
+                                                         '<option value="Human Resources Chief"' +
+                                                         (candidacy.position === "Human Resources Chief" ? "selected" : "") +
+                                                         '>Human Resources Chief</option>') +
+                                                      '</select>' +
+                                                      '</div>' +
+                                                      '<br></br>' +
+                                                      '<div className="input_wrap">' +
+                                                      '<input type="file" className="form-control" name="file" id="file" />' +
+                                                      '<label>File</label>' +
+                                                      "</div>",
+                                                   icon: "info",
+                                                   buttons: false,
+                                                   dangerMode: true,
 
-                                                preConfirm: () => {
-                                                   const description = Swal.getPopup().querySelector(
-                                                      'textarea[name="description"]'
-                                                   ).value;
-                                                   const position = Swal.getPopup().querySelector(
-                                                      'select[name="position"]'
-                                                   ).value;
-                                                   const fileInput = Swal.getPopup().querySelector('input[name="file"]');
-                                                   const file = fileInput.files[0];
+                                                   preConfirm: () => {
+                                                      const description = Swal.getPopup().querySelector(
+                                                         'textarea[name="description"]'
+                                                      ).value;
+                                                      const position = Swal.getPopup().querySelector(
+                                                         'select[name="position"]'
+                                                      ).value;
+                                                      const fileInput = Swal.getPopup().querySelector('input[name="file"]');
+                                                      const file = fileInput.files[0];
 
-                                                   if (!description || !position) {
-                                                      Swal.showValidationMessage("Please fill in all fields");
-                                                   }
-                                                   return {
-                                                      _id: candidacy._id,
-                                                      user: userr._id,
-                                                      description: description,
-                                                      position: position,
-                                                      file: file,
-                                                      idElection: idelection,
-                                                   };
-                                                },
-                                             }).then((result) => {
-                                                const data = new FormData();
-                                                data.append("description", result.value.description);
-                                                data.append("position", result.value.position);
-                                                if (result.value.file) {
-                                                   data.append("file", result.value.file);
-                                                }
-
-                                                axios
-                                                   .put(`http://localhost:3000/candidacy/updateCandidacy/${candidacy._id}`, data, {
-                                                      headers: {
-                                                         "Content-Type": "multipart/form-data",
-                                                      },
-                                                   })
-                                                   .then((response) => {
-                                                      if (response.status !== 200) {
-                                                         throw new Error("Network response was not ok");
+                                                      if (!description || !position) {
+                                                         Swal.showValidationMessage("Please fill in all fields");
                                                       }
-                                                      Swal.fire({
-                                                         icon: "success",
-                                                         title: "Applied successfully",
-                                                         showConfirmButton: false,
-                                                         timer: 1500,
+                                                      return {
+                                                         _id: candidacy._id,
+                                                         user: userr._id,
+                                                         description: description,
+                                                         position: position,
+                                                         file: file,
+                                                         idElection: idelection,
+                                                      };
+                                                   },
+                                                }).then((result) => {
+                                                   const data = new FormData();
+                                                   data.append("description", result.value.description);
+                                                   data.append("position", result.value.position);
+                                                   if (result.value.file) {
+                                                      data.append("file", result.value.file);
+                                                   }
+
+                                                   axios
+                                                      .put(`http://localhost:3000/candidacy/updateCandidacy/${candidacy._id}`, data, {
+                                                         headers: {
+                                                            "Content-Type": "multipart/form-data",
+                                                         },
+                                                      })
+                                                      .then((response) => {
+                                                         if (response.status !== 200) {
+                                                            throw new Error("Network response was not ok");
+                                                         }
+                                                         Swal.fire({
+                                                            icon: "success",
+                                                            title: "Applied successfully",
+                                                            showConfirmButton: false,
+                                                            timer: 1500,
+                                                         });
+                                                      })
+                                                      .catch((error) => {
+                                                         console.error("There was an error applying", error);
+                                                         Swal.fire({
+                                                            icon: "error",
+                                                            title: "Oops...",
+                                                            text: "Something went wrong!",
+                                                         });
                                                       });
-                                                   })
-                                                   .catch((error) => {
-                                                      console.error("There was an error applying", error);
-                                                      Swal.fire({
-                                                         icon: "error",
-                                                         title: "Oops...",
-                                                         text: "Something went wrong!",
-                                                      });
-                                                   });
-                                             })
-                                          }
-                                          variant="primary" > Update </button>
+                                                })
+                                             }
+                                             variant="primary" > Update </button>
+                                       )}
                                     </div>
                                  </Card.Body>
                               </Card>
