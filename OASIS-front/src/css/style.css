@@ -3838,6 +3838,8 @@ input[type="button"].btn-block {
       color: #fff; }
 
 .card {
+  padding: 1.25rem;
+  margin: 1.25rem 1.25rem 1.25rem;
   position: relative;
   display: flex;
   flex-direction: column;

@@ -9,12 +9,14 @@ import profile from "../../../images/profile/17.jpg";
 import avatar from "../../../images/avatar/1.jpg";
 import { Button } from "react-bootstrap";
 import AppProfile from "../../components/AppsMenu/AppProfile/AppProfile";
+import useAuthStore from "../../../utils/zustand";
 
 const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("connectedUser"));
   // const profilePic = {require(src="../../../images/users/" + user.image)};
   const isAuthenticated = localStorage.getItem("connectedUser") ? true : false;
+  const clearUser = useAuthStore((state) => state.clearUser);
   const test = false;
 
   var path = window.location.pathname.split("/");
@@ -371,6 +373,7 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                       // localStorage.removeItem("token");
                       // localStorage.removeItem("connectedUser");
                       localStorage.clear();
+                      clearUser();
                       navigate("/login");
                     }}
                   >
