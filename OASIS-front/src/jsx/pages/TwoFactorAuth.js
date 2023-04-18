@@ -1,10 +1,10 @@
 import axios from "axios";
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 
 const TwoFactorAuth = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const submitHandler = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -28,7 +28,7 @@ const TwoFactorAuth = () => {
               localStorage.setItem("token", res.data.token);
               localStorage.setItem("connectedUser", res.data.user);
 
-              history.push("/");
+              navigate("/");
             });
         }
       })

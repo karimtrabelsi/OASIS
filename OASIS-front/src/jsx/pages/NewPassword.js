@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const NewPassword = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -18,7 +18,7 @@ const NewPassword = () => {
       })
       .then((res) => {
         console.log(res);
-        history.push("/page-login");
+        navigate("/page-login");
       })
       .catch((err) => {
         console.log("err");

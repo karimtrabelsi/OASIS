@@ -12,21 +12,20 @@ const NavHader = () => {
    const [showLogo, setShowLogo] = useState([]);
    
    return (
+       <nav className="navbar">
       <div className="nav-header">
-         <Link to="/" className="brand-logo" >
-         <img className="logo-abbr" src={logo} alt=""/> 
+         <Link to="/client/home" className="brand-logo" >
+            <img className="logo-abbr" src={logo} alt=""/> 
             {/* <img className="logo-compact" src={logoText} alt="" /> */}
             {showLogo && <img className="brand-title" src={logoText} alt="" />}
          </Link>
-
-         {/* <div className="nav-control" onClick={() => setToggle(!toggle)}>
-            <div className={`hamburger ${toggle ? "is-active" : ""}`}>
-               <span className="line"></span>
-               <span className="line"></span>
-               <span className="line"></span>
-            </div>
-         </div> */}
       </div>
+      <ul className={`nav-menu ${toggle ? "active" : ""}`}>
+         <li className="nav-item">
+            <Link to="/client/home" className="nav-link">Home</Link>
+         </li>
+      </ul>
+   </nav>
    );
 };
 

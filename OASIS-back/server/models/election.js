@@ -1,4 +1,12 @@
 const mongoose = require("mongoose");
+const User = require("./user");
+const Candidacy = require("./candidacy");
+const Club = require("./club");
+
+const Type = {
+  ExecutiveBoard: "ExecutiveBoard",
+  ExpandedBoard: "ExpandedBoard",
+};
 
 const electionSchema = new mongoose.Schema(
   {
@@ -7,24 +15,28 @@ const electionSchema = new mongoose.Schema(
       required: true,
     },
     club: {
+      type: Club.schema,
+      required: true,
+    },
+    type: {
       type: String,
+      enum: Object.values(Type),
       required: true,
     },
     description: {
       type: String,
       required: false,
     },
-    StartDate: {
+    startDate: {
         type: Date,
         required: true,
     },
-    EndDate: {  
+    endDate: {  
         type: Date,
         required: true,
     },
     candidates: {   
-        type: [String],
-        required: true,
+        type: [Candidacy.schema],
     },
    },
   { timestamps: true }

@@ -44,6 +44,14 @@ const FeesCollection = () => {
       });
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios("http://localhost:3000/getEvent");
+      setEvents(result.data);
+      // setUserr({ axes: "some_axes" }); // Remplacez "some_axes" par l'axe de l'utilisateur
+    };
+    fetchData();
+  }, []);
 
   const startDate = document.getElementById("startDate");
   const endDate = document.getElementById("endDate");

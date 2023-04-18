@@ -1,14 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
 import logo from "../../images/logo.png";
 import swal from "sweetalert";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import useAuthStore from "../../utils/zustand";
 
 const Login = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const imgStyle = {
     width: "220px",
@@ -36,10 +37,11 @@ const Login = () => {
         .then((res) => {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("connectedUser", res.data.user);
+          useAuthStore.setState({ user: res.data.user });
           console.log(res.data.user);
           JSON.parse(res.data.user).role === "SuperAdmin"
-            ? history.push("/")
-            : history.push("/front-profile");
+            ? navigate("/client/home")
+            : navigate("/profile");
           // history.go(0);
         })
         .catch((err) => {
@@ -76,7 +78,7 @@ const Login = () => {
                 );
                 localStorage.setItem("number", err.response.data.number);
                 localStorage.setItem("userLogginIn", JSON.stringify(user));
-                history.push("/page-twofactor-auth");
+                navigate("/page-twofactor-auth");
               });
           }
         });
