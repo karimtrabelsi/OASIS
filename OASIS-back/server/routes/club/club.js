@@ -1,6 +1,7 @@
 const Club = require("../../models/club");
 const User = require("../../models/user");
 const express = require("express");
+const Notification = require("../../models/notification");
 const app = express();
 const router = express.Router();
 
@@ -69,17 +70,64 @@ const createclub = async (req, res) => {
 
   const updateclub = async (req, res) => {
     Club.findOne({ _id: req.params.id }).then((club) => {
-         console.log(req.files);
-        club.clubname = req.body.clubname;
-        club.email = req.body.email;
-        club.image= req.file.filename;
-        club.save();
-        res.status(200).send("club updated");
-      })
-        .catch((err) => {
-          console.log(err);
+         console.log(req.body.clubname);
+         if (req.body.clubname && req.body.clubname != club.clubname) {
+          const notification = new Notification({
+          description : 'The name of '+ club.clubname +' has been changed to ' + req.body.clubname,
+          image:club.image,
+          });
+          Notification.updateMany({ unread: true }, { unread: false }, (err, result) => {
+            if (err) {
+              console.error(err);
+            } else {
+              console.log(`${result.nModified} notifications marked as read.`);
+            }
+          });
+          
+          notification.save(); 
+  
+        };
+         if (req.body.email && req.body.email!= club.email) {
+          const notification = new Notification({
+            description: 'The email of '+ club.clubname +' has been changed to ' + req.body.email,
+            image:club.image,
+          });
+          Notification.updateMany({ unread: true }, { unread: false }).then( (err, result) => {
+            if (err) {
+              console.error(err);
+            } else {
+              console.log(`${result.nModified} notifications marked as read.`);
+            }
+          });
+          
+          notification.save(); 
+  
         }
-        );
+        if (req.body.image && req.file.filename != club.image) {
+          const notification = new Notification({
+            description: 'The image of ' + club.clubname +'has been changed',
+            image:club.image,
+          });
+          Notification.updateMany({ unread: true }, { unread: false }).then( (err, result) => {
+            if (err) {
+              console.error(err);
+            } else {
+              console.log(`${result.nModified} notifications marked as read.`);
+            }
+          });
+          
+          notification.save(); 
+        }
+        club.clubname = req.body.clubname ? req.body.clubname : club.clubname;
+        club.email = req.body.email ? req.body.email : club.email;
+        club.image= req.file ?req.file.filename : club.image;
+    
+      
+      club.save();
+
+      res.status(200).send("club updated");  
+
+    });
   }
   router.route("/update/:id").put(upload.single("image"),updateclub);
 
@@ -107,4 +155,16 @@ const createclub = async (req, res) => {
       });
   };
   router.route("/approveclub/:id").put(approveClub);
+
+  const getNotification = async (req, res) => {
+    Notification.find().sort({date: -1}).then((notifications) => {
+      notifications.forEach((notification) => {
+        notification.unread = false;
+        notification.save();
+      });
+      res.status(200).send(notifications);
+    })
+    ;
+  };
+  router.route("/getnotifications").get(getNotification);
 

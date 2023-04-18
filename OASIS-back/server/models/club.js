@@ -59,6 +59,7 @@ const clubSchema = new mongoose.Schema(
         type: String,
         enum: Object.values(Type),
       },
+     
   },
   { timestamps: true }
 );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 /// Scroll
@@ -10,13 +10,27 @@ import avatar from "../../../images/avatar/1.jpg";
 import { Button } from "react-bootstrap";
 import AppProfile from "../../components/AppsMenu/AppProfile/AppProfile";
 import useAuthStore from "../../../utils/zustand";
+import axios from "axios";
 
 const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("connectedUser"));
   const isAuthenticated = localStorage.getItem("connectedUser") ? true : false;
   const clearUser = useAuthStore((state) => state.clearUser);
+  const [notificaitons, setNotifications] = useState([]);
+ const [count,setCount] = useState(0);
+ const [onNotif,setOnNotif] = useState(false);
 
+
+ const getNotifs=() => {
+
+   return axios.get("http://localhost:3000/clubs/getnotifications").then((res) => {
+      setNotifications(res.data);
+      setCount(res.data.filter((n) => n.unread === true).length);
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
   // const profilePic = {require(src="../../../images/users/" + user.image)};
 
   var path = window.location.pathname.split("/");
@@ -92,7 +106,10 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                   to="#"
                   role="button"
                   data-toggle="dropdown"
-                  onClick={() => onNotification()}
+                  onClick={() =>{ onNotification()
+                    getNotifs()
+                    setOnNotif(!onNotif)
+                  }}
                 >
                   <svg
                     width={28}
@@ -106,7 +123,7 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                       fill="#555555"
                     />
                   </svg>
-                  {/* <span className="badge light text-white bg-primary">12</span> */}
+<span className="badge light text-white bg-primary">{count}</span>
                 </Link>
                 <div
                   className={`dropdown-menu dropdown-menu-right ${
@@ -118,86 +135,26 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                     className={` widget-media dz-scroll p-3 height380 ${
                       toggle === "notification" ? "ps ps--active-y" : ""
                     }`}
-                  >
+
+                  >  
+                  
                     <ul className="timeline">
+                 {notificaitons
+                  .map((notification, index) => (
                       <li>
                         <div className="timeline-panel">
                           <div className="media mr-2">
-                            <img alt="image" width={50} src={avatar} />
+                            <img alt="image" width={50} src={require("../../../images/clubs/" + notification.image)} />
                           </div>
                           <div className="media-body">
-                            <h6 className="mb-1">Dr sultads Send you Photo</h6>
+                            <h6 className="mb-1">{notification.description}</h6>
                             <small className="d-block">
-                              29 July 2020 - 02:26 PM
+                              {notification.date}
                             </small>
                           </div>
                         </div>
                       </li>
-                      <li>
-                        <div className="timeline-panel">
-                          <div className="media mr-2 media-info">KG</div>
-                          <div className="media-body">
-                            <h6 className="mb-1">
-                              Resport created successfully
-                            </h6>
-                            <small className="d-block">
-                              29 July 2020 - 02:26 PM
-                            </small>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="timeline-panel">
-                          <div className="media mr-2 media-success">
-                            <i className="fa fa-home" />
-                          </div>
-                          <div className="media-body">
-                            <h6 className="mb-1">Reminder : Treatment Time!</h6>
-                            <small className="d-block">
-                              29 July 2020 - 02:26 PM
-                            </small>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="timeline-panel">
-                          <div className="media mr-2">
-                            <img alt="image" width={50} src={avatar} />
-                          </div>
-                          <div className="media-body">
-                            <h6 className="mb-1">Dr sultads Send you Photo</h6>
-                            <small className="d-block">
-                              29 July 2020 - 02:26 PM
-                            </small>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="timeline-panel">
-                          <div className="media mr-2 media-danger">KG</div>
-                          <div className="media-body">
-                            <h6 className="mb-1">
-                              Resport created successfully
-                            </h6>
-                            <small className="d-block">
-                              29 July 2020 - 02:26 PM
-                            </small>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="timeline-panel">
-                          <div className="media mr-2 media-primary">
-                            <i className="fa fa-home" />
-                          </div>
-                          <div className="media-body">
-                            <h6 className="mb-1">Reminder : Treatment Time!</h6>
-                            <small className="d-block">
-                              29 July 2020 - 02:26 PM
-                            </small>
-                          </div>
-                        </div>
-                      </li>
+                    ))}
                     </ul>
                   </PerfectScrollbar>
                   <Link className="all-notification" to="#">
