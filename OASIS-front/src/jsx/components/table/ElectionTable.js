@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import PageTitle from "../../layouts/PageTitle";
 import swal from "sweetalert";
 import Swal from "sweetalert2";
@@ -25,6 +25,8 @@ import avatar2 from "../../../images/avatar/2.jpg";
 import avatar3 from "../../../images/avatar/3.jpg";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import AuthContext from "../../../utils/zustand";
+import useAuthStore from "../../../utils/zustand";
 
 const ElectionTable = () => {
    const svg1 = (
@@ -37,6 +39,11 @@ const ElectionTable = () => {
          </g>
       </svg>
    );
+
+   const { user } = useAuthStore();
+
+   // Determine if the logged-in user has the role "Member"
+   const isMember = user && JSON.parse(user).role === "Member";
 
    const [elections, setElections] = useState([]);
    const [search, setSearch] = useState("");
@@ -88,7 +95,7 @@ const ElectionTable = () => {
                <Card>
                   <Card.Header>
                      <Card.Title>Elections</Card.Title>
-                     <div className="d-flex justify-content-between ">
+                     <div className="d-flex justify-content-center">
                         <div className="input-group search-area d-lg-inline-flex d-none mr-5">
                            <input
                               type="text"
@@ -114,6 +121,7 @@ const ElectionTable = () => {
                            </div>
                         </div>
                      </div>
+                     {!isMember && (
                      <button type="button" class="btn btn-info btn-rounded"
                         onClick={() => Swal.fire({
                            title: 'Add Election',
@@ -183,6 +191,7 @@ const ElectionTable = () => {
                         variant="primary"
 
                      ><span class="btn-icon-left text-info"><i class="fa fa-plus color-info"></i></span>Add</button>
+                     )}
 
                   </Card.Header>
                   <Card.Body>
@@ -198,6 +207,7 @@ const ElectionTable = () => {
                                     <div className="d-flex justify-content-between">
                                        <h5>{election.name}</h5>
                                     </div>
+                                    {!isMember && (
                                     <button type="button" className="btn btn-outline-danger btn-rounded" onClick={() =>
                                        swal({
                                           title: "Are you sure?",
@@ -234,12 +244,12 @@ const ElectionTable = () => {
                                        })
                                     }
                                        variant="primary"><i className="fa fa-close"></i></button>
+                                    )}
 
                                  </Card.Header>
                                  <Card.Img variant="top" src={avatar3} />
                                  <Card.Body>
                                     <Card.Title>Club : {election.club}</Card.Title>
-                                    <Card.Text>Description : {election.description}</Card.Text>
                                     <Card.Text>Type : {election.type}</Card.Text>
                                     <Card.Text>Start Date : {moment(election.startDate).format('MM/DD/YYYY')}</Card.Text>
                                     <Card.Text>End Date : {moment(election.endDate).format('MM/DD/YYYY')}</Card.Text>
@@ -252,10 +262,11 @@ const ElectionTable = () => {
             <p>Description: ${election.description}</p>
             <p>Start Date: ${moment(election.startDate).format('MM/DD/YYYY')}</p>
             <p>End Date: ${moment(election.endDate).format('MM/DD/YYYY')}</p>
-            <p>Candidates: ${election.candidates.join(', ')}</p>
+            <p>Candidates: ${election.candidates.map(candidate => candidate.user.firstname).join(', ')}</p>
         `
                                           });
                                        }}>Details</button>
+                                       {!isMember && (
                                        <button type="button" class="btn btn-outline-info btn-rounded" onClick={() => {
                                           Swal.fire({
                                              title: 'Update Election',
@@ -333,6 +344,7 @@ const ElectionTable = () => {
                                        }
                                        }
                                           variant="primary" > Update </button>
+                                       )}
                                        <Link to={`/client/table-apply?id=${election._id}`}>
                                           <button type="button" className="btn btn-outline-info btn-rounded">Join</button>
                                        </Link>

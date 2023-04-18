@@ -9906,6 +9906,7 @@ svg.pulse-svg {
 .header-left {
   height: 100%;
   display: flex;
+  gap: 50px;
   align-items: center; }
   .header-left .dashboard_bar {
     font-size: 28px;

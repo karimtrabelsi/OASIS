@@ -6,6 +6,7 @@ import swalMessage from "@sweetalert/with-react";
 import moment from 'moment';
 import { Redirect } from 'react-router-dom';
 import { Field, useFormik } from "formik";
+import useAuthStore from "../../../utils/zustand";
 
 
 import {
@@ -39,6 +40,10 @@ const ApplyPage = () => {
       </svg>
    );
 
+   const { user } = useAuthStore();
+
+   // Determine if the logged-in user has the role "Member"
+   
    const handleVote = (candidacy) => {
       Swal.fire({
          title: "Confirm Vote",
@@ -200,12 +205,11 @@ const ApplyPage = () => {
             <option value="Secretary">Secretary</option>
             <option value="Treasurer">Treasurer</option>
             <option value="Protocol">Protocol</option>` :
-                                             `<option value="ChiefExecutiveOfficer">Chief Executive Officer</option>
-            <option value="ChiefOperatingOfficer">Chief Operating Officer</option>
-            <option value="ChiefFinancialOfficer">Chief Financial Officer</option>
-            <option value="ChiefMarketingOfficer">Chief Marketing Officer</option>
-            <option value="ChiefTechnologyOfficer">Chief Technology Officer</option>
-            <option value="ChiefHumanResourcesOfficer">Chief Human Resources Officer</option>`}
+           `<option value="Public Interest Chief">Public Interest Chief</option>
+            <option value="International Service Chief">International Service Chief</option>
+            <option value="Interior Service Chief">Interior Service Chief</option>
+            <option value="Personal Development Manager">Personal Development Manager</option>
+            <option value="Human Resources Chief">Human Resources Chief</option>`}
         </select>
     </div>
     <br></br>
@@ -273,6 +277,9 @@ const ApplyPage = () => {
                      {candidacies
                         .filter((candidacy) => candidacy.electionSelected === idelection)
                         .reduce((accumulator, candidacy, index) => {
+   const isMember = user &&( JSON.parse(user).role === "Member" || JSON.parse(user).role === "President") && JSON.parse(user)._id === candidacy.user._id;
+   // const isPresident = user && JSON.parse(user).role === "President" && JSON.parse(user)._id === candidacy.user._id;
+
                            if (index % 3 === 0) {
                               accumulator.push([]);
                            }
@@ -282,7 +289,7 @@ const ApplyPage = () => {
                                     <div className="d-flex justify-content-between">
                                        <h5>Position : {candidacy.position}</h5>
                                     </div>
-                                    <button type="button" className="btn btn-outline-danger btn-rounded" onClick={() =>
+                                    {isMember && (    <button type="button" className="btn btn-outline-danger btn-rounded" onClick={() =>
                                        swal({
                                           title: "Are you sure?",
                                           text: "Once deleted, your apply will not be available anymore and your votes will be removed !",
@@ -317,7 +324,8 @@ const ApplyPage = () => {
                                           }
                                        })
                                     }
-                                       variant="primary"><i className="fa fa-close"></i></button>
+                                       variant="primary"><i className="fa fa-close"></i></button> 
+                                    )}
 
                                  </Card.Header>
                                  <Card.Img variant="top" src={images('./' + candidacy.user.image)} style={{ maxWidth: "250px", maxHeight: "250px", margin: "auto" }} />
@@ -330,7 +338,8 @@ const ApplyPage = () => {
                                     <div className="d-flex justify-content-between">
                                        <button type="button" className="btn btn-outline-info btn-rounded" onClick={() => handleVote(candidacy)} variant="primary" disabled={hasVoted}>
                                           {hasVoted ? 'Voted' : 'Vote'}</button>
-                                       <button type="button" className="btn btn-outline-info btn-rounded"
+                                          {isMember && (
+                                          <button type="button" className="btn btn-outline-info btn-rounded"
                                           onClick={() =>
                                              Swal.fire({
                                                 title: "Update Candidacy",
@@ -357,21 +366,21 @@ const ApplyPage = () => {
                                                       '<option value="Protocol"' +
                                                       (candidacy.position === "Protocol" ? "selected" : "") +
                                                       '>Protocol</option>' :
-                                                      '<option value="ChiefExecutiveOfficer"' +
-                                                      (candidacy.position === "Chief Executive Officer" ? "selected" : "") +
-                                                      '>Chief Executive Officer</option>' +
-                                                      '<option value="ChiefOperatingOfficer"' +
-                                                      (candidacy.position === "Chief Operating Officer" ? "selected" : "") +
-                                                      '>Chief Operating Officer</option>' +
-                                                      '<option value="ChiefFinancialOfficer"' +
-                                                      (candidacy.position === "Chief Financial Officer" ? "selected" : "") +
-                                                      '>Chief Financial Officer</option>' +
-                                                      '<option value="ChiefMarketingOfficer"' +
-                                                      (candidacy.position === "Chief Marketing Officer" ? "selected" : "") +
-                                                      '>Chief Marketing Officer</option>' +
-                                                      '<option value="ChiefTechnologyOfficer"' +
-                                                      (candidacy.position === "Chief Technology Officer" ? "selected" : "") +
-                                                      '>Chief Technology Officer</option>') +
+                                                      '<option value="Public Interest Chief"' +
+                                                      (candidacy.position === "Public Interest Chief" ? "selected" : "") +
+                                                      '>Public Interest Chief</option>' +
+                                                      '<option value="International Service Chief"' +
+                                                      (candidacy.position === "International Service Chief" ? "selected" : "") +
+                                                      '>International Service Chief</option>' +
+                                                      '<option value="Interior Service Chief"' +
+                                                      (candidacy.position === "Interior Service Chief" ? "selected" : "") +
+                                                      '>Interior Service Chief</option>' +
+                                                      '<option value="Personal Development Manager"' +
+                                                      (candidacy.position === "Personal Development Manager" ? "selected" : "") +
+                                                      '>Personal Development Manager</option>' +
+                                                      '<option value="Human Resources Chief"' +
+                                                      (candidacy.position === "Human Resources Chief" ? "selected" : "") +
+                                                      '>Human Resources Chief</option>') +
                                                    '</select>' +
                                                    '</div>' +
                                                    '<br></br>' +
@@ -441,6 +450,7 @@ const ApplyPage = () => {
                                              })
                                           }
                                           variant="primary" > Update </button>
+                                       )}
                                     </div>
                                  </Card.Body>
                               </Card>
