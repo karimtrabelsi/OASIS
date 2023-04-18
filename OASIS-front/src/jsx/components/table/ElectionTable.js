@@ -46,6 +46,7 @@ const ElectionTable = () => {
    const isMember = user && JSON.parse(user).role === "Member";
 
    const [elections, setElections] = useState([]);
+   const [clubs, setClubs] = useState([]);
    const [search, setSearch] = useState("");
    const [searchS, setSearchS] = useState("");
    const [searchE, setSearchE] = useState("");
@@ -87,6 +88,18 @@ const ElectionTable = () => {
       searchE && setElections(elections.filter((election) => election.moment(election.endDate).format('MM/DD/YYYY').includes(search)));
    }, [elections]);
 
+   function getClubs() {
+      axios
+         .get("http://localhost:3000/clubs/getclubs")
+         .then((res) => {
+            setClubs(res.data);
+         })
+         .catch((err) => {
+            console.log(err);
+         });
+   }
+
+
    return (
       <Fragment>
          <PageTitle activeMenu="Table" motherMenu="Bootstrap" />
@@ -122,81 +135,89 @@ const ElectionTable = () => {
                         </div>
                      </div>
                      {!isMember && (
-                     <button type="button" class="btn btn-info btn-rounded"
-                        onClick={() => Swal.fire({
-                           title: 'Add Election',
-                           html:
-                              '<input id="name" class="swal2-input" placeholder="Name">' +
-                              '<input id="club" class="swal2-input" placeholder="Club">' +
-                              '<div class="form-group">' +
-                              '<label for="type">Type:</label>' +
-                              '<select id="type" class="form-control">' +
-                              '<option value="ExecutiveBoard">ExecutiveBoard</option>' +
-                              '<option value="ExpandedBoard">ExpandedBoard</option>' +
-                              '</select>' +
-                              '</div>' +
-                              '<textarea id="description" class="swal2-textarea" placeholder="Description"></textarea>' +
-                              '<input type="date" id="startDate" class="swal2-input" placeholder="Start Date">' +
-                              '<input type="date" id="endDate" class="swal2-input" placeholder="End Date">',
-                           focusConfirm: false,
-                           preConfirm: () => {
-                              const name = document.getElementById('name').value;
-                              const club = document.getElementById('club').value;
-                              const type = document.getElementById('type').value;
-                              const description = document.getElementById('description').value;
-                              const startDate = document.getElementById('startDate').value;
-                              const endDate = document.getElementById('endDate').value;
-                              const currentDate = new Date().toISOString().split('T')[0];
-                              if (!name || !club || !description || !startDate || !endDate) {
-                                 Swal.showValidationMessage('Please fill in all fields');
-                              } else if (startDate < currentDate) {
-                                 Swal.showValidationMessage('Start date cannot be before current date');
-                              } else if (endDate <= startDate) {
-                                 Swal.showValidationMessage('End date must be after start date');
-                              }
-                              return { name: name, club: club, type: type, description: description, startDate: startDate, endDate: endDate };
-                           }
-                        }).then(result => {
-                           if (result.isConfirmed) {
-                              console.log(result.value);
-                              fetch('http://localhost:3000/election/newElection', {
-                                 method: 'POST',
-                                 headers: {
-                                    'Content-Type': 'application/json'
-                                 },
-                                 body: JSON.stringify(result.value)
-                              })
-                                 .then(response => {
-                                    if (!response.ok) {
-                                       throw new Error('Network response was not ok');
+                        <button type="button" class="btn btn-info btn-rounded"
+                           onClick={() => {
+                              getClubs();
+                              Swal.fire({
+                                 title: 'Add Election',
+                                 html:
+                                    '<input id="name" class="swal2-input" placeholder="Name">' +
+                                    '<div class="form-group">' +
+                                    '<label for="club">Club:</label>' +
+                                    '<select id="club" class="form-control">' +
+                                    clubs.map((club) => '<option value="' + club._id + '">' + club.clubname + '</option>') +
+                                    '</select>' +
+                                    '</div>' +
+                                    '<div class="form-group">' +
+                                    '<label for="type">Type:</label>' +
+                                    '<select id="type" class="form-control">' +
+                                    '<option value="ExecutiveBoard">ExecutiveBoard</option>' +
+                                    '<option value="ExpandedBoard">ExpandedBoard</option>' +
+                                    '</select>' +
+                                    '</div>' +
+                                    '<textarea id="description" class="swal2-textarea" placeholder="Description"></textarea>' +
+                                    '<input type="date" id="startDate" class="swal2-input" placeholder="Start Date">' +
+                                    '<input type="date" id="endDate" class="swal2-input" placeholder="End Date">',
+                                 focusConfirm: false,
+                                 preConfirm: () => {
+                                    const name = document.getElementById('name').value;
+                                    const club = document.getElementById('club').value;
+                                    const type = document.getElementById('type').value;
+                                    const description = document.getElementById('description').value;
+                                    const startDate = document.getElementById('startDate').value;
+                                    const endDate = document.getElementById('endDate').value;
+                                    const currentDate = new Date().toISOString().split('T')[0];
+                                    if (!name || !club || !description || !startDate || !endDate) {
+                                       Swal.showValidationMessage('Please fill in all fields');
+                                    } else if (startDate < currentDate) {
+                                       Swal.showValidationMessage('Start date cannot be before current date');
+                                    } else if (endDate <= startDate) {
+                                       Swal.showValidationMessage('End date must be after start date');
                                     }
-                                    Swal.fire({
-                                       icon: 'success',
-                                       title: 'Election added successfully',
-                                       showConfirmButton: false,
-                                       timer: 1500
-                                    });
-                                 })
-                                 .catch(error => {
-                                    console.error('There was an error adding the election:', error);
-                                    Swal.fire({
-                                       icon: 'error',
-                                       title: 'Oops...',
-                                       text: 'Something went wrong!'
-                                    });
-                                 });
+                                    return { name: name, club: club, type: type, description: description, startDate: startDate, endDate: endDate };
+                                 }
+                              }).then(result => {
+                                 if (result.isConfirmed) {
+                                    console.log(result.value);
+                                    fetch('http://localhost:3000/election/newElection', {
+                                       method: 'POST',
+                                       headers: {
+                                          'Content-Type': 'application/json'
+                                       },
+                                       body: JSON.stringify(result.value)
+                                    })
+                                       .then(response => {
+                                          if (!response.ok) {
+                                             throw new Error('Network response was not ok');
+                                          }
+                                          Swal.fire({
+                                             icon: 'success',
+                                             title: 'Election added successfully',
+                                             showConfirmButton: false,
+                                             timer: 1500
+                                          });
+                                       })
+                                       .catch(error => {
+                                          console.error('There was an error adding the election:', error);
+                                          Swal.fire({
+                                             icon: 'error',
+                                             title: 'Oops...',
+                                             text: 'Something went wrong!'
+                                          });
+                                       });
+                                 }
+                              })
                            }
-                        })
-                        }
-                        variant="primary"
+                           }
+                           variant="primary"
 
-                     ><span class="btn-icon-left text-info"><i class="fa fa-plus color-info"></i></span>Add</button>
+                        ><span class="btn-icon-left text-info"><i class="fa fa-plus color-info"></i></span>Add</button>
                      )}
 
                   </Card.Header>
                   <Card.Body>
                      {elections
-                        .filter((election) => election.club === userr.club)
+                        .filter((election) => election.club.clubname === userr.club)
                         .reduce((accumulator, election, index) => {
                            if (index % 3 === 0) {
                               accumulator.push([]);
@@ -208,48 +229,48 @@ const ElectionTable = () => {
                                        <h5>{election.name}</h5>
                                     </div>
                                     {!isMember && (
-                                    <button type="button" className="btn btn-outline-danger btn-rounded" onClick={() =>
-                                       swal({
-                                          title: "Are you sure?",
-                                          text: "Once deleted, election will not be available anymore !",
-                                          icon: "warning",
-                                          buttons: true,
-                                          dangerMode: true,
-                                       }).then((willDelete) => {
-                                          if (willDelete) {
-                                             axios
-                                                .delete(
-                                                   "http://localhost:3000/election/deleteElection/" +
-                                                   election._id
-                                                )
-                                                .then((res) => {
-                                                   // console.log(res)
-                                                   if ((res.respone = 200)) {
-                                                      swal(
-                                                         election.name + " deleted !",
-                                                         {
-                                                            icon: "success",
-                                                         }
-                                                      );
-                                                   } else {
-                                                      swal("Connection Error!");
-                                                   }
-                                                })
-                                                .catch((err) => {
-                                                   console.log(err);
-                                                });
-                                          } else {
-                                             swal("Nothing changed !");
-                                          }
-                                       })
-                                    }
-                                       variant="primary"><i className="fa fa-close"></i></button>
+                                       <button type="button" className="btn btn-outline-danger btn-rounded" onClick={() =>
+                                          swal({
+                                             title: "Are you sure?",
+                                             text: "Once deleted, election will not be available anymore !",
+                                             icon: "warning",
+                                             buttons: true,
+                                             dangerMode: true,
+                                          }).then((willDelete) => {
+                                             if (willDelete) {
+                                                axios
+                                                   .delete(
+                                                      "http://localhost:3000/election/deleteElection/" +
+                                                      election._id
+                                                   )
+                                                   .then((res) => {
+                                                      // console.log(res)
+                                                      if ((res.respone = 200)) {
+                                                         swal(
+                                                            election.name + " deleted !",
+                                                            {
+                                                               icon: "success",
+                                                            }
+                                                         );
+                                                      } else {
+                                                         swal("Connection Error!");
+                                                      }
+                                                   })
+                                                   .catch((err) => {
+                                                      console.log(err);
+                                                   });
+                                             } else {
+                                                swal("Nothing changed !");
+                                             }
+                                          })
+                                       }
+                                          variant="primary"><i className="fa fa-close"></i></button>
                                     )}
 
                                  </Card.Header>
                                  <Card.Img variant="top" src={avatar3} />
                                  <Card.Body>
-                                    <Card.Title>Club : {election.club}</Card.Title>
+                                    <Card.Title>Club : {election.club.clubname}</Card.Title>
                                     <Card.Text>Type : {election.type}</Card.Text>
                                     <Card.Text>Start Date : {moment(election.startDate).format('MM/DD/YYYY')}</Card.Text>
                                     <Card.Text>End Date : {moment(election.endDate).format('MM/DD/YYYY')}</Card.Text>
@@ -258,7 +279,7 @@ const ElectionTable = () => {
                                           Swal.fire({
                                              title: election.name,
                                              html: `
-            <p>Club: ${election.club}</p>
+            <p>Club: ${election.club.clubname}</p>
             <p>Description: ${election.description}</p>
             <p>Start Date: ${moment(election.startDate).format('MM/DD/YYYY')}</p>
             <p>End Date: ${moment(election.endDate).format('MM/DD/YYYY')}</p>
@@ -267,83 +288,81 @@ const ElectionTable = () => {
                                           });
                                        }}>Details</button>
                                        {!isMember && (
-                                       <button type="button" class="btn btn-outline-info btn-rounded" onClick={() => {
-                                          Swal.fire({
-                                             title: 'Update Election',
-                                             html:
-                                                'Name :<input id="name" class="swal2-input" placeholder="Name" value="' + election.name + '">' +
-                                                'Club :<input id="club" class="swal2-input" placeholder="Club" value="' + election.club + '">' +
-                                                '<div class="form-group">' +
-                                                '<label for="type">Type:</label>' +
-                                                '<select id="type" class="form-control">' +
-                                                '<option value="ExecutiveBoard">ExecutiveBoard</option>' +
-                                                '<option value="ExpandedBoard">ExpandedBoard</option>' +
-                                                '</select>' +
-                                                '</div>' +
-                                                'Description :<textarea id="description" class="swal2-textarea" placeholder="Description">' + election.description + '</textarea>' +
-                                                'Start Date :<input type="date" id="startDate" class="swal2-input" placeholder="Start Date" value="' + moment(election.startDate).format('YYYY-MM-DD') + '">' +
-                                                'End Date :<input type="date" id="endDate" class="swal2-input" placeholder="End Date" value="' + moment(election.endDate).format('YYYY-MM-DD') + '">',
-                                             focusConfirm: false,
-                                             preConfirm: () => {
-                                                const name = document.getElementById('name').value;
-                                                const club = document.getElementById('club').value;
-                                                const type = document.getElementById('type').value;
-                                                const description = document.getElementById('description').value;
-                                                const startDate = document.getElementById('startDate').value;
-                                                const endDate = document.getElementById('endDate').value;
-                                                const currentDate = new Date().toISOString().split('T')[0];
-                                                if (!name || !club || !description || !startDate || !endDate) {
-                                                   Swal.showValidationMessage('Please fill in all fields');
-                                                } else if (startDate < currentDate) {
-                                                   Swal.showValidationMessage('Start date cannot be before current date');
-                                                } else if (endDate <= startDate) {
-                                                   Swal.showValidationMessage('End date must be after start date');
-                                                }
-                                                return { name: name, club: club, type: type, description: description, startDate: startDate, endDate: endDate };
-                                             }
-                                          }).then(result => {
-                                             if (result.isConfirmed) {
-                                                console.log(result.value);
-                                                const updateData = {
-                                                   name: result.value.name,
-                                                   club: result.value.club,
-                                                   type: result.value.type,
-                                                   description: result.value.description,
-                                                   startDate: result.value.startDate,
-                                                   endDate: result.value.endDate,
-                                                   candidates: result.value.candidates
-                                                }
-                                                axios.put(`http://localhost:3000/election/updateElection/${election._id}`, updateData, {
-                                                   headers: {
-                                                      'Content-Type': 'application/json'
+                                          <button type="button" class="btn btn-outline-info btn-rounded" onClick={() => {
+                                             Swal.fire({
+                                                title: 'Update Election',
+                                                html:
+                                                   'Name :<input id="name" class="swal2-input" placeholder="Name" value="' + election.name + '">' +
+                                                   '<div class="form-group">' +
+                                                   '<label for="type">Type:</label>' +
+                                                   '<select id="type" class="form-control">' +
+                                                   '<option value="ExecutiveBoard">ExecutiveBoard</option>' +
+                                                   '<option value="ExpandedBoard">ExpandedBoard</option>' +
+                                                   '</select>' +
+                                                   '</div>' +
+                                                   'Description :<textarea id="description" class="swal2-textarea" placeholder="Description">' + election.description + '</textarea>' +
+                                                   'Start Date :<input type="date" id="startDate" class="swal2-input" placeholder="Start Date" value="' + moment(election.startDate).format('YYYY-MM-DD') + '">' +
+                                                   'End Date :<input type="date" id="endDate" class="swal2-input" placeholder="End Date" value="' + moment(election.endDate).format('YYYY-MM-DD') + '">',
+                                                focusConfirm: false,
+                                                preConfirm: () => {
+                                                   const name = document.getElementById('name').value;
+                                                   const type = document.getElementById('type').value;
+                                                   const description = document.getElementById('description').value;
+                                                   const startDate = document.getElementById('startDate').value;
+                                                   const endDate = document.getElementById('endDate').value;
+                                                   const currentDate = new Date().toISOString().split('T')[0];
+                                                   if (!name || !description || !startDate || !endDate) {
+                                                      Swal.showValidationMessage('Please fill in all fields');
+                                                   } else if (startDate < currentDate) {
+                                                      Swal.showValidationMessage('Start date cannot be before current date');
+                                                   } else if (endDate <= startDate) {
+                                                      Swal.showValidationMessage('End date must be after start date');
                                                    }
-                                                }).then(response => {
-                                                   if (response.status === 200) {
-                                                      Swal.fire({
-                                                         icon: 'success',
-                                                         title: 'Election updated successfully',
-                                                         showConfirmButton: false,
-                                                         timer: 1500
-                                                      }).then(() => {
-                                                      });
-                                                   } else {
+                                                   return { name: name, type: type, description: description, startDate: startDate, endDate: endDate };
+                                                }
+                                             }).then(result => {
+                                                if (result.isConfirmed) {
+                                                   console.log(result.value);
+                                                   const updateData = {
+                                                      name: result.value.name,
+                                                      club: result.value.club,
+                                                      type: result.value.type,
+                                                      description: result.value.description,
+                                                      startDate: result.value.startDate,
+                                                      endDate: result.value.endDate,
+                                                      candidates: result.value.candidates
+                                                   }
+                                                   axios.put(`http://localhost:3000/election/updateElection/${election._id}`, updateData, {
+                                                      headers: {
+                                                         'Content-Type': 'application/json'
+                                                      }
+                                                   }).then(response => {
+                                                      if (response.status === 200) {
+                                                         Swal.fire({
+                                                            icon: 'success',
+                                                            title: 'Election updated successfully',
+                                                            showConfirmButton: false,
+                                                            timer: 1500
+                                                         }).then(() => {
+                                                         });
+                                                      } else {
+                                                         Swal.fire({
+                                                            icon: 'error',
+                                                            title: 'Failed to update election',
+                                                         });
+                                                      }
+                                                   }).catch(error => {
+                                                      console.error(error);
                                                       Swal.fire({
                                                          icon: 'error',
                                                          title: 'Failed to update election',
                                                       });
-                                                   }
-                                                }).catch(error => {
-                                                   console.error(error);
-                                                   Swal.fire({
-                                                      icon: 'error',
-                                                      title: 'Failed to update election',
                                                    });
-                                                });
-                                             }
-                                          })
-                                       }
-                                       }
-                                          variant="primary" > Update </button>
+                                                }
+                                             })
+                                          }
+                                          }
+                                             variant="primary" > Update </button>
                                        )}
                                        <Link to={`/client/table-apply?id=${election._id}`}>
                                           <button type="button" className="btn btn-outline-info btn-rounded">Join</button>

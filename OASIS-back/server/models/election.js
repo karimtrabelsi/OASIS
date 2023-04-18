@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("./user");
 const Candidacy = require("./candidacy");
-
+const Club = require("./club");
 
 const Type = {
   ExecutiveBoard: "ExecutiveBoard",
@@ -15,7 +15,7 @@ const electionSchema = new mongoose.Schema(
       required: true,
     },
     club: {
-      type: String,
+      type: Club.schema,
       required: true,
     },
     type: {
