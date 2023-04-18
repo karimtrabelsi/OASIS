@@ -23,21 +23,9 @@ const RecrutementTable = () =>{
        
        search &&
        setCandidatures(candidatures.filter((candidature) => candidature.nom.includes(search)));
-   }, [candidatures]);
+   }, []);
 
 
-/*
-   const accepterCandidature = async (candidat) => {
-    const subject = "Félicitations, vous êtes accepté(e) au club " + candidat.clubSouhaite;
-    const text = "Cher/Chère " + candidat.nom + ",\n\n" +
-                 "Nous sommes heureux de vous informer que votre candidature au club " + candidat.clubSouhaite + " a été acceptée.\n\n" +
-                 "Bienvenue dans notre club et nous espérons que vous apprécierez votre temps avec nous.\n\n" +
-                 "Cordialement,\n" +
-                 "L'équipe du club " + candidat.clubSouhaite;
-    
-    await sendEmail(candidat.mail, subject, text);
-  };
-  */
 
   
 
@@ -49,35 +37,24 @@ const RecrutementTable = () =>{
 
   const accepterCandidature = async (candidat) => {
     try {
-      const response = await fetch("http://localhost:3000/sendMail", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email: candidat.mail,
-          subject: "Félicitations, vous êtes accepté(e) au club " + candidat.clubSouhaite,
-          text:
-            "Cher/Chère " +
-            candidat.nom +
-            ",\n\n" +
-            "Nous sommes heureux de vous informer que votre candidature au club " +
-            candidat.clubSouhaite +
-            " a été acceptée.\n\n" +
-            "Bienvenue dans notre club et nous espérons que vous apprécierez votre temps avec nous.\n\n" +
-            "Cordialement,\n" +
-            "L'équipe du club " +
-            candidat.clubSouhaite
-        })
+      console.log('-DEBUG-', candidat)
+      await axios.post('http://localhost:3000/recrutements/accept', {
+        email: candidat.mail,
+        subject: "Félicitations, vous êtes accepté(e) au club " + candidat.clubSouhaite,
+        text: "Cher/Chère " +
+        candidat.nom +
+        ",\n\n" +
+        "Nous sommes heureux de vous informer que votre candidature au club " +
+        candidat.clubSouhaite +
+        " a été acceptée.\n\n" +
+        "Bienvenue dans notre club et nous espérons que vous apprécierez votre temps avec nous.\n\n" +
+        "Cordialement,\n" +
+        "L'équipe du club " +
+        candidat.clubSouhaite
       });
-
-      if (response.ok) {
-        console.log("Email sent successfully");
-      } else {
-        console.log("Email not sent");
-      }
+      console.log("email sent successfully");
     } catch (error) {
-      console.error(error);
+      console.log(error, "email not sent");
     }
   };
 
@@ -87,7 +64,7 @@ const RecrutementTable = () =>{
     const text = `Bonjour ${candidat.nom},\n\nNous regrettons de vous informer que votre candidature pour rejoindre le club ${candidat.clubSouhaite} n'a pas été retenue.\n\nCordialement,\nL'équipe du club`;
   
     try {
-      await axios.post('http://localhost:3000/sendMail', {
+      await axios.post('http://localhost:3000/recrutements/accept', {
         email: candidat.mail,
         subject: subject,
         text: text
@@ -103,47 +80,9 @@ const RecrutementTable = () =>{
 
 
 
-   /*
-  const refuserCandidature = async (email, clubSouhaite) => {
-    const subject = "Votre candidature au club " + clubSouhaite + " a été refusée";
-    const text = "Bonjour,\n\nNous regrettons de vous informer que votre candidature au club " + clubSouhaite + " a été refusée. Nous vous remercions toutefois de votre intérêt et nous vous encourageons à continuer à chercher des opportunités similaires.\n\nCordialement,\nL'équipe du club";
-    const url = "http://localhost:3000/sendMail";
-  
-    try {
-      await axios.post(url, { email, subject, text });
-      console.log("Email envoyé avec succès à " + email);
-    } catch (error) {
-      console.log("Une erreur s'est produite lors de l'envoi de l'email: ", error);
-    }
-  };
-  */  
    
-/*
-   const accepterCandidature = (candidature) => {
-    axios.post(`http://localhost:3000/accepter/${candidature._id}`)
-      .then(() => {
-        sendMail(candidature.mail, `Félicitations, vous êtes accepté au club ${candidature.clubSouhaite} !`);
-        setCandidatures(candidatures.filter((c) => c._id !== candidature._id));
-        setCandidatDetails(null);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
-  const refuserCandidature = (candidature) => {
-    axios.post(`http://localhost:3000/refuser/${candidature._id}`)
-      .then(() => {
-        sendMail(candidature.mail, `Votre candidature pour le club ${candidature.clubSouhaite} a été refusée.`);
-        setCandidatures(candidatures.filter((c) => c._id !== candidature._id));
-        setCandidatDetails(null);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
-*/
   return (
 <div>
       <Typography variant="h4" component="h1" gutterBottom>Liste des candidatures</Typography>

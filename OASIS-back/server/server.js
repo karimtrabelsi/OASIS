@@ -30,6 +30,7 @@ const getRecrutements = require("./routes/recrutement/getRecrutements");
 const getRecrutement = require("./routes/recrutement/getRecrutement");
 const updateRecrutement = require("./routes/recrutement/updateRecrutement");
 const deleteRecrutement = require("./routes/recrutement/deleteRecrutement");
+const acceptCandidate= require("./routes/recrutement/acceptCandidate");
 const financialManagement = require("./routes/event/financialManagement");
 const sendMail= require("./utils/sendMail");
 const app = express();
@@ -109,7 +110,7 @@ let upload = multer({ storage, fileFilter });
 
 let uploadFile = multer({ storageFile, fileFilter });
 
-
+app.post('/recrutements/accept',acceptCandidate)
 app.post('/recrutements', createRecrutement);
 app.get('/recrutements', getRecrutements);
 app.get('/recrutements/:id', getRecrutement);
