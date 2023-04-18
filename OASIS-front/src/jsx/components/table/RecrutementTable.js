@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { List, ListItem, ListItemText, ListItemAvatar, Avatar, Typography , Button} from '@material-ui/core';
+import useAuthStore from "../../../utils/zustand"
 const RecrutementTable = () =>{
   const [candidatures, setCandidatures] = useState([]);
   const [candidatDetails, setCandidatDetails] = useState(null);
   const [search, setSearch] = useState("");
   const userr = JSON.parse(localStorage.getItem("connectedUser"));
+  const {user} = useAuthStore();
+
   const afficherDetailsCandidat = (candidat) => {
     setCandidatDetails(candidat);
   };
@@ -21,9 +24,9 @@ const RecrutementTable = () =>{
        });
 
        
-       search &&
-       setCandidatures(candidatures.filter((candidature) => candidature.nom.includes(search)));
-   }, []);
+       
+       setCandidatures(candidatures.filter((candidature) => candidature.clubSouhaite.includes(JSON.parse(user).club)));
+   }, [candidatures]);
 
 
 
