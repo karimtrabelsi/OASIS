@@ -33,7 +33,7 @@ const recrutementSchema = new mongoose.Schema({
   competences: { type: String,
     required: true,
       },
-  dateCandidature: { type: Date,
+  dateCandidature: { type: String,
     required: true,
       },
   dateEntretien:{ type: Date,

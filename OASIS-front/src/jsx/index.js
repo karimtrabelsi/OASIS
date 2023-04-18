@@ -9,6 +9,7 @@ import "./chart.css";
 
 /// Pages
 import Registration from "./pages/Registration";
+import Recrutement from "./pages/Recrutement";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import NewPassword from "./pages/NewPassword";
@@ -203,6 +204,7 @@ const Markup = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/recrutement" element={<Recrutement />} />
       <Route path="/register" element={<Registration />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/new-password" element={<NewPassword />} />
