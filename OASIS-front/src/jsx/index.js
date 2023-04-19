@@ -9,6 +9,7 @@ import "./chart.css";
 
 /// Pages
 import Registration from "./pages/Registration";
+import Recrutement from "./pages/Recrutement";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import NewPassword from "./pages/NewPassword";
@@ -85,7 +86,7 @@ import ApplyPage from "./components/table/ApplyPage";
 import ApexChart from "./components/charts/apexcharts";
 import FeesCollection from "./components/table/FeesCollection";
 import EventTable from "./components/table/EventTable";
-
+import RecrutementTable from "./components/table/RecrutementTable";
 /// Form
 import Element from "./components/Forms/Element/Element";
 import Wizard from "./components/Forms/Wizard/Wizard";
@@ -237,6 +238,7 @@ const Markup = () => {
           <Route path="elections" element={<ElectionTable />} />
           <Route path="table-apply" element={<ApplyPage />} />
           <Route path="table-club-front" element={<ClubTable />} />
+          <Route path="Event-Table" element={<FeesCollection />} />
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>
@@ -244,6 +246,7 @@ const Markup = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/recrutement" element={<Recrutement />} />
       <Route path="/register" element={<Registration />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/new-password" element={<NewPassword />} />
@@ -255,6 +258,7 @@ const Markup = () => {
         <Route path="members" element={<DataTable />} />
         <Route path="Event-Table" element={<FeesCollection />} />
         <Route path="elections" element={<ElectionTable />} />
+        <Route path="recrutements" element={<RecrutementTable />} />
         <Route path="table-apply" element={<ApplyPage />} />
         <Route path="table-club" element={<Club />} />
         <Route path="table-club-front" element={<ClubTable />} />

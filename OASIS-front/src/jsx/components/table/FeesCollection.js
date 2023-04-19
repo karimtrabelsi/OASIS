@@ -6,7 +6,11 @@ import swal from "sweetalert";
 import Swal from "sweetalert2";
 import swalMessage from "@sweetalert/with-react";
 import PageTitle from "../../layouts/PageTitle";
+
 import ReactStars from "react-rating-stars-component";
+
+
+import useAuthStore from "../../../utils/zustand";
 
 
 
@@ -30,6 +34,7 @@ const FeesCollection = () => {
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState("");
   const [showDetails, setShowDetails] = useState(false);
+
   //const [userr, setUserr] = useState({});
   const setUserr = JSON.parse(localStorage.getItem("connectedUser"));
   useEffect(() => {
@@ -127,7 +132,7 @@ const FeesCollection = () => {
           <Card>
             <Card.Header>
               <Card.Title>Events list</Card.Title>
-             
+<
                 <div className="input-group search-area mr-5">
                 <div className="d-flex justify-content-md-around align-self-center ">
                   <input
@@ -154,7 +159,9 @@ const FeesCollection = () => {
                   </div>
                 </div>
               </div>
-              <button type="button" class="btn btn-info btn-rounded"
+
+              {!isMember && (<button type="button" class="btn btn-info btn-rounded"
+
                 onClick={() => Swal.fire({
                   title: 'Enter your Event details',
                   html:
@@ -199,6 +206,7 @@ const FeesCollection = () => {
                     const typeEvent = document.getElementById("typeEvent").value; // récupérer la valeur de l'option sélectionnée
                     const axes = document.getElementById("axes").value;
                     const currentDate = new Date().toISOString().split('T')[0];
+
                     if (startDate < currentDate) {
                       Swal.showValidationMessage('Start date cannot be before current date');
                    } else if (endDate <= startDate) {
@@ -208,6 +216,7 @@ const FeesCollection = () => {
                     //     Swal.showValidationMessage('Please fill in all fields');
                     const formData = new FormData();
                     console.log('here')
+
                     formData.append('file', file)
                     formData.append('eventname', eventname)
                     formData.append('startDate', startdate)
@@ -227,6 +236,7 @@ const FeesCollection = () => {
                         'Content-Type': 'multipart/form-data'
                       }
                     }).then(response => {
+
                         Swal.fire({
                           icon: 'success',
                           title: 'Your Event added successfully',
@@ -242,13 +252,41 @@ const FeesCollection = () => {
                         });
                       });
                   }
+
+                                 // Handle form submission here
+                                 const eventname = document.getElementById("eventname").value;
+                                // const startdate = document.getElementById("startdate").value;
+                                 const startdateInput = document.querySelector("#startdate");
+                                 const startdate = startdateInput ? startdateInput.value : "";
+                                 const enddate = document.getElementById("enddate").value;
+                                 const place = document.getElementById("place").value;
+                                 const collaborateur = document.getElementById("collaborateur").value;
+                                 const typeEvent =document.getElementById("typeEvent").addEventListener("change", function() {
+                                   alert("Vous avez sélectionné " + this.value);
+                                 });
+                                 const axes = Array.from(document.querySelectorAll('input[name="axes"]:checked')).map(e => e.value);
+                                 console.log("Event Name:", eventname);
+                                 console.log("Start Date:", startdate);
+                                 console.log("End Date:", enddate);
+                                 console.log("Place:", place);
+                                 console.log("Collaborateur:", collaborateur);
+                                 console.log("Type Event:", typeEvent);
+                                 console.log("Axes:", axes);
+                                 // Add new event to the events array
+                                 // const updatedEvents = [...events, newEvent];
+                                 // setEvents(updatedEvents);
+                             
+                                 // Swal.fire({
+                                 //    title: 'Form submitted',
+                                 //    text: 'Thank you for submitting the form.',
+                                 //    icon: 'success'
+                                 // });*/
+
                 })
                 }
                 variant="primary">
                 <span class="btn-icon-left text-info"><i class="fa fa-plus color-info"></i></span>Add Event</button>
-
-
-
+              )}
 
             </Card.Header>
             <Card.Body>
@@ -260,6 +298,7 @@ const FeesCollection = () => {
                   <Card key={event._id} className="my-3">
                     <Card.Header>
                       <h5>{event.eventname}</h5>
+
                       <ReactStars
     count={5}
     // onChange={ratingChanged}
@@ -270,6 +309,7 @@ const FeesCollection = () => {
     fullIcon={<i className="fa fa-star"></i>}
     activeColor="#ffd700"
   />
+
                     </Card.Header>
                     <Card.Img variant="top" src={require("../../../images/events/" + event.image)} />
                     <Card.Body>
@@ -281,8 +321,10 @@ const FeesCollection = () => {
           <Card.Text>Collaborator: {event.collaborateur}</Card.Text>
           <Card.Text>Contribution: {event.cotisation}</Card.Text> */}
                       <div>
+
                         < div className="d-flex justify-content-center">
                         <button variant="primary" className="btn btn-outline-primary btn-rounded" onClick={() => {
+
                           Swal.fire({
                             title: 'Event Details',
                             html: `
@@ -302,11 +344,12 @@ const FeesCollection = () => {
                             }
                           });
                         }}>
-                          {showDetails[event._id] ? 'Hide Details' : ' Details'}
-                          
-                        </button>
+                          {showDetails[event._id] ? 'Hide Details' : 'Show Details'}
+                        </Button>
 
-                        <button
+                        {!isMember && ( 
+                        <Button
+
                           variant="primary"
                           className="btn btn-outline-danger btn-rounded"
                           onClick={() => {
@@ -322,6 +365,9 @@ const FeesCollection = () => {
                                   .then((res) => {
                                     if (res.status === 200) {
                                       swal(event.eventname + " deleted!", { icon: "success" });
+
+                                    } else {
+                                      swal("Connection error!");
                                     }
                                   })
                                   .catch((err) => {
@@ -333,6 +379,7 @@ const FeesCollection = () => {
                             });
                           }}
                         >
+
                           <i className="fa fa-close"></i> 
                         </button>
 
@@ -440,6 +487,11 @@ const FeesCollection = () => {
 
            
                     
+
+
+                          <i className="fa fa-close"></i> Delete
+                        </Button>
+                        )}
 
                       </div>
                       {showDetails[event._id] && (

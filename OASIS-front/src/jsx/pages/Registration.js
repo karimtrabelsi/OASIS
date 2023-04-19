@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Col,
@@ -25,13 +25,14 @@ const Register = () => {
   };
   const getData = async () => {
     const res = await axios.get("https://api.ipify.org/?format=json");
-    console.log(res.data);
     setIP(res.data.ip);
   };
 
   const options = [
     { value: "Member", label: "Member" },
     { value: "President", label: "President" },
+    { value: "Governor", label: "Governor" },
+    { value: "SuperAdmin", label: "SuperAdmin" }
   ];
 
   const navigate = useNavigate();
@@ -72,8 +73,6 @@ const Register = () => {
         .matches(phoneRegExp, "Phone number is not valid")
         .max(8, "Must be 8 characters or less")
         .required("Required"),
-      club: Yup.string().required("Required"),
-      role: Yup.string().required("Please select an option"),
       image: Yup.mixed().required(),
     }),
     onSubmit: (values) => {
@@ -87,7 +86,7 @@ const Register = () => {
         phonenumber: values.phoneNumber,
         club: values.club,
         password: values.password,
-        role: values.role,
+        role: values.role.value,
         image: values.image,
         ip: ip,
       };
@@ -104,7 +103,7 @@ const Register = () => {
             "Please wait untill an admin approves your account! We will notify you with an Email",
             "success"
           );
-          navigate("/page-login");
+          navigate("/login");
         })
         .catch((err) => {
           console.log("err");
@@ -112,6 +111,24 @@ const Register = () => {
         });
     },
   });
+
+  const [clubs, setClubs] = useState([]);
+
+  function getClubs() {
+    axios
+      .get("http://localhost:3000/clubs/getclubs")
+      .then((res) => {
+        setClubs(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  useEffect(() => {
+    getClubs();
+  }, []);
+
 
   return (
     <div className="overflow-auto">
@@ -167,7 +184,7 @@ const Register = () => {
                               First Name
                             </Form.Label>
                             {formik.touched.firstName &&
-                            formik.errors.firstName ? (
+                              formik.errors.firstName ? (
                               <Form.Control.Feedback className="invalid-feedback">
                                 {formik.errors.firstName}
                               </Form.Control.Feedback>
@@ -191,7 +208,7 @@ const Register = () => {
                               Last Name
                             </Form.Label>
                             {formik.touched.lastName &&
-                            formik.errors.lastName ? (
+                              formik.errors.lastName ? (
                               <Form.Control.Feedback className="invalid-feedback">
                                 {formik.errors.lastName}
                               </Form.Control.Feedback>
@@ -219,7 +236,7 @@ const Register = () => {
                               Username
                             </Form.Label>
                             {formik.touched.username &&
-                            formik.errors.username ? (
+                              formik.errors.username ? (
                               <Form.Control.Feedback className="invalid-feedback">
                                 {formik.errors.username}
                               </Form.Control.Feedback>
@@ -269,7 +286,7 @@ const Register = () => {
                               Phone Number
                             </Form.Label>
                             {!!formik.touched.phoneNumber &&
-                            !!formik.errors.phoneNumber ? (
+                              !!formik.errors.phoneNumber ? (
                               <Form.Control.Feedback className="invalid-feedback">
                                 {formik.errors.phoneNumber}
                               </Form.Control.Feedback>
@@ -277,25 +294,24 @@ const Register = () => {
                           </Col>
                           <Col>
                             <Form.Control
-                              as="input"
-                              type="text"
-                              required
+                              as="select"
                               name="club"
+                              value={formik.values.club}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              value={formik.values.club}
-                              isInvalid={
-                                !!formik.touched.club && !!formik.errors.club
-                              }
-                            />
-                            <Form.Label className="text-center ">
-                              Club
-                            </Form.Label>
-                            {formik.touched.club && formik.errors.club ? (
-                              <Form.Control.Feedback className="invalid-feedback">
-                                {formik.errors.club}
-                              </Form.Control.Feedback>
-                            ) : null}
+                            >
+                              <option selected disabled value="">
+                                Select Your Club
+                              </option>
+                              {clubs.map((club) => (
+                                <option key={club._id} value={club.clubname}>
+                                  {club.clubname}
+                                </option>
+                              ))}
+                            </Form.Control>
+                            {formik.errors.club && formik.touched.club && (
+                              <div className="invalid-feedback">{formik.errors.club}</div>
+                            )}
                           </Col>
                         </Row>
                       </Form.Group>
@@ -308,9 +324,6 @@ const Register = () => {
                               onBlur={() =>
                                 formik.setFieldTouched("role", true)
                               }
-                              isInvalid={
-                                !!formik.errors.role && !!formik.touched.role
-                              }
                             >
                               <option selected disabled value="">
                                 Select Role
@@ -321,11 +334,6 @@ const Register = () => {
                                 </option>
                               ))}
                             </Form.Control>
-                            {formik.errors.role && formik.touched.role && (
-                              <div className="invalid-feedback">
-                                {formik.errors.role}
-                              </div>
-                            )}
                           </Col>
                           <Col>
                             <Form.Control
@@ -343,7 +351,7 @@ const Register = () => {
                             />
                             <Form.Label>Password</Form.Label>
                             {formik.touched.password &&
-                            formik.errors.password ? (
+                              formik.errors.password ? (
                               <Form.Control.Feedback className="invalid-feedback">
                                 {formik.errors.password}
                               </Form.Control.Feedback>

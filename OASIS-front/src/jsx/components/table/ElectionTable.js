@@ -88,8 +88,12 @@ const ElectionTable = () => {
       searchE && setElections(elections.filter((election) => election.moment(election.endDate).format('MM/DD/YYYY').includes(search)));
    }, [elections]);
 
+   useEffect(() => {
+      getClubs();
+    }, []);
+
    function getClubs() {
-      axios
+       axios
          .get("http://localhost:3000/clubs/getclubs")
          .then((res) => {
             setClubs(res.data);
@@ -136,8 +140,7 @@ const ElectionTable = () => {
                      </div>
                      {!isMember && (
                         <button type="button" class="btn btn-info btn-rounded"
-                           onClick={() => {
-                              getClubs();
+                           onClick={async () => {
                               Swal.fire({
                                  title: 'Add Election',
                                  html:
