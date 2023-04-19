@@ -15,15 +15,17 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuthStore from "../../../../utils/zustand";
+import "../../../../comments.css";
 
 import PageTitle from "../../../layouts/PageTitle";
-
+import PerfectScrollbar from "react-perfect-scrollbar";
 import { SRLWrapper } from "simple-react-lightbox";
 import { useQuery } from "react-query";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import swal from "sweetalert";
 import PostImage from "../../frontOffice/postImage";
+import Avatar from "../../frontOffice/avatar";
 
 const AppProfile = () => {
   const [activeToggle, setActiveToggle] = useState("posts");
@@ -117,9 +119,7 @@ const AppProfile = () => {
       file: null,
     },
     validationSchema: Yup.object({
-      content: Yup.string()
-        .max(100, "Must be 100 characters or less")
-        .required("Required"),
+      content: Yup.string().required("Required"),
     }),
     onSubmit: (values) => {
       const randomId = Math.round(Math.random() * 1000000);
@@ -154,6 +154,25 @@ const AppProfile = () => {
         });
     },
   });
+
+  const handleComment = async (e) => {
+    e.preventDefault();
+    const content = e.target.content.value;
+    const postId = e.target.postId.value;
+    const userId = userr._id;
+    await axios
+      .post("http://localhost:3000/posts/addComment", {
+        content,
+        userId,
+        postId,
+      })
+      .then((res) => {
+        refetch();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   if (isLoading) {
     console.log("loading");
@@ -707,16 +726,112 @@ const AppProfile = () => {
                             </Button>
                           </form>
                         </div>
+                        <hr class="solid" />
+
                         {data.data.map((post, index) => (
                           <>
-                            <div className="profile-uoloaded-post border-bottom-1 pb-5 d-flex flex-column align-items-start">
-                              <p>{post.content}</p>
+                            <div className="profile-upoloaded-post border-bottom-1 pb-5 d-flex flex-column align-items-start ">
+                              <div className="d-flex align-items-center flex-nowrap">
+                                <Avatar userImage={userr.image} hasBorder />
+                                <h5 className="">
+                                  {userr.firstname} {userr.lastname}
+                                  <small className="text-muted">
+                                    <b> @{userr.username}</b>
+                                  </small>
+                                </h5>
+                              </div>
+                              <h5 className="mx-5 mt-3">{post.content}</h5>
 
-                              <PostImage
-                                id={userr._id}
-                                uuid={post.uuid}
-                                image={post.image}
-                              />
+                              <div className="d-flex  justify-content-center align-items-center ">
+                                {post.image && (
+                                  <PostImage
+                                    id={userr._id}
+                                    uuid={post.uuid}
+                                    image={post.image}
+                                  />
+                                )}
+                              </div>
+
+                              <ul class="comments">
+                                {post.comments.length !== 0 &&
+                                  post.comments.map((comment, index) => (
+                                    <>
+                                      <li class="comment">
+                                        <span class="comment__name">
+                                          {" "}
+                                          {comment.user.firstname}{" "}
+                                          {comment.user.lastname}
+                                        </span>
+                                        <span class="comment__timestamp">
+                                          - 35 minutes ago
+                                        </span>
+                                        <div class="comment__response">
+                                          {comment.content}
+                                        </div>
+                                        <button
+                                          className="btn  mr-2"
+                                          onClick={() => {
+                                            axios
+                                              .post(
+                                                "http://localhost:3000/posts/addLikeComment",
+                                                {
+                                                  postId: post._id,
+                                                  userId: userr._id,
+                                                  commentId: comment.uuid,
+                                                }
+                                              )
+                                              .then((res) => refetch());
+                                          }}
+                                        >
+                                          <span className="mr-2">
+                                            {comment.likes.find(
+                                              (like) =>
+                                                like.userId === userr._id
+                                            ) ? (
+                                              <i className="fa fa-heart text-danger" />
+                                            ) : (
+                                              <i className="fa fa-heart " />
+                                            )}
+                                          </span>
+                                          {comment.likes.length}
+                                        </button>
+                                      </li>
+                                    </>
+                                  ))}
+                              </ul>
+
+                              <form onSubmit={handleComment}>
+                                <div className="d-flex justify-content-center align-items-center mt-5">
+                                  <Avatar userImage={userr.image} hasBorder />
+                                  <div className="form-group ">
+                                    <ul class="comments">
+                                      <li class="comment">
+                                        <span class="comment__name"></span>
+                                        <input
+                                          type="hidden"
+                                          name="postId"
+                                          value={post._id}
+                                        />
+                                        <textarea
+                                          rows={10}
+                                          cols={100}
+                                          type="text"
+                                          className="form-control"
+                                          placeholder="Type A Comment"
+                                          name="content"
+                                        />
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+
+                                <button className="btn " type="submit">
+                                  <span className="mr-2">
+                                    <i className="fa fa-reply" />
+                                  </span>
+                                  Reply
+                                </button>
+                              </form>
 
                               <button
                                 className="btn  mr-2"
@@ -742,15 +857,6 @@ const AppProfile = () => {
                                   )}
                                 </span>
                                 {post.likes.length}
-                              </button>
-                              <button
-                                className="btn "
-                                onClick={() => setReplay(true)}
-                              >
-                                <span className="mr-2">
-                                  <i className="fa fa-reply" />
-                                </span>
-                                Reply
                               </button>
                             </div>
                             <hr class="solid" />
