@@ -53,7 +53,6 @@ const ClubTable = () => {
             console.log(err);
          });
       search && setClubs(clubs.filter((club) => club.clubname.includes(search)));
-      searchS && setClubs(clubs.filter((club) => club.region.includes(search)));
       searchE && setClubs(clubs.filter((club) => club.city.includes(search)));
    }, [clubs]);
 
@@ -125,7 +124,6 @@ const ClubTable = () => {
             <p>Founding President: ${club.foundingpresident.firstname}</p>
             <p>Bord: ${club.board}</p>
             <p>City: ${club.city}</p>
-            <p>Region: ${club.region}</p>
             <p>Members: ${club.members.length}</p>
             <p>Email: ${club.email}</p>
             <p>Type: ${club.type}</p>

@@ -30693,16 +30693,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
         padding-left: 20px;
         box-shadow: none;  
       }
-      select[type="select"] {
-        border: 2px solid #E54927;
-        border-radius: 5px;
-        height: 47px;
-        width: 100%;
-        color: #000000;
-        font-size: 14px;
-        padding-left: 20px;
-        box-shadow: none;  
-      }
+   
 
       input:focus + label, input:valid + label{
         font-size: 12px;
@@ -30723,8 +30714,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 
       .input_wrap {width:100%; height:auto; position:relative;
       }
-      .select_wrap {width:100%; height:auto; position:relative;
-      }
+     
 
       .input_wrap label {
         font-family:arial;
@@ -30741,26 +30731,60 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
        
       
       }
+      
+      input[type="text"]:focus {outline:none;}
+      input[type="password"]:focus {outline:none;}
+      input[type="email"]:focus {outline:none;}
+      input[type="number"]:focus {outline:none;}
+
+      .select_wrap {
+        position: relative;
+        width: 100%;
+      }
+      
+      .select_wrap select {
+        border: 2px solid #E54927;
+        border-radius: 5px;
+        height: 47px;
+        width: 100%;
+        color: #000000;
+        font-size: 14px;
+        padding-left: 20px;
+        box-shadow: none;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+      }
+      
+      .select_wrap select:focus {
+        outline: none;
+        border-color: #e39b96;
+      }
+      
+      .select_wrap select:focus + label, .select_wrap select:valid + label {
+        font-size: 12px;
+        color: #e39b96;
+        top: -5px;
+        left: 10px;
+        background: #ffffff;
+        padding: 0px 5px 0px 5px;
+      }
+      
       .select_wrap label {
-        font-family:arial;
-        font-size:16px;
+        font-family: arial;
+        font-size: 16px;
         color: #6c757d;
         padding: 14px;
         position: absolute;
         top: 0;
         left: 10px;
-        transition:0.2s ease all; 
-        -moz-transition:0.2s ease all; 
-        -webkit-transition:0.2s ease all;
+        transition: 0.2s ease all;
         pointer-events: none;
-       
-      
+        z-index: 1;
       }
-      input[type="text"]:focus {outline:none;}
-      input[type="password"]:focus {outline:none;}
-      input[type="email"]:focus {outline:none;}
-      input[type="number"]:focus {outline:none;}
-      select[type="select"]:focus {outline:none;}
+
+     
+      
 
 
       @media screen and (min-width: 769px) {
