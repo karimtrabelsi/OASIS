@@ -42,7 +42,7 @@ const postSchema = new mongoose.Schema({
     required: false,
   },
   likes: {
-    type: [Number],
+    type: [Object],
     required: false,
     default: [],
   },

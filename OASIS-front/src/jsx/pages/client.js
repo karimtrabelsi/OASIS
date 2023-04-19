@@ -7,7 +7,6 @@ import useAuthStore from "../../utils/zustand";
 const Client = () => {
   const { user } = useAuthStore();
   const auth = localStorage.getItem("connectedUser");
-  console.log(user);
   if (!user) {
     return <Navigate to="/login" />;
   }

@@ -40,9 +40,13 @@ const Login = () => {
           useAuthStore.setState({ user: res.data.user });
           console.log(res.data.user);
           JSON.parse(res.data.user).role === "SuperAdmin"
-            ? navigate("/client/home")
-            : navigate("/front-profile");
-          // history.go(0);
+            && navigate("/client/home")
+            JSON.parse(res.data.user).role === "Member"
+            && navigate("/client/home")
+            JSON.parse(res.data.user).role === "President"
+            && navigate("/client/home")
+            JSON.parse(res.data.user).role === "Governor"
+            && navigate("/client/home")
         })
         .catch((err) => {
           console.log(err);
@@ -61,10 +65,6 @@ const Login = () => {
             err.response.data.msg ===
             "User is not allowed to login from this IP"
           ) {
-            console.log(err.response.data.number);
-            // let number = err.respone.data.number;
-            console.log("sssssss");
-            console.log(err.response.data);
             axios
               .post("http://localhost:3000/users/twoFactorAuth/send", {
                 number: err.response.data.number,
@@ -78,7 +78,7 @@ const Login = () => {
                 );
                 localStorage.setItem("number", err.response.data.number);
                 localStorage.setItem("userLogginIn", JSON.stringify(user));
-                navigate("/page-twofactor-auth");
+                navigate("/twofactor-auth");
               });
           }
         });
@@ -162,7 +162,7 @@ const Login = () => {
                       <p className="mb-0  text-center">
                         Forgot Password??{" "}
                         <Link
-                          to="/page-reset-password"
+                          to="/reset-password"
                           className="text-primary fw-bold"
                         >
                           Reset password
@@ -173,7 +173,7 @@ const Login = () => {
                       <p className="mb-0  text-center">
                         Don't have an account ?{" "}
                         <Link
-                          to="/page-register"
+                          to="/register"
                           className="text-primary fw-bold"
                         >
                           Signup Here !

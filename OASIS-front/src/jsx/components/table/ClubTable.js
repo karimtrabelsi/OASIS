@@ -38,6 +38,7 @@ const ClubTable = () => {
       </svg>
    );
 
+   const images = require.context('../../../images/clubs/', true, /\.(png|jpe?g|gif|svg)$/);
    const [clubs, setClubs] = useState([]);
    const [search, setSearch] = useState("");
    const [searchS, setSearchS] = useState("");
@@ -107,7 +108,7 @@ const ClubTable = () => {
                                     
 
                                  </Card.Header>
-                                 <Card.Img variant="top" src={avatar3} />
+                                 <Card.Img variant="top" src={images('./' + club.image)} style={{ width: "400px", height: "250px", margin: "auto" }} />
                                  <Card.Body>
                                     <Card.Title>Club Name : {club.clubname}</Card.Title>
                                     <Card.Text>City : {club.city}</Card.Text>

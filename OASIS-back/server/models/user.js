@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const Roles = {
   SuperAdmin: "SuperAdmin",
   Governor: "Governor",
@@ -48,7 +49,7 @@ const userSchema = new mongoose.Schema(
     },
     club: {
       type: String,
-      required: false,
+      required: true,
     },
     approved: {
       type: Boolean,

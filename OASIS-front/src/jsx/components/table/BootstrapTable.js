@@ -26,6 +26,9 @@ import avatar2 from "../../../images/avatar/2.jpg";
 import avatar3 from "../../../images/avatar/3.jpg";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Error404 from "../../pages/Error404";
+import useAuthStore from "../../../utils/zustand";
+
 
 const BootstrapTable = () => {
   const svg1 = (
@@ -44,6 +47,11 @@ const BootstrapTable = () => {
   const [newUsers, setNewUsers] = useState(false);
   const [search, setSearch] = useState("");
   const isMounted = useRef(true);
+
+  const { user } = useAuthStore();
+
+  // Determine if the logged-in user has the role "Member"
+  
   const fetchData = useCallback(async () => {
     const response = await axios.get("http://localhost:3000/users");
     if (isMounted.current) {
@@ -83,6 +91,13 @@ const BootstrapTable = () => {
         console.log(err);
       });
   };
+
+
+  if (JSON.parse(user).role !== "SuperAdmin") {
+    return (
+       <Error404/>
+    )
+  }
 
   return (
     <Fragment>
