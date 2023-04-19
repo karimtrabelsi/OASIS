@@ -266,7 +266,7 @@ const Register = () => {
                           </Col>
                         </Row>
                       </Form.Group>
-                      <Form.Group className="mb-3 input_wrap">
+                      <Form.Group className="mb-3 select_wrap">
                         <Row>
                           <Col>
                             <Form.Control
@@ -315,7 +315,7 @@ const Register = () => {
                           </Col>
                         </Row>
                       </Form.Group>
-                      <Form.Group className="mb-3 input_wrap">
+                      <Form.Group className="mb-3 select_wrap">
                         <Row>
                           <Col>
                             <Form.Control

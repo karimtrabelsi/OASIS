@@ -277,16 +277,10 @@ const Club = () => {
                       <strong>Founding President</strong>
                     </th>
                     <th>
-                      <strong>Board</strong>
-                    </th>
-                    <th>
                       <strong>EMAIL</strong>
                     </th>
                     <th>
                       <strong>City</strong>
-                    </th>
-                    <th>
-                      <strong>Region</strong>
                     </th>
                     <th></th>
                     <th>
@@ -318,10 +312,8 @@ const Club = () => {
                           height={60} alt="image" src={require("../../../images/clubs/" + club.image)} /></td>
                         <td>{club.clubname}</td>
                         <td>{club.foundingpresident.firstname}</td>
-                        <td></td>
                         <td>{club.email}</td>
                         <td>{club.city}</td>
-                        <td>{club.region}</td>
                         <td></td>
                         <td>
                           <span
@@ -386,6 +378,7 @@ const Club = () => {
                         <td>{club.members.length}</td>
                         <td></td>
                         <td>{club.club}</td>
+                        <td>
                         <Badge
                           variant="warning light"
                           onClick={() =>
@@ -479,6 +472,7 @@ const Club = () => {
                         >
                           Update
                         </Badge>
+                        </td>
 
 
                       </tr>

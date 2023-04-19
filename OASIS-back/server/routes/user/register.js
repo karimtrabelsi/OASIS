@@ -1,4 +1,5 @@
 const User = require("../../models/user");
+const Club = require("../../models/club");
 const bcrypt = require("bcrypt");
 const localIpAddress = require("local-ip-address");
 
@@ -51,6 +52,12 @@ module.exports = async (req, res) => {
       ip: ip,
     });
     dbUser.save();
+    const userr = await User.findById(dbUser._id)
+    Club.findOne({ clubname: req.body.club }).then((club) => {
+      club.members.push(userr);
+      club.save();
+      console.log("User added to club")
+    });
     res.status(200).send("User created");
   }
 };

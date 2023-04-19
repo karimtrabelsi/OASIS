@@ -122,7 +122,6 @@ const ClubTable = () => {
             <p>Sponsor Club: ${club.club}</p>
             <p>Club Name: ${club.clubname}</p>
             <p>Founding President: ${club.foundingpresident.firstname}</p>
-            <p>Bord: ${club.board}</p>
             <p>City: ${club.city}</p>
             <p>Members: ${club.members.length}</p>
             <p>Email: ${club.email}</p>
