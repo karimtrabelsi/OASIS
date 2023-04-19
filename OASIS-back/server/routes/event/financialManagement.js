@@ -1,5 +1,5 @@
 const Event = require("../../models/event");
-const regression = require("regression");
+// const regression = require("regression");
 
 async function predictBudget() {
   // Récupérer tous les événements
@@ -23,7 +23,7 @@ async function predictBudget() {
   });
 
   // Effectuer la régression linéaire
-  const result = regression.linear(data);
+  // const result = regression.linear(data);
 
   // Prédire le budget pour chaque événement
   events.forEach(event => {
