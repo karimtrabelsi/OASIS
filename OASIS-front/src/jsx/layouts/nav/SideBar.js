@@ -170,6 +170,9 @@ class SideBar extends Component {
                   <Link to="elections">Elections Management</Link>
                 </li>
                 <li>
+                  <Link to="recrutements">Recrutement Management</Link>
+                </li>
+                 <li>
                   <Link to="table-club">Clubs Management</Link>
                 </li>
               </ul>

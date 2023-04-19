@@ -177,7 +177,18 @@ const Login = () => {
                           className="text-primary fw-bold"
                         >
                           Signup Here !
-                        </Link>
+                        </Link> 
+                        </p>
+                        </div>
+                        <div className="mt-3">
+                        <p className="mb-0  text-center">
+                        Would you like to join us as a member?{" "}
+                        <Link
+                          to="/recrutement"
+                          className="text-primary fw-bold"
+                        >
+                         Join Us!
+                        </Link> <br/>
                       </p>
                     </div>
                   </div>
