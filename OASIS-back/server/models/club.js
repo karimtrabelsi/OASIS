@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const User = require("./user");
 const Type = {
-    Rotary: "Rotary",
-    Rotaract: "Rotaract",
-    Interact: "Interact",
-    Lions: "Lions",
-    Leo: "Leo",
-  };
+  Rotary: "Rotary",
+  Rotaract: "Rotaract",
+  Interact: "Interact",
+  Lions: "Lions",
+  Leo: "Leo",
+};
 
 
 const clubSchema = new mongoose.Schema(
@@ -24,25 +24,21 @@ const clubSchema = new mongoose.Schema(
       required: true,
     },
     board: {
-        type: [User.schema],
-        required: false,
-      },
+      type: [User.schema],
+      required: false,
+    },
     city: {
       type: String,
       required: true,
     },
-    region: {
-        type: String,
-        required: true,
-      },
     members: {
       type: [User.schema],
       required: false,
     },
     membersN: {
-        type: Number,
-        required: false,
-      },
+      type: Number,
+      required: false,
+    },
     email: {
       type: String,
       required: true,
@@ -56,10 +52,10 @@ const clubSchema = new mongoose.Schema(
       default: false,
     },
     type: {
-        type: String,
-        enum: Object.values(Type),
-      },
-     
+      type: String,
+      enum: Object.values(Type),
+    },
+
   },
   { timestamps: true }
 );

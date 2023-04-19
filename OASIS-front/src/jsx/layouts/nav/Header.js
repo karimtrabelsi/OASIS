@@ -22,15 +22,15 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
  const [onNotif,setOnNotif] = useState(false);
 
 
- const getNotifs=() => {
-
-   return axios.get("http://localhost:3000/clubs/getnotifications").then((res) => {
+  useEffect(() => {
+    axios.get("http://localhost:3000/clubs/getnotifications").then((res) => {
       setNotifications(res.data);
-      setCount(res.data.filter((n) => n.unread === true).length);
+      console.log(res.data);
     }).catch((err) => {
+      console.log("aaa")
       console.log(err);
     });
-  }
+  },[]);
   // const profilePic = {require(src="../../../images/users/" + user.image)};
 
   var path = window.location.pathname.split("/");
@@ -106,9 +106,8 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                   to="#"
                   role="button"
                   data-toggle="dropdown"
-                  onClick={() =>{ onNotification()
-                    getNotifs()
-                    setOnNotif(!onNotif)
+                  onClick={() =>{  
+                    onNotification()
                   }}
                 >
                   <svg
