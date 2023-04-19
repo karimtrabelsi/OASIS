@@ -133,8 +133,8 @@ const FeesCollection = () => {
           <Card>
             <Card.Header>
               <Card.Title>Events list</Card.Title>
-             
-                <div className="input-group search-area mr-5">
+
+              <div className="input-group search-area mr-5">
                 <div className="d-flex justify-content-md-around align-self-center ">
                   <input
                     type="text"
@@ -160,28 +160,33 @@ const FeesCollection = () => {
                   </div>
                 </div>
               </div>
-              {!isMember && ( <button type="button" class="btn btn-info btn-rounded"
+              {!isMember && (<button type="button" class="btn btn-info btn-rounded"
                 onClick={() => Swal.fire({
                   title: 'Enter your Event details',
                   html:
-                    '<input type="file" id="image" class="swal2-input" placeholder="image">' +
+                    '<div class="input_wrap">' +
+                    '<input type="file" id="image" class="form-control" >' +
+                    ' <label>Image</label>' +
+                    '<div/>' +
                     '<input type="text" id="eventname" class="swal2-input" placeholder="eventname">' +
                     '<input type="date" id="startDate" class="swal2-input" placeholder="startdate">' +
                     '<input type="date" id="enddate" class="swal2-input" placeholder="enddate">' +
                     '<input type="text" id="place" class="swal2-input" placeholder="place">' +
                     '<input type="text" id="collaborateur" class="swal2-input" placeholder="collaborateur">' +
                     '<input type="text" id="cotisation" class="swal2-input" placeholder="cotisation">' +
-                    '<div class="swal2-input">' +
-                    '<label for="typeEvent" >Event Type :</label>' +
+                    '<br></br>' +
+                    '<div class="select_wrap">' +
                     '<select id="typeEvent" name="typeEvent">' +
+                    ' <option value="">Select a Type</option>' +
                     '<option value="CharityEvent">Charity Event</option>' +
                     '<option value="TeamBuilding">Team Building</option>' +
                     '<option value="ProTraining">Pro Training</option>' +
                     '</select>' +
                     '</div>' +
-                    '<div class="swal2-input">' +
-                    '<label for="axes">Global Causes:</label>' +
+                    '<br/>' +
+                    '<div class="select_wrap">' +
                     '<select id="axes" name="axes">' +
+                    ' <option value="">Select an axe</option>' +
                     '<option value="Diabetes">Diabetes</option>' +
                     '<option value="Vision">Vision</option>' +
                     '<option value="Hunger">Hunger</option>' +
@@ -207,9 +212,9 @@ const FeesCollection = () => {
                     const currentDate = new Date().toISOString().split('T')[0];
                     if (startDate < currentDate) {
                       Swal.showValidationMessage('Start date cannot be before current date');
-                   } else if (endDate <= startDate) {
+                    } else if (endDate <= startDate) {
                       Swal.showValidationMessage('End date must be after start date');
-                   }
+                    }
                     //  if (!eventname || !startDate || !enddate || !place || !collaborateur || !typeEvent || !axes) {
                     //     Swal.showValidationMessage('Please fill in all fields');
                     const formData = new FormData();
@@ -233,20 +238,20 @@ const FeesCollection = () => {
                         'Content-Type': 'multipart/form-data'
                       }
                     }).then(response => {
-                        Swal.fire({
-                          icon: 'success',
-                          title: 'Your Event added successfully',
-                          showConfirmButton: false,
-                          timer: 1500
-                        });
-                      }).catch(error => {
-                        console.error('There was an error adding your Event:', error);
-                        Swal.fire({
-                          icon: 'error',
-                          title: 'Oops...',
-                          text: 'Something went wrong!'
-                        });
+                      Swal.fire({
+                        icon: 'success',
+                        title: 'Your Event added successfully',
+                        showConfirmButton: false,
+                        timer: 1500
                       });
+                    }).catch(error => {
+                      console.error('There was an error adding your Event:', error);
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                      });
+                    });
                   }
                 })
                 }
@@ -268,15 +273,15 @@ const FeesCollection = () => {
                     <Card.Header>
                       <h5>{event.eventname}</h5>
                       <ReactStars
-    count={5}
-    // onChange={ratingChanged}
-    size={24}
-    isHalf={true}
-    emptyIcon={<i className="far fa-star"></i>}
-    halfIcon={<i className="fa fa-star-half-alt"></i>}
-    fullIcon={<i className="fa fa-star"></i>}
-    activeColor="#ffd700"
-  />
+                        count={5}
+                        // onChange={ratingChanged}
+                        size={24}
+                        isHalf={true}
+                        emptyIcon={<i className="far fa-star"></i>}
+                        halfIcon={<i className="fa fa-star-half-alt"></i>}
+                        fullIcon={<i className="fa fa-star"></i>}
+                        activeColor="#ffd700"
+                      />
                     </Card.Header>
                     <Card.Img variant="top" src={require("../../../images/events/" + event.image)} />
                     <Card.Body>
@@ -289,10 +294,10 @@ const FeesCollection = () => {
           <Card.Text>Contribution: {event.cotisation}</Card.Text> */}
                       <div>
                         < div className="d-flex justify-content-center">
-                        <button variant="primary" className="btn btn-outline-primary btn-rounded" onClick={() => {
-                          Swal.fire({
-                            title: 'Event Details',
-                            html: `
+                          <button variant="primary" className="btn btn-outline-primary btn-rounded" onClick={() => {
+                            Swal.fire({
+                              title: 'Event Details',
+                              html: `
       <p><strong>Place:</strong> ${event.place}</p>
       <p><strong>Event Type:</strong> ${event.typeEvent}</p>
       <p><strong>Axe:</strong> ${event.axes}</p>
@@ -301,154 +306,154 @@ const FeesCollection = () => {
       <p><strong>Collaborator:</strong> ${event.collaborateur}</p>
       <p><strong>Contribution:</strong> ${event.cotisation}</p>
     `,
-                            showClass: {
-                              popup: 'animate__animated animate__fadeInDown'
-                            },
-                            hideClass: {
-                              popup: 'animate__animated animate__fadeOutUp'
-                            }
-                          });
-                        }}>
-                          {showDetails[event._id] ? 'Hide Details' : ' Details'}
-                          
-                        </button>
-
-                        {!isMember && ( <button
-                          variant="primary"
-                          className="btn btn-outline-danger btn-rounded"
-                          onClick={() => {
-                            swal({
-                              title: "Are you sure?",
-                              text: "Once deleted, the event will no longer be available!",
-                              icon: "warning",
-                              buttons: true,
-                              dangerMode: true,
-                            }).then((willDelete) => {
-                              if (willDelete) {
-                                axios.delete("http://localhost:3000/deletEvent/" + event._id) // fixed typo
-                                  .then((res) => {
-                                    if (res.status === 200) {
-                                      swal(event.eventname + " deleted!", { icon: "success" });
-                                    }
-                                  })
-                                  .catch((err) => {
-                                    console.log(err);
-                                  });
-                              } else {
-                                swal("Nothing has changed!");
+                              showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                              },
+                              hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
                               }
                             });
-                          }}
-                        >
-                          <i className="fa fa-close"></i> 
-                        </button>
-                        )}
+                          }}>
+                            {showDetails[event._id] ? 'Hide Details' : ' Details'}
 
-{!isMember && ( <button type="button" variant="primary" className="btn btn-outline-primary btn-rounded"
-                onClick={() => Swal.fire({
-                  title: 'Enter your Event details',
-                  html:
-                    //'<input type="file" id="image" class="swal2-input" placeholder="image">' +
-                    '<input type="text" id="eventname" class="swal2-input" placeholder="eventname"  value="' + event.eventname + '">' +
-                    '<input type="date" id="startDate" class="swal2-input" placeholder="startdate" value="' +  moment(event.startDate).format('YYYY-MM-DD')  +'" >' +
-                    '<input type="date" id="enddate" class="swal2-input" placeholder="enddate" value="' +  moment(event.endDate).format('YYYY-MM-DD')  +'">' +
-                    '<input type="text" id="place" class="swal2-input" placeholder="place" value="' + event.place +'">' +
-                    '<input type="text" id="collaborateur" class="swal2-input" placeholder="collaborateur" value="' + event.collaborateur +'">' +
-                    '<input type="text" id="cotisation" class="swal2-input" placeholder="cotisation" value="' + event.cotisation +'">' +
-                    '<div class="swal2-input">' +
-                    '<label for="typeEvent" >Event Type :</label>' +
-                    '<select id="typeEvent" name="typeEvent">' +
-                    '<option value="CharityEvent">Charity Event</option>' +
-                    '<option value="TeamBuilding">Team Building</option>' +
-                    '<option value="ProTraining">Pro Training</option>' +
-                    '</select>' +
-                    '</div>' +
-                    '<div class="swal2-input">' +
-                    '<label for="axes">Global Causes:</label>' +
-                    '<select id="axes" name="axes">' +
-                    '<option value="Diabetes">Diabetes</option>' +
-                    '<option value="Vision">Vision</option>' +
-                    '<option value="Hunger">Hunger</option>' +
-                    '<option value="Environment">Environment</option>' +
-                    '<option value="ChildhoodCancer">ChildhoodCancer</option>' +
-                    '</select>' +
-                    '</div>',
-                  //showCancelButton: true,
-                  focusConfirm: false,
-                  //confirmButtonText: 'Submit',
-                  preConfirm: () => {
-                    // const file = document.getElementById("image").files[0];
-                    // console.log(file)
-                    const eventname = document.getElementById("eventname").value;
-                    const startdateInput = document.querySelector("#startDate");
-                    const startdate = startdateInput ? startdateInput.value : "";
-                    const enddate = document.getElementById("enddate").value;
-                    const place = document.getElementById("place").value;
-                    const collaborateur = document.getElementById("collaborateur").value;
-                    const cotisation = document.getElementById("cotisation").value;
-                    const typeEvent = document.getElementById("typeEvent").value; // récupérer la valeur de l'option sélectionnée
-                    const axes = document.getElementById("axes").value;
-                    const currentDate = new Date().toISOString().split('T')[0];
-                    if (startDate < currentDate) {
-                      Swal.showValidationMessage('Start date cannot be before current date');
-                   } else if (endDate < startDate) {
-                      Swal.showValidationMessage('End date must be after start date');
-                   }
-                    //  if (!eventname || !startDate || !enddate || !place || !collaborateur || !typeEvent || !axes) {
-                    //     Swal.showValidationMessage('Please fill in all fields');
-                    return { eventname: eventname, startdate: startdate, enddate: enddate,place: place, collaborateur: collaborateur,cotisation: cotisation,  typeEvent: typeEvent, axes: axes };
-                  }
-                }).then(result => {
-                  if (result.isConfirmed) {
-                    console.log(result.value);
-                    const updateData = {
-                      eventname: result.value.eventname, 
-                      startdate: result.value.startdate, 
-                      enddate: result.value.enddate,
-                      place: result.value.place, 
-                      collaborateur: result.value.collaborateur,
-                      cotisation: result.value.cotisation,  
-                      typeEvent: result.value.typeEvent, 
-                      axes: result.value.axes
-                }
-                    // for (const value of formData.values()) {
-                    //   console.log(value);
-                    // }
-                    axios.put(`http://localhost:3000/updateEvent/${event._id}`, updateData, {
-                      headers: {
-                        'Content-Type': 'application/json'
-                      }
-                   
-                    }).then(response => {
-                      if (response.status === 200) {
-                        Swal.fire({
-                          icon: 'success',
-                          title: 'Event updated successfully',
-                          showConfirmButton: false,
-                          timer: 1500
-                        }).then(() => {
-                        });
-                      } else {
-                        Swal.fire({
-                           icon: 'error',
-                           title: 'Failed to update Event',
-                        });
-                     }
-                      }).catch(error => {
-                        console.error('There was an error adding your Event:', error);
-                        Swal.fire({
-                          icon: 'error',
-                        });
-                      });
-                  }
-                })
-                }
-               >Update</button>
-              )}
+                          </button>
+
+                          {!isMember && (<button
+                            variant="primary"
+                            className="btn btn-outline-danger btn-rounded"
+                            onClick={() => {
+                              swal({
+                                title: "Are you sure?",
+                                text: "Once deleted, the event will no longer be available!",
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true,
+                              }).then((willDelete) => {
+                                if (willDelete) {
+                                  axios.delete("http://localhost:3000/deletEvent/" + event._id) // fixed typo
+                                    .then((res) => {
+                                      if (res.status === 200) {
+                                        swal(event.eventname + " deleted!", { icon: "success" });
+                                      }
+                                    })
+                                    .catch((err) => {
+                                      console.log(err);
+                                    });
+                                } else {
+                                  swal("Nothing has changed!");
+                                }
+                              });
+                            }}
+                          >
+                            <i className="fa fa-close"></i>
+                          </button>
+                          )}
+
+                          {!isMember && (<button type="button" variant="primary" className="btn btn-outline-primary btn-rounded"
+                            onClick={() => Swal.fire({
+                              title: 'Enter your Event details',
+                              html:
+                                //'<input type="file" id="image" class="swal2-input" placeholder="image">' +
+                                '<input type="text" id="eventname" class="swal2-input" placeholder="eventname"  value="' + event.eventname + '">' +
+                                '<input type="date" id="startDate" class="swal2-input" placeholder="startdate" value="' + moment(event.startDate).format('YYYY-MM-DD') + '" >' +
+                                '<input type="date" id="enddate" class="swal2-input" placeholder="enddate" value="' + moment(event.endDate).format('YYYY-MM-DD') + '">' +
+                                '<input type="text" id="place" class="swal2-input" placeholder="place" value="' + event.place + '">' +
+                                '<input type="text" id="collaborateur" class="swal2-input" placeholder="collaborateur" value="' + event.collaborateur + '">' +
+                                '<input type="text" id="cotisation" class="swal2-input" placeholder="cotisation" value="' + event.cotisation + '">' +
+                                '<div class="swal2-input">' +
+                                '<label for="typeEvent" >Event Type :</label>' +
+                                '<select id="typeEvent" name="typeEvent">' +
+                                '<option value="CharityEvent">Charity Event</option>' +
+                                '<option value="TeamBuilding">Team Building</option>' +
+                                '<option value="ProTraining">Pro Training</option>' +
+                                '</select>' +
+                                '</div>' +
+                                '<div class="swal2-input">' +
+                                '<label for="axes">Global Causes:</label>' +
+                                '<select id="axes" name="axes">' +
+                                '<option value="Diabetes">Diabetes</option>' +
+                                '<option value="Vision">Vision</option>' +
+                                '<option value="Hunger">Hunger</option>' +
+                                '<option value="Environment">Environment</option>' +
+                                '<option value="ChildhoodCancer">ChildhoodCancer</option>' +
+                                '</select>' +
+                                '</div>',
+                              //showCancelButton: true,
+                              focusConfirm: false,
+                              //confirmButtonText: 'Submit',
+                              preConfirm: () => {
+                                // const file = document.getElementById("image").files[0];
+                                // console.log(file)
+                                const eventname = document.getElementById("eventname").value;
+                                const startdateInput = document.querySelector("#startDate");
+                                const startdate = startdateInput ? startdateInput.value : "";
+                                const enddate = document.getElementById("enddate").value;
+                                const place = document.getElementById("place").value;
+                                const collaborateur = document.getElementById("collaborateur").value;
+                                const cotisation = document.getElementById("cotisation").value;
+                                const typeEvent = document.getElementById("typeEvent").value; // récupérer la valeur de l'option sélectionnée
+                                const axes = document.getElementById("axes").value;
+                                const currentDate = new Date().toISOString().split('T')[0];
+                                if (startDate < currentDate) {
+                                  Swal.showValidationMessage('Start date cannot be before current date');
+                                } else if (endDate < startDate) {
+                                  Swal.showValidationMessage('End date must be after start date');
+                                }
+                                //  if (!eventname || !startDate || !enddate || !place || !collaborateur || !typeEvent || !axes) {
+                                //     Swal.showValidationMessage('Please fill in all fields');
+                                return { eventname: eventname, startdate: startdate, enddate: enddate, place: place, collaborateur: collaborateur, cotisation: cotisation, typeEvent: typeEvent, axes: axes };
+                              }
+                            }).then(result => {
+                              if (result.isConfirmed) {
+                                console.log(result.value);
+                                const updateData = {
+                                  eventname: result.value.eventname,
+                                  startdate: result.value.startdate,
+                                  enddate: result.value.enddate,
+                                  place: result.value.place,
+                                  collaborateur: result.value.collaborateur,
+                                  cotisation: result.value.cotisation,
+                                  typeEvent: result.value.typeEvent,
+                                  axes: result.value.axes
+                                }
+                                // for (const value of formData.values()) {
+                                //   console.log(value);
+                                // }
+                                axios.put(`http://localhost:3000/updateEvent/${event._id}`, updateData, {
+                                  headers: {
+                                    'Content-Type': 'application/json'
+                                  }
+
+                                }).then(response => {
+                                  if (response.status === 200) {
+                                    Swal.fire({
+                                      icon: 'success',
+                                      title: 'Event updated successfully',
+                                      showConfirmButton: false,
+                                      timer: 1500
+                                    }).then(() => {
+                                    });
+                                  } else {
+                                    Swal.fire({
+                                      icon: 'error',
+                                      title: 'Failed to update Event',
+                                    });
+                                  }
+                                }).catch(error => {
+                                  console.error('There was an error adding your Event:', error);
+                                  Swal.fire({
+                                    icon: 'error',
+                                  });
+                                });
+                              }
+                            })
+                            }
+                          >Update</button>
+                          )}
                         </div>
 
-           
-                    
+
+
 
                       </div>
                       {showDetails[event._id] && (
