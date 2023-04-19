@@ -67,7 +67,7 @@ router.post(
     { name: "image", maxCount: 1 },
     { name: "file", maxCount: 1 },
   ]),
-  (req, res) => {
+  async (req, res) => {
     const post = new Post({
       userId: req.body.userId,
       content: req.body.content,
@@ -75,6 +75,7 @@ router.post(
       file: req.files["file"] ? req.files["file"][0].originalname : "null",
       link: req.body.link !== "" ? req.body.link : "null",
       uuid: req.body.uuid,
+      user: await User.findById(req.body.userId),
     });
     post
       .save()
@@ -165,7 +166,7 @@ router.post("/addLikeComment", async (req, res) => {
         console.log(comment.likes);
       }
       post.comments.pull(comment);
-      
+
       post.comments.push(comment);
       post.save();
       res.status(200).send("comment liked");
