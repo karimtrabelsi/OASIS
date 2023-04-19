@@ -109,11 +109,7 @@
             "How do I know if my vote has been counted in an election?"
         ],
         "answers": [
-            "Yes, you can vote online for an election. Just go to the Election Voting page and follow the instructions.",
-            "The deadline for voting in an election is usually specified on the Election Voting page or in the election announcement.",
-            "If you don't vote in an election, your voice will not be heard and your preferred candidate may not win.",
-            "In order to vote in an election, you may need to register on the Election Registration page. The requirements for registration may vary depending on the election.",
-            "Once you have voted in an election, you can usually check the election results page to see if your vote has been counted."
+            "In order to vote in an election, you may need to go on the Election page. The requirements for registration may vary depending on the election."
         ]
     },
     {
@@ -142,7 +138,7 @@
       },
       {
         "name": "Unknown",
-        "questions": [".*"],
+        "questions": [],
         "answers": [
           "I'm sorry, I don't understand. Can you please rephrase your question?"
         ]
