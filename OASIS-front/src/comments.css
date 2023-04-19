@@ -1,0 +1,31 @@
+.note {
+  color: #e3e3e3;
+}
+
+.comments {
+  list-style-type: none;
+}
+
+.comment {
+  border-bottom: 1px solid #e3e3e3;
+  padding: 1rem 0.5rem;
+  position: relative;
+}
+
+.comment--requestee:before {
+  /* background-color: #3f3d3c; */
+  color: coral;
+}
+
+.comment__name {
+  font-weight: 700;
+}
+
+.comment__timestamp {
+  color: #999;
+  font-style: italic;
+}
+
+.comment__response {
+  margin-top: 0.56rem;
+}

@@ -15,7 +15,20 @@ const PostImage = ({ id, uuid, image }) => {
     };
     loadImage();
   }, []);
-  return imagee && <img src={imagee} widht={400} height={400} alt="My Image" />;
+  return (
+    imagee && (
+      <div>
+        <img
+          src={imagee}
+          widht={"100%"}
+          height={"600px"}
+          objectFit={"fill"}
+          alt="My Image"
+          style={{ borderRadius: "5px", maxWidth: "506px", maxHeight: "506px" }}
+        />
+      </div>
+    )
+  );
 };
 
 export default PostImage;
