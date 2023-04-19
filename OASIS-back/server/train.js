@@ -32,6 +32,9 @@ for (const file of files) {
   }
 }
 
+manager.addDocument("en", ".*", "Unknown");
+manager.addAnswer("en", "Unknown", "I'm sorry, I don't understand. Can you please rephrase your question?");
+
 (async () => {
   await manager.train();
   manager.save();

@@ -59,7 +59,12 @@ app.use(express.json());
 app.post("/chat", async (req, res) => {
   const { message } = req.body;
   const response = await manager.process("en", message);
-  res.json({ message: response.answer });
+  if (response.answer) {
+    res.json({ message: response.answer });
+  } else {
+    const defaultResponse = "I'm sorry, I didn't understand. Can you please rephrase your question?";
+    res.json({ message: defaultResponse });
+  }
 });
 
 mongoose

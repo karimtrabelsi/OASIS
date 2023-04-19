@@ -2707,19 +2707,7 @@
         ],
         "Election Votes": [
           {
-            "answer": "Yes, you can vote online for an election. Just go to the Election Voting page and follow the instructions."
-          },
-          {
-            "answer": "The deadline for voting in an election is usually specified on the Election Voting page or in the election announcement."
-          },
-          {
-            "answer": "If you don't vote in an election, your voice will not be heard and your preferred candidate may not win."
-          },
-          {
-            "answer": "In order to vote in an election, you may need to register on the Election Registration page. The requirements for registration may vary depending on the election."
-          },
-          {
-            "answer": "Once you have voted in an election, you can usually check the election results page to see if your vote has been counted."
+            "answer": "In order to vote in an election, you may need to go on the Election page. The requirements for registration may vary depending on the election."
           }
         ],
         "Event Management": [

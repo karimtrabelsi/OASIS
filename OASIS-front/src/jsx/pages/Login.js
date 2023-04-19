@@ -38,7 +38,6 @@ const Login = () => {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("connectedUser", res.data.user);
           useAuthStore.setState({ user: res.data.user });
-          console.log(res.data.user);
           JSON.parse(res.data.user).role === "SuperAdmin"
             && navigate("/client/home")
             JSON.parse(res.data.user).role === "Member"
