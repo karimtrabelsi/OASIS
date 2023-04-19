@@ -18,7 +18,7 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
   const isAuthenticated = localStorage.getItem("connectedUser") ? true : false;
   const clearUser = useAuthStore((state) => state.clearUser);
   const [notificaitons, setNotifications] = useState([]);
- const [count,setCount] = useState(0);
+ const [count,setCount] = useState(0);  
  const [onNotif,setOnNotif] = useState(false);
 
 
@@ -31,6 +31,17 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
       console.log(err);
     });
   },[]);
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/clubs/getunreadnotifications").then((res) => {
+      setCount(res.data.length);
+      console.log(res.data);
+    }).catch((err) => {
+      console.log("aaa")
+      console.log(err);
+    });
+  },[]);
+
   // const profilePic = {require(src="../../../images/users/" + user.image)};
 
   var path = window.location.pathname.split("/");
@@ -108,6 +119,11 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                   data-toggle="dropdown"
                   onClick={() =>{  
                     onNotification()
+                    axios.put("http://localhost:3000/clubs/updateallnotifications").then((res) => {
+                      setCount(0);
+                    }).catch((err) => {
+                      console.log(err);
+                    });
                   }}
                 >
                   <svg

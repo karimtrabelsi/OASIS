@@ -152,3 +152,25 @@ const getNotification = async (req, res) => {
 };
 router.route("/getnotifications").get(getNotification);
 
+const updateAllNotifications = async (req, res) => {
+  try {
+    const result = await Notification.updateMany({ read: false }, { read: true });
+    res.status(200).json({ message: `${result.nModified} notifications updated` });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+router.route("/updateallnotifications").put(updateAllNotifications);
+
+
+const getUnreadNotifications = async (req, res) => {
+  try {
+    const notifications = await Notification.find({ read: false }).sort({ date: -1 });
+    res.status(200).json(notifications);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+router.route("/getunreadnotifications").get(getUnreadNotifications);
+
+
