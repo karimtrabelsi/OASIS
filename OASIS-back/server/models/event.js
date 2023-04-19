@@ -41,7 +41,7 @@ const eventSchema = new mongoose.Schema(
         required: false,
       },
       cotisation: {
-        type: String,
+        type: Number,
       },
       typeEvent: {
         type: String,

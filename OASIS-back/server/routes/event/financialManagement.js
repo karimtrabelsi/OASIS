@@ -13,12 +13,12 @@ async function predictBudget() {
       event.typeEvent === "ProTraining" ? 1 : 0,
       30,
       10 || 0,
-      event.cotisation,
+      Number(event.cotisation),
       event.place === "Paris" ? 1 : 0,
       event.place === "Lyon" ? 1 : 0,
       event.place === "Marseille" ? 1 : 0
     ];
-    const y = event.cotisation;
+    const y = Number(event.cotisation);
     return [x, y];
   });
 
@@ -33,6 +33,7 @@ async function predictBudget() {
       event.typeEvent === "ProTraining" ? 1 : 0,
       10,
       30 || 0,
+      Number(event.cotisation),
       event.place === "Paris" ? 1 : 0,
       event.place === "Lyon" ? 1 : 0,
       event.place === "Marseille" ? 1 : 0

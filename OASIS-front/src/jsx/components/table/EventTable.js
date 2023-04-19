@@ -148,7 +148,7 @@ const EventTable = () => {
                             '<option value="vision">Vision</option>'+
                             '<option value="hunger">Hunger</option>'+
                             '<option value="environment">Environment</option>'+
-                            '<option value="childhoodcancer">Childhood Cancer</option>'+
+                            '<option value="ChildhoodCancer">ChildhoodCancer</option>'+
                             '</select>'+
                             '</div>' ,
                             focusConfirm: false,
@@ -322,7 +322,7 @@ const EventTable = () => {
                                             '<option value="vision">Vision</option>'+
                                             '<option value="hunger">Hunger</option>'+
                                             '<option value="environment">Environment</option>'+
-                                            '<option value="childhoodcancer">Childhood Cancer</option>'+
+                                            '<option value="ChildhoodCancer">Childhood Cancer</option>'+
                                             '</select>'+
                                             '</div>' ,
                                             focusConfirm: false,
