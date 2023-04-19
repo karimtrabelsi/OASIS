@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const User = require("./user");
 
 const commentSchema = new mongoose.Schema({
   userId: {
@@ -61,6 +62,10 @@ const postSchema = new mongoose.Schema({
   },
   uuid: {
     type: String,
+    required: true,
+  },
+  user: {
+    type: User.schema,
     required: true,
   },
 });

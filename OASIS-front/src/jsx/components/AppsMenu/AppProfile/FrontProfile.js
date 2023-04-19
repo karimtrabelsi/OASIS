@@ -26,6 +26,7 @@ import * as Yup from "yup";
 import swal from "sweetalert";
 import PostImage from "../../frontOffice/postImage";
 import Avatar from "../../frontOffice/avatar";
+import PostWidget from "../../frontOffice/postWidget";
 
 const AppProfile = () => {
   const [activeToggle, setActiveToggle] = useState("posts");
@@ -60,7 +61,9 @@ const AppProfile = () => {
       queryKey: ["posts"],
       queryFn: fetchPosts,
     });
-
+  const handleRefetch = () => {
+    refetch();
+  };
   console.log("isSuccess : ", isSuccess);
 
   function handleRegister(e) {
@@ -651,7 +654,8 @@ const AppProfile = () => {
                           <form onSubmit={formik.handleSubmit} noValidate>
                             <div className="d-flex justify-content-evenly">
                               <img
-                                src={profile07}
+                                src={require("../../../../images/users/" +
+                                  JSON.parse(user).image)}
                                 alt="image"
                                 className="mr-2 rounded mt-3 ml-1"
                                 width={40}
@@ -728,140 +732,20 @@ const AppProfile = () => {
                         </div>
                         <hr class="solid" />
 
-                        {data.data.map((post, index) => (
-                          <>
-                            <div className="profile-upoloaded-post border-bottom-1 pb-5 d-flex flex-column align-items-start ">
-                              <div className="d-flex align-items-center flex-nowrap">
-                                <Avatar userImage={userr.image} hasBorder />
-                                <h5 className="">
-                                  {userr.firstname} {userr.lastname}
-                                  <small className="text-muted">
-                                    <b> @{userr.username}</b>
-                                  </small>
-                                </h5>
-                              </div>
-                              <h5 className="mx-5 mt-3">{post.content}</h5>
-
-                              <div className="d-flex  justify-content-center align-items-center ">
-                                {post.image && (
-                                  <PostImage
-                                    id={userr._id}
-                                    uuid={post.uuid}
-                                    image={post.image}
-                                  />
-                                )}
-                              </div>
-
-                              <ul class="comments">
-                                {post.comments.length !== 0 &&
-                                  post.comments.map((comment, index) => (
-                                    <>
-                                      <li class="comment">
-                                        <span class="comment__name">
-                                          {" "}
-                                          {comment.user.firstname}{" "}
-                                          {comment.user.lastname}
-                                        </span>
-                                        <span class="comment__timestamp">
-                                          - 35 minutes ago
-                                        </span>
-                                        <div class="comment__response">
-                                          {comment.content}
-                                        </div>
-                                        <button
-                                          className="btn  mr-2"
-                                          onClick={() => {
-                                            axios
-                                              .post(
-                                                "http://localhost:3000/posts/addLikeComment",
-                                                {
-                                                  postId: post._id,
-                                                  userId: userr._id,
-                                                  commentId: comment.uuid,
-                                                }
-                                              )
-                                              .then((res) => refetch());
-                                          }}
-                                        >
-                                          <span className="mr-2">
-                                            {comment.likes.find(
-                                              (like) =>
-                                                like.userId === userr._id
-                                            ) ? (
-                                              <i className="fa fa-heart text-danger" />
-                                            ) : (
-                                              <i className="fa fa-heart " />
-                                            )}
-                                          </span>
-                                          {comment.likes.length}
-                                        </button>
-                                      </li>
-                                    </>
-                                  ))}
-                              </ul>
-
-                              <form onSubmit={handleComment}>
-                                <div className="d-flex justify-content-center align-items-center mt-5">
-                                  <Avatar userImage={userr.image} hasBorder />
-                                  <div className="form-group ">
-                                    <ul class="comments">
-                                      <li class="comment">
-                                        <span class="comment__name"></span>
-                                        <input
-                                          type="hidden"
-                                          name="postId"
-                                          value={post._id}
-                                        />
-                                        <textarea
-                                          rows={10}
-                                          cols={100}
-                                          type="text"
-                                          className="form-control"
-                                          placeholder="Type A Comment"
-                                          name="content"
-                                        />
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-
-                                <button className="btn " type="submit">
-                                  <span className="mr-2">
-                                    <i className="fa fa-reply" />
-                                  </span>
-                                  Reply
-                                </button>
-                              </form>
-
-                              <button
-                                className="btn  mr-2"
-                                onClick={() =>
-                                  axios
-                                    .post(
-                                      "http://localhost:3000/posts/addLike",
-                                      {
-                                        postId: post._id,
-                                        userId: userr._id,
-                                      }
-                                    )
-                                    .then((res) => refetch())
-                                }
-                              >
-                                <span className="mr-2">
-                                  {post.likes.find(
-                                    (like) => like.userId === userr._id
-                                  ) ? (
-                                    <i className="fa fa-heart text-danger" />
-                                  ) : (
-                                    <i className="fa fa-heart " />
-                                  )}
-                                </span>
-                                {post.likes.length}
-                              </button>
-                            </div>
-                            <hr class="solid" />
-                          </>
-                        ))}
+                        {isSuccess &&
+                          data.data.map((post, index) => (
+                            <>
+                              <PostWidget
+                                image={post.image}
+                                userId={post.userId}
+                                uuid={post.uuid}
+                                userr={post.user}
+                                content={post.content}
+                                post={post}
+                                handleRefetch={handleRefetch}
+                              />
+                            </>
+                          ))}
                       </div>
                     </div>
 
