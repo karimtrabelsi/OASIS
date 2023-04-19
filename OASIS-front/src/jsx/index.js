@@ -181,7 +181,7 @@ const Markup = () => {
     { url: "table-apply", component: ApplyPage },
     { url: "table-bootstrap-basic", component: BootstrapTable },
     { url: "Event-Table", component: FeesCollection },
-   { url: "Table-Event", component: EventTable },
+    { url: "Table-Event", component: EventTable },
     { url: "table-club", component: Club },
     { url: "table-club-front", component: ClubTable },
 
@@ -250,7 +250,7 @@ const Markup = () => {
       <Route path="/twofactor-auth" element={<TwoFactorAuth />} />
       <Route path="/client" element={<Client />}>
         <Route path="home" element={<Home />} />
-        <Route path="profile" element={<AppProfile />} />
+        <Route path="profile" element={<FrontProfile />} />
         <Route path="users" element={<BootstrapTable />} />
         <Route path="members" element={<DataTable />} />
         <Route path="Event-Table" element={<FeesCollection />} />
