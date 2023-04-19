@@ -86,36 +86,7 @@ const Club = () => {
       console.log(err);
     });
   };
-  const region = [
-    'Tunis',
-    'Kairouan',
-    'Sousse',
-    'Sfax',
-    'Hammamet',
-    'Monastir',
-    'Mahdia',
-    'Bizerte',
-    'Nabeul',
-    'Gafsa',
-    'Gabes',
-    'Tozeur',
-    'Tataouine',
-    'Kasserine',
-    'Sidi Bouzid',
-    'Kebili',
-    'Jendouba',
-    'Ben Arous',
-    'Medenine',
 
-  ]
-  const [selectedCity, setSelectedCity] = useState(region[0])
-  const [query, setQuery] = useState('')
-  const filteredregion =
-    query === ''
-      ? region
-      : region.filter((city) => {
-        return city.toLowerCase().includes(query.toLowerCase())
-      })
 
   return (
     <Fragment>
@@ -217,13 +188,25 @@ const Club = () => {
                       )
                       const file = image.files[0]
 
-                      if (!clubname || !fp || !city || !type || !club || !email || !image) {
-                        Swal.showValidationMessage('Please fill in all fields');
+                      // Check that all required fields have a value
+                      if (!clubname || !fp || !city || !type || !club || !email || !file) {
+                        Swal.showValidationMessage('Please fill in all required fields');
                       }
+
+                      // Check that the email field has a valid email format
+                      if (email && !/\S+@\S+\.\S+/.test(email)) {
+                        Swal.showValidationMessage('Please enter a valid email address');
+                      }
+
+                      // Check that the image file is a valid image format
+                      if (file && !/\.(jpg|jpeg|png|gif)$/i.test(file.name)) {
+                        Swal.showValidationMessage('Please select a valid image file');
+                      }
+
                       return { clubname: clubname, fp: fp, city: city, type: type, club: club, email: email, image: file };
                     }
-                  }).then((result) => {
 
+                  }).then((result) => {
                     console.log(result)
                     axios
                       .post(
@@ -235,16 +218,23 @@ const Club = () => {
                       }
                       )
                       .then((res) => {
-                        // console.log(res)
-                        if ((res.respone = 200)) {
+                        if (res.status === 200) {
                           Swal.fire("Club has been added!", {
                             icon: "success",
                           });
                         } else {
-                          Swal.fire("something wrong !");
+                          Swal.fire("Something went wrong!");
                         }
                       })
+                      .catch((err) => {
+                        if (err.response.data === "Clubname or email already taken") {
+                          Swal.fire("Oops", "Clubname or email already taken!", "error");
+                        } else {
+                          Swal.fire("Something went wrong!");
+                        }
+                      });
                   })
+
                 }
                 }
                   variant="primary">+ Add</Button>
@@ -419,9 +409,11 @@ const Club = () => {
                               icon: "info",
                               buttons: false,
                               dangerMode: true,
-                              willClose: () => {
-                                Swal.fire("Nothing changed !");
-                              },
+                              showDenyButton: true,
+                              denyButtonText: `Don't save`,
+                              cancelButtonText:
+                                '<i class="fa fa-thumbs-down">Cancel</i>',
+                              cancelButtonAriaLabel: 'Thumbs down',
 
                               preConfirm: () => {
                                 const clubname = Swal.getPopup().querySelector(
@@ -438,24 +430,26 @@ const Club = () => {
                                 if (!clubname || !email || !image) {
                                   Swal.showValidationMessage('Please fill in all fields');
                                 }
+                                if (email && !/\S+@\S+\.\S+/.test(email)) {
+                                  Swal.showValidationMessage('Please enter a valid email address');
+                                }
                                 return { clubname: clubname, email: email, image: file };
                               }
                             })
                               .then((result) => {
-                                if (result) {
-
-                                  console.log(result)
+                                if (result.isConfirmed) {
+                                  console.log(result);
                                   axios
                                     .put(
-                                      "http://localhost:3000/clubs/update/" +
-                                      club._id, result.value, {
-                                      headers: {
-                                        'Content-Type': 'multipart/form-data'
+                                      "http://localhost:3000/clubs/update/" + club._id,
+                                      result.value,
+                                      {
+                                        headers: {
+                                          "Content-Type": "multipart/form-data",
+                                        },
                                       }
-                                    }
                                     )
                                     .then((res) => {
-                                      // console.log(res)
                                       if ((res.respone = 200)) {
                                         Swal.fire("Club has been updated!", {
                                           icon: "success",
@@ -464,10 +458,22 @@ const Club = () => {
                                         Swal.fire("Nothing changed !");
                                       }
                                     })
+                                    .catch((err) => {
+                                      if (err.response.data === "Clubname or email already taken") {
+                                        Swal.fire(
+                                          "Oops",
+                                          "Clubname or email already taken!",
+                                          "error"
+                                        );
+                                      } else {
+                                        Swal.fire("Something went wrong!");
+                                      }
+                                    });
                                 }
-                              
+                                if (result.isDenied) {
+                                  Swal.fire('Changes are not saved', '', 'info')
+                                }
                               })
-
                           }
                         >
                           Update

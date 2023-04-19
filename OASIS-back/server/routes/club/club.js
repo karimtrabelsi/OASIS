@@ -43,13 +43,13 @@ const createclub = async (req, res) => {
     const club = req.body;
     const takenclubname = await Club.findOne({ clubname: club.clubname });
     const takenEmail = await Club.findOne({ email: club.email });
-  
+
     if (takenclubname || takenEmail) {
-      res.status(400).send("Username or email already taken");
-    } 
+      res.status(400).send("Clubname or email already taken");
+    }
     else {
-       
-        const dbClub = new Club({
+
+      const dbClub = new Club({
         clubname: club.clubname,
         foundingpresident: await User.findById(club.fp),
         city: club.city,
@@ -65,77 +65,90 @@ const createclub = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-  };
-  router.route("/create").post(upload.single("image"),createclub);
+};
+router.route("/create").post(upload.single("image"), createclub);
 
-  const updateclub = async (req, res) => {
-    Club.findOne({ _id: req.params.id }).then((club) => {
-         console.log(req.body.clubname);
-         if (req.body.clubname && req.body.clubname != club.clubname) {
+const updateclub = async (req, res) => {
+  try {
+    const club = req.body;
+    const takenclubname = await Club.findOne({ clubname: club.clubname, _id: { $ne: req.params.id } });
+    const takenEmail = await Club.findOne({ email: club.email, _id: { $ne: req.params.id } });
+
+    if (takenclubname || takenEmail) {
+      res.status(400).send("Clubname or email already taken");
+    } else {
+      Club.findOne({ _id: req.params.id }).then((club) => {
+        console.log(req.body.clubname);
+        if (req.body.clubname && req.body.clubname != club.clubname) {
           const notification = new Notification({
-          description : 'The name of '+ club.clubname +' has been changed to ' + req.body.clubname,
-          image:club.image,
+            description: 'The name of ' + club.clubname + ' has been changed to ' + req.body.clubname,
+            image: club.image,
           });
-          notification.save(); 
+          notification.save();
         }
-         if (req.body.email && req.body.email!= club.email) {
+        if (req.body.email && req.body.email != club.email) {
           const notification = new Notification({
-            description: 'The email of '+ club.clubname +' has been changed to ' + req.body.email,
-            image:club.image,
+            description: 'The email of ' + club.clubname + ' has been changed to ' + req.body.email,
+            image: club.image,
           });
-          notification.save(); 
-  
+          notification.save();
+
         }
-        if (req.body.image && req.file.filename != club.image) {
+        if (req.file && req.file.filename != club.image) {
           const notification = new Notification({
-            description: 'The image of ' + club.clubname +'has been changed',
-            image:club.image,
-          });         
-          notification.save(); 
+            description: 'The image of ' + club.clubname + ' has been changed',
+            image: club.image,
+          });
+          notification.save();
         }
         club.clubname = req.body.clubname ? req.body.clubname : club.clubname;
         club.email = req.body.email ? req.body.email : club.email;
-        club.image= req.file ?req.file.filename : club.image;
-    
-      
+        club.image = req.file ? req.file.filename : club.image;
+
         club.save();
 
-        res.status(200).send("club updated");  
+        res.status(200).send("club updated");
 
-    });
-  }
-  router.route("/update/:id").put(upload.single("image"),updateclub);
-
-  const getClubs = async (req, res) => {
-    Club.find().then((clubs) => {
-      res.status(200).send(clubs);
-    });
-  };
-  router.route("/getclubs").get(getClubs);
-
-
-  const getClub = async (req, res) => {
-   await  Club.findById( req.params.id ).then((club) => {
-
-        res.status(200).send(club);
-    })
-  };
-  router.route("/getclub/:id").get(getClub);
-
-  const approveClub = async (req, res) => {
-   await Club.findOne({ _id: req.params.id }).then((club) => {
-        club.approved = true;
-        club.save();
-        res.status(200).send("Club approved");
       });
-  };
-  router.route("/approveclub/:id").put(approveClub);
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal server error");
+  }
+};
 
-  const getNotification = async (req, res) => {
-    Notification.find().sort({date: -1}).then((notifications) => {
-      res.status(200).send(notifications);
-    })
+router.route("/update/:id").put(upload.single("image"), updateclub);
+
+const getClubs = async (req, res) => {
+  Club.find().then((clubs) => {
+    res.status(200).send(clubs);
+  });
+};
+router.route("/getclubs").get(getClubs);
+
+
+const getClub = async (req, res) => {
+  await Club.findById(req.params.id).then((club) => {
+
+    res.status(200).send(club);
+  })
+};
+router.route("/getclub/:id").get(getClub);
+
+const approveClub = async (req, res) => {
+  await Club.findOne({ _id: req.params.id }).then((club) => {
+    club.approved = true;
+    club.save();
+    res.status(200).send("Club approved");
+  });
+};
+router.route("/approveclub/:id").put(approveClub);
+
+const getNotification = async (req, res) => {
+  Notification.find().sort({ date: -1 }).then((notifications) => {
+    res.status(200).send(notifications);
+  })
     ;
-  };
-  router.route("/getnotifications").get(getNotification);
+};
+router.route("/getnotifications").get(getNotification);
 
