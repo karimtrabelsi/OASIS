@@ -85,6 +85,7 @@ import ElectionTable from "./components/table/ElectionTable";
 import ApplyPage from "./components/table/ApplyPage";
 import ApexChart from "./components/charts/apexcharts";
 import FeesCollection from "./components/table/FeesCollection";
+import EventTable from "./components/table/EventTable";
 import RecrutementTable from "./components/table/RecrutementTable";
 /// Form
 import Element from "./components/Forms/Element/Element";
@@ -101,6 +102,13 @@ import MainSweetAlert from "./components/PluginsMenu/Sweet Alert/SweetAlert";
 import Toastr from "./components/PluginsMenu/Toastr/Toastr";
 import JqvMap from "./components/PluginsMenu/Jqv Map/JqvMap";
 import RechartJs from "./components/charts/rechart";
+import axios from "axios";
+import Header from "./layouts/nav/Header";
+import Register from "./pages/Registration";
+import BasicDatatable from "./components/table/BasicDatatable";
+//import { formatRelativeWithOptions } from "date-fns/esm/fp";
+import { RequireAuth } from "./pages/authprovider";
+// import EventTable from "./components/table/EventTable";
 
 import Client from "./pages/client";
 import useAuthStore from "../utils/zustand";
@@ -173,6 +181,8 @@ const Markup = () => {
     { url: "table-election", component: ElectionTable },
     { url: "table-apply", component: ApplyPage },
     { url: "table-bootstrap-basic", component: BootstrapTable },
+    { url: "Event-Table", component: FeesCollection },
+   { url: "Table-Event", component: EventTable },
     { url: "table-club", component: Club },
     { url: "table-club-front", component: ClubTable },
 
