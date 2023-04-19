@@ -54,10 +54,10 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
               <Link to="/client/home" className="header-link">
                 Home
               </Link>
-              <Link to="/client/home" className="header-link">
+              <Link to="Event-Table" className="header-link">
                 Events
               </Link>
-              <Link to="/client/table-club-front" className="header-link">
+              <Link to="table-club-front" className="header-link">
                 Clubs
               </Link>
               <Link to="elections" className="header-link">
