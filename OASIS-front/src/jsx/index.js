@@ -79,7 +79,6 @@ import BootstrapTable from "./components/table/BootstrapTable";
 import ClubTable from "./components/table/ClubTable";
 import Club from "./components/table/Club";
 
-
 import ElectionTable from "./components/table/ElectionTable";
 import ApplyPage from "./components/table/ApplyPage";
 import ApexChart from "./components/charts/apexcharts";
@@ -174,8 +173,6 @@ const Markup = () => {
     { url: "table-bootstrap-basic", component: BootstrapTable },
     { url: "table-club", component: Club },
     { url: "table-club-front", component: ClubTable },
-
-
 
     /// Form
     { url: "form-element", component: Element },

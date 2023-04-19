@@ -88,14 +88,19 @@ router.post(
   }
 );
 
-router.post("/addComment", (req, res) => {
+router.post("/addComment", async (req, res) => {
+  const user = await User.findById(req.body.userId);
+  console.log(user.username);
+  const randomId = Math.round(Math.random() * 1000000);
   const comment = {
-    userId: req.body.userId,
+    user: user,
     content: req.body.content,
     postId: req.body.postId,
+    uuid: randomId,
+    likes: [Object],
   };
-  post
-    .findById(req.body.postId)
+  console.log(req.body);
+  await Post.findById(req.body.postId)
     .then((post) => {
       post.comments.push(comment);
       post
@@ -104,10 +109,13 @@ router.post("/addComment", (req, res) => {
           res.status(200).send(post);
         })
         .catch((error) => {
+          console.log("ici");
           res.status(401).send(error);
         });
     })
     .catch((error) => {
+      console.log("sss");
+
       res.status(401).send(error);
     });
 });
@@ -130,6 +138,40 @@ router.post("/addLike", (req, res) => {
       res.status(200).send(post);
     })
     .catch((error) => {
+      res.status(400).send(error);
+    });
+});
+
+router.post("/addLikeComment", async (req, res) => {
+  const like = {
+    userId: req.body.userId,
+    postId: req.body.postId,
+    commentId: req.body.commentId,
+  };
+
+  Post.findById(like.postId)
+    .then((post) => {
+      console.log(post._id);
+      const comment = post.comments.find((c) => c.uuid == like.commentId);
+      if (comment.likes.find((l) => l.userId === like.userId)) {
+        console.log("like already exists");
+        console.log(comment.likes.indexOf({ like }));
+        delete comment.likes[comment.likes.indexOf({ like }) + 1];
+        const newLikes = comment.likes.filter((l) => l !== undefined);
+        comment.likes = newLikes;
+      } else {
+        console.log("like does not exist");
+        comment.likes.push(like);
+        console.log(comment.likes);
+      }
+      post.comments.pull(comment);
+      
+      post.comments.push(comment);
+      post.save();
+      res.status(200).send("comment liked");
+    })
+    .catch((error) => {
+      console.log(error);
       res.status(400).send(error);
     });
 });
