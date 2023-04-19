@@ -26,7 +26,7 @@ const RecrutementTable = () =>{
        
        
        setCandidatures(candidatures.filter((candidature) => candidature.clubSouhaite.includes(JSON.parse(user).club)));
-   }, [candidatures]);
+   }, []);
 
 
 

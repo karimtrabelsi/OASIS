@@ -186,7 +186,7 @@ const FeesCollection = () => {
                     '<br/>' +
                     '<div class="select_wrap">' +
                     '<select id="axes" name="axes">' +
-                    ' <option value="">Select an axe</option>' +
+                    ' <option value="">Select a global cause</option>' +
                     '<option value="Diabetes">Diabetes</option>' +
                     '<option value="Vision">Vision</option>' +
                     '<option value="Hunger">Hunger</option>' +
@@ -360,17 +360,18 @@ const FeesCollection = () => {
                                 '<input type="text" id="place" class="swal2-input" placeholder="place" value="' + event.place + '">' +
                                 '<input type="text" id="collaborateur" class="swal2-input" placeholder="collaborateur" value="' + event.collaborateur + '">' +
                                 '<input type="text" id="cotisation" class="swal2-input" placeholder="cotisation" value="' + event.cotisation + '">' +
-                                '<div class="swal2-input">' +
-                                '<label for="typeEvent" >Event Type :</label>' +
+                                '<div class="select_wrap">' +
                                 '<select id="typeEvent" name="typeEvent">' +
+                                ' <option value="">Select a Type</option>' +
                                 '<option value="CharityEvent">Charity Event</option>' +
                                 '<option value="TeamBuilding">Team Building</option>' +
                                 '<option value="ProTraining">Pro Training</option>' +
                                 '</select>' +
                                 '</div>' +
-                                '<div class="swal2-input">' +
-                                '<label for="axes">Global Causes:</label>' +
+                                '<div class="select_wrap">' +
+                                '</br>'+
                                 '<select id="axes" name="axes">' +
+                                ' <option value="">Select a global cause</option>' +
                                 '<option value="Diabetes">Diabetes</option>' +
                                 '<option value="Vision">Vision</option>' +
                                 '<option value="Hunger">Hunger</option>' +

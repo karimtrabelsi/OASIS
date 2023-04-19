@@ -337,7 +337,6 @@ const Club = () => {
                               onClick={() =>
                                 swal({
                                   title: "Are you sure?",
-                                  text: "Once Approved, user will be able to login !",
                                   icon: "warning",
                                   buttons: true,
                                   dangerMode: true,
