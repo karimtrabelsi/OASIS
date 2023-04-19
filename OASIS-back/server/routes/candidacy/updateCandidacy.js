@@ -1,22 +1,19 @@
 const Candidacy = require("../../models/candidacy");
 const Election = require("../../models/election");
 
-module.exports = async (req, res) => {
-    const id = req.params.id;
-    const update = req.body;
-    Candidacy.findByIdAndUpdate(id, update, { new: true })
-    .then((updateCandidacy) => {
-        if (!updateCandidacy) {
-            return res.status(404).send("Candidacy not found");
-        }
-        
-        res.status(200).json(updateCandidacy);
+module.exports = (req, res) => {
+    Candidacy.findOne({ _id: req.params.id }).then((candidacy) => {
+      candidacy.position = req.body.position;
+      candidacy.description = req.body.description;
+      if (req.file) {
+        candidacy.file = req.file.filename;
+      }  
+      candidacy.save();
+      res.status(200).send("Candidacy updated");
     })
-    .catch((err) => {
-        console.error(err);
-        res.status(500).send("Failed to update candidacy");
-    }
-    );
-};
-
+      .catch((err) => {
+        console.log(err);
+      }
+      );
+  };
     

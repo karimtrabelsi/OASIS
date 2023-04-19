@@ -17,14 +17,17 @@ const newElection = require("./routes/election/newElection");
 const deleteElection = require("./routes/election/deleteElection");
 const updateElection = require("./routes/election/updateElection");
 const getElections = require("./routes/election/getElections");
+const getElection = require("./routes/election/getElection");
 const creatEvent = require("./routes/event/event");
 const updatedEvent = require("./routes/event/updateEvent");
 const deletEvent = require("./routes/event/deleteEvent");
 const getEvent = require("./routes/event/getEvent");
 const newCandidacy = require("./routes/candidacy/newCandidacy");
 const updateCandidacy = require("./routes/candidacy/updateCandidacy");
+const voteCandidacy = require("./routes/candidacy/voteCandidacy");
 const deleteCandidacy = require("./routes/candidacy/deleteCandidacy");
 const getCandidacies = require("./routes/candidacy/getCandidacy");
+
 const createRecrutement = require("./routes/recrutement/createRecrutement");
 const getRecrutements = require("./routes/recrutement/getRecrutements");
 const getRecrutement = require("./routes/recrutement/getRecrutement");
@@ -33,6 +36,12 @@ const deleteRecrutement = require("./routes/recrutement/deleteRecrutement");
 const acceptCandidate= require("./routes/recrutement/acceptCandidate");
 const financialManagement = require("./routes/event/financialManagement");
 const sendMail= require("./utils/sendMail");
+
+const checkUser = require("./routes/candidacy/checkUser");
+
+// const financialManagement = require("./routes/event/financialManagement");
+
+
 const app = express();
 const club = require("./routes/club/club");
 app.use(cors());
@@ -50,10 +59,6 @@ app.post("/chat", async (req, res) => {
   const { message } = req.body;
   const response = await manager.process("en", message);
   res.json({ message: response.answer });
-});
-
-app.listen(3002, () => {
-  console.log("Chatbot API is running on port 3002");
 });
 
 mongoose
@@ -82,15 +87,6 @@ const storage = multer.diskStorage({
   },
 });
 
-const storageFile = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "../OASIS-front/src/images/files");
-  },
-  filename: function (req, file, cb) {
-    cb(null, "File-" + path.extname(file.originalname));
-  },
-});
-
 const fileFilter = (req, file, cb) => {
   const allowedFileTypes = [
     "image/jpeg",
@@ -108,7 +104,25 @@ const fileFilter = (req, file, cb) => {
 
 let upload = multer({ storage, fileFilter });
 
-let uploadFile = multer({ storageFile, fileFilter });
+const storageFile = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "../OASIS-front/src/uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(null, `${file.originalname}`);
+  },
+});
+
+const uploadFile = multer({ storage: storageFile, fileFilter: fileFilter });
+
+app.get("/uploads/:filename", (req, res) => {
+  const file = path.join(
+    __dirname,
+    "../../OASIS-front/src/uploads",
+    req.params.filename
+  );
+  res.sendFile(file);
+});
 
 app.post('/recrutements/accept',acceptCandidate)
 app.post('/recrutements', createRecrutement);
@@ -148,6 +162,8 @@ app.put("/election/updateElection/:id", updateElection);
 
 app.get("/election", getElections);
 
+app.get("/election/:id", getElection);
+
 app.get("/getUsername", verifyJWt, (req, res) => {
   console.log(req.user);
   res.status(200).send({ isLoggedIn: true, username: req.user.username });
@@ -161,11 +177,13 @@ app.delete("/deletEvent/:id", deletEvent);
 app.get("/getEvent", getEvent);
 
 app.post("/candidacy/newCandidacy", uploadFile.single("file"), newCandidacy);
-app.put(
-  "/candidacy/updateCandidacy/:id",
-  uploadFile.single("file"),
-  updateCandidacy
-);
+
+app.put("/candidacy/updateCandidacy/:id", uploadFile.single("file") , updateCandidacy);
+app.post("/candidacy/vote", voteCandidacy);
+
+app.delete("/candidacy/deleteCandidacy/:id", deleteCandidacy);
+app.get("/candidacy", getCandidacies);
+app.get("/candidacy/:userId/:electionId", checkUser);
 app.delete("/candidacy/deleteCandidacy/:id", deleteCandidacy);
 app.get("/candidacy", getCandidacies);
 

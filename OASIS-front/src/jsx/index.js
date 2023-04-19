@@ -77,6 +77,10 @@ import BtcChart from "./components/charts/apexcharts/ApexChart";
 /// Table
 import DataTable from "./components/table/DataTable";
 import BootstrapTable from "./components/table/BootstrapTable";
+import ClubTable from "./components/table/ClubTable";
+import Club from "./components/table/Club";
+
+
 import ElectionTable from "./components/table/ElectionTable";
 import ApplyPage from "./components/table/ApplyPage";
 import ApexChart from "./components/charts/apexcharts";
@@ -99,6 +103,9 @@ import JqvMap from "./components/PluginsMenu/Jqv Map/JqvMap";
 import RechartJs from "./components/charts/rechart";
 
 import Client from "./pages/client";
+import useAuthStore from "../utils/zustand";
+import FrontLayout from "./layouts/frontLayout";
+import HomeFront from "./components/frontOffice/home";
 
 const Markup = () => {
   const authRoutes = [
@@ -166,6 +173,10 @@ const Markup = () => {
     { url: "table-election", component: ElectionTable },
     { url: "table-apply", component: ApplyPage },
     { url: "table-bootstrap-basic", component: BootstrapTable },
+    { url: "table-club", component: Club },
+    { url: "table-club-front", component: ClubTable },
+
+
 
     /// Form
     { url: "form-element", component: Element },
@@ -201,6 +212,27 @@ const Markup = () => {
     { url: "page-error-503", component: Error503 },
   ];
 
+  const { user } = useAuthStore();
+
+  if (user && JSON.parse(user).role === "Member")
+    return (
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Registration />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/new-password" element={<NewPassword />} />
+        <Route path="/twofactor-auth" element={<TwoFactorAuth />} />
+        <Route path="/client" element={<FrontLayout />}>
+          <Route path="profile" element={<FrontProfile />} />
+          <Route path="home" element={<HomeFront />} />
+          <Route path="elections" element={<ElectionTable />} />
+          <Route path="table-apply" element={<ApplyPage />} />
+          <Route path="table-club-front" element={<ClubTable />} />
+          <Route path="Event-Table" element={<FeesCollection />} />
+        </Route>
+        <Route path="*" element={<Error404 />} />
+      </Routes>
+    );
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
@@ -211,12 +243,15 @@ const Markup = () => {
       <Route path="/twofactor-auth" element={<TwoFactorAuth />} />
       <Route path="/client" element={<Client />}>
         <Route path="home" element={<Home />} />
-        <Route path="profile" element={<FrontProfile />} />
+        <Route path="profile" element={<AppProfile />} />
         <Route path="users" element={<BootstrapTable />} />
         <Route path="members" element={<DataTable />} />
         <Route path="Event-Table" element={<FeesCollection />} />
         <Route path="elections" element={<ElectionTable />} />
         <Route path="recrutements" element={<RecrutementTable />} />
+        <Route path="table-apply" element={<ApplyPage />} />
+        <Route path="table-club" element={<Club />} />
+        <Route path="table-club-front" element={<ClubTable />} />
         <Route path="*" element={<Error404 />} />
       </Route>
     </Routes>

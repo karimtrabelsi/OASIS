@@ -1,11 +1,12 @@
 const Election = require("../../models/election");
+const Club = require("../../models/club");
 
 module.exports = async (req, res) => {
   try {
     const election = req.body;
     const dbElection = new Election({
       name: election.name,
-      club: election.club,
+      club: await Club.findById(election.club),
       type: election.type,
       description: election.description,
       startDate: election.startDate,
