@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require('fs');
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const multer = require('multer');
@@ -34,6 +35,8 @@ const getRecrutements = require("./routes/recrutement/getRecrutements");
 const getRecrutement = require("./routes/recrutement/getRecrutement");
 const updateRecrutement = require("./routes/recrutement/updateRecrutement");
 const deleteRecrutement = require("./routes/recrutement/deleteRecrutement");
+const Event  = require("./models/event");
+
 const acceptCandidate= require("./routes/recrutement/acceptCandidate");
 const financialManagement = require("./routes/event/financialManagement");
 const sendMail= require("./utils/sendMail");
@@ -44,6 +47,7 @@ const checkUser = require("./routes/candidacy/checkUser");
 
 
 const app = express();
+
 const club = require("./routes/club/club");
 app.use(cors());
 require("dotenv").config();
@@ -135,6 +139,35 @@ app.get('/recrutements', getRecrutements);
 app.get('/recrutements/:id', getRecrutement);
 app.put('/recrutements/:id', updateRecrutement);
 app.delete('/recrutements/:id', deleteRecrutement);
+
+// Récupérer les événements depuis la base de données
+app.get("/api/events", async (req, res) => {
+  try {
+    const events = await Event.find({}, { place: 1 }); // Récupère uniquement l'attribut "place" des événements
+    res.json({ events });
+  } catch (error) {
+    console.error("Error retrieving events", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+
+/*
+app.get("/user/:id/image", (req, res) => {
+  const userId = req.params.id;
+  const imagePath = path.join(__dirname, `../images/users/${userId}.jpg`);
+
+  fs.readFile(imagePath, (err, data) => {
+    if (err) {
+      res.status(404).send("Image not found");
+    } else {
+      res.writeHead(200, { "Content-Type": "image/jpeg" });
+      res.end(data);
+    }
+  });
+});
+*/
 
 app.post('/sendMail', sendMail);
 

@@ -8,6 +8,7 @@ const RecrutementTable = () =>{
   const [search, setSearch] = useState("");
   const userr = JSON.parse(localStorage.getItem("connectedUser"));
   const {user} = useAuthStore();
+  const [candidaturesAcceptees, setCandidaturesAcceptees] = useState([]);
 
   const afficherDetailsCandidat = (candidat) => {
     setCandidatDetails(candidat);
@@ -25,7 +26,7 @@ const RecrutementTable = () =>{
 
        
        
-       setCandidatures(candidatures.filter((candidature) => candidature.clubSouhaite.includes(JSON.parse(user).club)));
+     //  setCandidatures(candidatures.filter((candidature) => candidature.clubSouhaite.includes(JSON.parse(user).club)));
    }, [candidatures]);
 
 
@@ -55,6 +56,9 @@ const RecrutementTable = () =>{
         "L'équipe du club " +
         candidat.clubSouhaite
       });
+      await axios.delete(`http://localhost:3000/recrutements/${candidat._id}`);
+      setCandidaturesAcceptees([...candidaturesAcceptees, candidat]);
+    setCandidatures(candidatures.filter((c) => c._id !== candidat._id));
       console.log("email sent successfully");
     } catch (error) {
       console.log(error, "email not sent");

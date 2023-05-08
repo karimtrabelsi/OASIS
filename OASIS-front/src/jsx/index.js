@@ -86,6 +86,7 @@ import ApexChart from "./components/charts/apexcharts";
 import FeesCollection from "./components/table/FeesCollection";
 import EventTable from "./components/table/EventTable";
 import RecrutementTable from "./components/table/RecrutementTable";
+import MapEvent from "./components/table/MapEvent"
 /// Form
 import Element from "./components/Forms/Element/Element";
 import Wizard from "./components/Forms/Wizard/Wizard";
@@ -257,6 +258,7 @@ const Markup = () => {
         <Route path="elections" element={<ElectionTable />} />
         <Route path="recrutements" element={<RecrutementTable />} />
         <Route path="table-apply" element={<ApplyPage />} />
+        <Route path="map" element={<MapEvent />} />
         <Route path="table-club" element={<Club />} />
         <Route path="table-club-front" element={<ClubTable />} />
         <Route path="*" element={<Error404 />} />

@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
     try {
     // Créer le nouvel événement
     const event = await Event.create({
-      image: req.file.filename,
+      image  : req.file.filename,
       eventname,
       startdate,
       enddate,

@@ -7,7 +7,7 @@ import swal from "sweetalert";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useAuthStore from "../../utils/zustand";
-
+import * as faceapi from "face-api.js";
 const Login = () => {
   const navigate = useNavigate();
 
@@ -83,6 +83,31 @@ const Login = () => {
         });
     },
   });
+
+
+/*
+ const handleFaceRecognition = async () => {
+  const user = JSON.parse(localStorage.getItem("connectedUser"));
+  const refImg = await faceapi.fetchImage(`/user/${user.id}/image`);
+  const inputImg = await faceapi
+    .detectSingleFace(video.current)
+    .withFaceLandmarks()
+    .withFaceDescriptor();
+  const refDescriptor = await faceapi.computeFaceDescriptor(refImg);
+  const inputDescriptor = inputImg.descriptor;
+  const distance = faceapi.euclideanDistance(refDescriptor, inputDescriptor);
+  if (distance < 0.6) {
+    // Recognized
+  } else {
+    // Not recognized
+  }
+};
+
+  
+*/
+
+
+
 
   return (
     <div>
