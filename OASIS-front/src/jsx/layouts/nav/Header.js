@@ -25,7 +25,6 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
   useEffect(() => {
     axios.get("http://localhost:3000/clubs/getnotifications").then((res) => {
       setNotifications(res.data);
-      console.log(res.data);
     }).catch((err) => {
       console.log("aaa")
       console.log(err);
@@ -35,7 +34,6 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
   useEffect(() => {
     axios.get("http://localhost:3000/clubs/getunreadnotifications").then((res) => {
       setCount(res.data.length);
-      console.log(res.data);
     }).catch((err) => {
       console.log("aaa")
       console.log(err);

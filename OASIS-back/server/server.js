@@ -26,9 +26,9 @@ const getEvent = require("./routes/event/getEvent");
 const newCandidacy = require("./routes/candidacy/newCandidacy");
 const updateCandidacy = require("./routes/candidacy/updateCandidacy");
 const voteCandidacy = require("./routes/candidacy/voteCandidacy");
+const checkFace = require("./routes/candidacy/checkFace");
 const deleteCandidacy = require("./routes/candidacy/deleteCandidacy");
 const getCandidacies = require("./routes/candidacy/getCandidacy");
-
 const createRecrutement = require("./routes/recrutement/createRecrutement");
 const getRecrutements = require("./routes/recrutement/getRecrutements");
 const getRecrutement = require("./routes/recrutement/getRecrutement");
@@ -40,6 +40,7 @@ const sendMail= require("./utils/sendMail");
 
 const checkUser = require("./routes/candidacy/checkUser");
 
+
 // const financialManagement = require("./routes/event/financialManagement");
 
 
@@ -47,6 +48,7 @@ const app = express();
 const club = require("./routes/club/club");
 app.use(cors());
 require("dotenv").config();
+
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(bodyParser.json(), urlencodedParser);
@@ -56,7 +58,7 @@ console.log("Starting Chatbot ...");
 const manager = new NlpManager({ languages: ["en"] });
 manager.load();
 app.use(express.json());
-app.post("/chat", async (req, res) => {
+app.post("/chatBot", async (req, res) => {
   const { message } = req.body;
   const response = await manager.process("en", message);
   if (response.answer) {
@@ -65,6 +67,37 @@ app.post("/chat", async (req, res) => {
     const defaultResponse = "I'm sorry, I didn't understand. Can you please rephrase your question?";
     res.json({ message: defaultResponse });
   }
+});
+
+
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3001",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log(`User Connected: ${socket.id}`);
+
+  socket.on("join_room", (data) => {
+    socket.join(data);
+    console.log(`User with ID: ${socket.id} joined room: ${data}`);
+  });
+
+  socket.on("send_message", (data) => {
+    
+    console.log(data)
+    socket.to(data.room).emit("receive_message", data);
+    
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected", socket.id);
+  });
 });
 
 mongoose
@@ -88,7 +121,7 @@ const storage = multer.diskStorage({
     cb(null, "../OASIS-front/src/images/users");
   },
   filename: function (req, file, cb) {
-    cb(null, "userImage-" + req.body._id + path.extname(file.originalname));
+    cb(null, req.body._id+"-"+req.body._id + path.extname(file.originalname));
   },
 });
 
@@ -196,13 +229,13 @@ app.post("/candidacy/newCandidacy", uploadFile.single("file"), newCandidacy);
 
 app.put("/candidacy/updateCandidacy/:id", uploadFile.single("file") , updateCandidacy);
 app.post("/candidacy/vote", voteCandidacy);
+// app.post("/candidacy/checkFace", checkFace);
 
 app.delete("/candidacy/deleteCandidacy/:id", deleteCandidacy);
 app.get("/candidacy", getCandidacies);
 app.get("/candidacy/:userId/:electionId", checkUser);
 app.delete("/candidacy/deleteCandidacy/:id", deleteCandidacy);
 app.get("/candidacy", getCandidacies);
-
 app.post("/predictBudget", (req, res) => {
   financialManagement;
 });

@@ -348,7 +348,7 @@ const EventTable = () => {
                                   Swal.showValidationMessage('Please fill in all fields');
                                } else if (startDate < currentDate) {
                                   Swal.showValidationMessage('Start date cannot be before current date');
-                               } else if (endDate <= startDate) {
+                               } else if (endDate < startDate) {
                                   Swal.showValidationMessage('End date must be after start date');
                                }
                                                  return { eventname: eventname, startDate: startDate,  enddate: enddate, place: place, collaborateur: collaborateur, typeEvent: typeEvent, axes:axes };

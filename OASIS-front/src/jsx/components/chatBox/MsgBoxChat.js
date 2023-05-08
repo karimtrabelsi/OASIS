@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { el } from "date-fns/locale";
+import useAuthStore from "../../../utils/zustand";
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:3001");
 
 
-
-const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
+const MsgBoxChat = ({ avatar1, avatar2, openMsgC, PerfectScrollbar, offMsg, userSelected, username, room }) => {
+   const to = userSelected;
    const userr = JSON.parse(localStorage.getItem("connectedUser"));
-   const now = new Date();
-   const hours = now.getHours();
-   const minutes = now.getMinutes();
-   const ampm = hours >= 12 ? 'PM' : 'AM';
-   const time = `${hours % 12}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
+   const [currentMessage, setCurrentMessage] = useState("");
+   const [messageList, setMessageList] = useState([]);
    const [toggle, setToggle] = useState(false);
    const [user, setuser] = useState([]);
    const [response, setResponse] = useState([]);
@@ -18,46 +20,41 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
    const [newMessage, setNewMessage] = useState();
    const [chat, setChat] = useState([])
    const [isTyping, setIsTyping] = useState(false);
-   useEffect(() => {
-      axios.get("http://localhost:3000/users").then((res) => {
-         setuser(res.data);
-      });
-   }, []);
 
-   const handleSubmit = async (event) => {
-      event.preventDefault();
-      const m = event.target.elements.message.value;
-      const res = await axios.post('http://localhost:3000/chatBot', { message: m });
-      setNewMessage(m);
-      setNewResponse(res.data.message);
-      setResponse([...response, res.data.message]);
-      setMessage([...message, m]);
-      //setChat([...chat,{message:newMessage,response:newResponse}])
-      setChat(prevChat => [...prevChat, { message: m, response: res.data.message }]);
+   const sendMessage = async () => {
+      socket.emit("join_room", `${userr._id}${to._id}`);
+      if (currentMessage !== "") {
+         const messageData = {
+            room: `${userr._id}${to._id}`,
+            author: userr.firstname,
+            message: currentMessage,
+            time:
+               new Date(Date.now()).getHours() +
+               ":" +
+               new Date(Date.now()).getMinutes(),
+         };
+         console.log(messageData);
+
+
+         await socket.emit("send_message", messageData);
+         setMessageList((list) => [...list, messageData]);
+         setCurrentMessage("");
+      }
    };
 
- 
-
-   // const handleSubmit = async (event) => {
-   //    event.preventDefault();
-   //    const m = event.target.elements.message.value;
-   //    setIsTyping(true);
-   //    setTimeout(async () => {
-   //      const res = await axios.post('http://localhost:3000/chat', { message: m });
-   //      setNewMessage(m);
-   //      setNewResponse(res.data.message);
-   //      setResponse([...response, res.data.message]);
-   //      setMessage([...message, m]);
-   //      setChat(prevChat => [...prevChat, { message: m, response: res.data.message }]);
-   //      setIsTyping(false);
-   //    }, 2000);
-   //  };
+   useEffect(() => {
+      if (socket) {
+        socket.on("receive_message", (data) => {
+          setMessageList((list) => [...list, data]);
+        });
+      }
+    }, [socket]);
 
 
 
    return (
       <div
-         className={`card chat dz-chat-history-box ${openMsg ? "" : "d-none"}`}
+         className={`card chat dz-chat-history-box ${openMsgC ? "" : "d-none"}`}
       >
          <div className="card-header chat-list-header text-center">
             <a
@@ -100,8 +97,14 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
                </svg>
             </a>
             <div>
-               <h6 className="mb-1">Chat with Our ChatBot</h6>
-               <p className="mb-0 text-success">Online</p>
+               {userSelected !== null ? (
+                  <>
+                     <h6 className="mb-1">Chat with {to.firstname}</h6>
+                     <p className="mb-0 text-success">Online</p>
+                  </>
+               ) : (
+                  <p>Please select a user to chat with</p>
+               )}
             </div>
             <div className="dropdown">
                <a
@@ -166,17 +169,18 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
             </div>
          </div>
          <PerfectScrollbar
-            className={`card-body msg_card_body dz-scroll ${openMsg ? "ps ps--active-y" : ""
+            className={`card-body msg_card_body dz-scroll ${openMsgC ? "ps ps--active-y" : ""
                } `}
             id="DZ_W_Contacts_Body3"
          >
-            {chat.map((msg, index) => (
+            {messageList.map((messageContent,index) => {
                <div key={index}>
                   <div className="d-flex justify-content-end mb-4">
                      <div className="msg_cotainer_send">
-                        {msg.message}
-                        
-                        <span className="msg_time_send">{time}, Today</span>
+                        {messageContent.message}
+
+                        <span className="msg_time_send"><p id="time">{messageContent.time}</p>
+                           <p id="author">{messageContent.author}</p></span>
                      </div>
                      <div className="img_cont_msg">
                         <img
@@ -195,36 +199,33 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
                         />
                      </div>
                      <div className="msg_cotainer">
-                        {msg.response}
-                        {isTyping && (
-                           <span className="msg_cotainer">is typing...</span>
-                        )}
-                        <span className="msg_time">{time}, Today</span>
+                        {messageContent.message}
+                        
+                        <span className="msg_time"><p id="time">{messageContent.time}</p>
+                           <p id="author">{messageContent.author}</p></span>
                      </div>
                   </div>
                </div>
-            ))}
+            })}
 
          </PerfectScrollbar>
-         <div className="card-footer type_msg">
-            <form onSubmit={handleSubmit}>
-               <div className="input-group">
-                  <input
-                     className="form-control"
-                     placeholder="Type your message..."
-                     name="message"
-                  />
-                  <div className="input-group-append">
-                     <button type="submit" className="btn btn-primary">
-                        <i className="fa fa-location-arrow"></i>
-                     </button>
-                  </div>
-
-               </div>
-            </form>
+         <div className="chat-footer">
+            <input
+               type="text"
+               value={currentMessage}
+               placeholder="Hey..."
+               onChange={(event) => {
+                  setCurrentMessage(event.target.value);
+               }}
+               onKeyPress={(event) => {
+                  event.key === "Enter" && sendMessage();
+                  console.log(socket);
+               }}
+            />
+            <button onClick={sendMessage}>&#9658;</button>
          </div>
-      </div>
+      </div >
    );
 };
 
-export default MsgBox;
+export default MsgBoxChat;

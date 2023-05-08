@@ -9,6 +9,7 @@ import "./css/style.css";
 
 import { withResizeDetector } from "react-resize-detector";
 
+
 const App = ({ width }) => {
   const body = document.querySelector("body");
 
