@@ -24,6 +24,7 @@ import Widget from "./pages/Widget";
 
 /// Deshboard
 import Home from "./components/Dashboard/Home";
+import PowerBI from"./components/Dashboard/PowerBI";
 import WorkoutStatistic from "./components/Dashboard/WorkoutStatistic";
 import WorkoutPlan from "./components/Dashboard/WorkoutPlan";
 import DistanceMap from "./components/Dashboard/DistanceMap";
@@ -176,6 +177,7 @@ const Markup = () => {
     { url: "chart-rechart", component: RechartJs },
 
     /// table
+    { url: "table-powerBi", component: PowerBI },
     { url: "table-datatable-basic", component: DataTable },
     { url: "table-election", component: ElectionTable },
     { url: "table-apply", component: ApplyPage },
@@ -260,6 +262,7 @@ const Markup = () => {
         <Route path="table-club" element={<Club />} />
         <Route path="table-club-front" element={<ClubTable />} />
         <Route path="*" element={<Error404 />} />
+        <Route path="powerbi" element={<PowerBI />} />
       </Route>
     </Routes>
   );

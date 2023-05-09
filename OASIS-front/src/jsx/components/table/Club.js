@@ -378,99 +378,99 @@ const Club = () => {
                         <td></td>
                         <td>{club.club}</td>
                         <td>
-                        <Badge
-                          variant="warning light"
-                          onClick={() =>
-                            Swal.fire({
-                              title: "Update",
-                              html:
-                                '<br></br>' +
-                                '<div class="input_wrap">' +
-                                '<input type="text" required value=' + club.clubname + ' class="form-control" name="clubname">' +
-                                '<label>Club name</label>' +
-                                '</div>' +
-                                '<br></br>' +
-                                '<div class="input_wrap">' +
-                                '<input type="text" required value=' + club.email + ' class="form-control" name="email">' +
-                                '<label>Email</label>' +
-                                '</div>' +
-                                '<br></br>' +
-                                '<div class="input_wrap">' +
-                                '<input type="file"  value=' + club.image + ' class="form-control" name="image">' +
-                                '<label>image</label>' +
-                                '</div>',
-                              icon: "info",
-                              buttons: false,
-                              dangerMode: true,
-                              showDenyButton: true,
-                              denyButtonText: `Don't save`,
-                              cancelButtonText:
-                                '<i class="fa fa-thumbs-down">Cancel</i>',
-                              cancelButtonAriaLabel: 'Thumbs down',
+                          <Badge
+                            variant="warning light"
+                            onClick={() =>
+                              Swal.fire({
+                                title: "Update",
+                                html:
+                                  '<br></br>' +
+                                  '<div class="input_wrap">' +
+                                  '<input type="text" required value=' + club.clubname + ' class="form-control" name="clubname">' +
+                                  '<label>Club name</label>' +
+                                  '</div>' +
+                                  '<br></br>' +
+                                  '<div class="input_wrap">' +
+                                  '<input type="text" required value=' + club.email + ' class="form-control" name="email">' +
+                                  '<label>Email</label>' +
+                                  '</div>' +
+                                  '<br></br>' +
+                                  '<div class="input_wrap">' +
+                                  '<input type="file"  value=' + club.image + ' class="form-control" name="image">' +
+                                  '<label>image</label>' +
+                                  '</div>',
+                                icon: "info",
+                                buttons: false,
+                                dangerMode: true,
+                                showDenyButton: true,
+                                denyButtonText: `Don't save`,
+                                cancelButtonText:
+                                  '<i class="fa fa-thumbs-down">Cancel</i>',
+                                cancelButtonAriaLabel: 'Thumbs down',
 
-                              preConfirm: () => {
-                                const clubname = Swal.getPopup().querySelector(
-                                  'input[name="clubname"]'
-                                ).value;
-                                const email = Swal.getPopup().querySelector(
-                                  'input[name="email"]'
-                                ).value;
-                                const image = Swal.getPopup().querySelector(
-                                  'input[name="image"]'
-                                )
-                                const file = image.files[0]
+                                preConfirm: () => {
+                                  const clubname = Swal.getPopup().querySelector(
+                                    'input[name="clubname"]'
+                                  ).value;
+                                  const email = Swal.getPopup().querySelector(
+                                    'input[name="email"]'
+                                  ).value;
+                                  const image = Swal.getPopup().querySelector(
+                                    'input[name="image"]'
+                                  )
+                                  const file = image.files[0]
 
-                                if (!clubname || !email || !image) {
-                                  Swal.showValidationMessage('Please fill in all fields');
-                                }
-                                if (email && !/\S+@\S+\.\S+/.test(email)) {
-                                  Swal.showValidationMessage('Please enter a valid email address');
-                                }
-                                return { clubname: clubname, email: email, image: file };
-                              }
-                            })
-                              .then((result) => {
-                                if (result.isConfirmed) {
-                                  console.log(result);
-                                  axios
-                                    .put(
-                                      "http://localhost:3000/clubs/update/" + club._id,
-                                      result.value,
-                                      {
-                                        headers: {
-                                          "Content-Type": "multipart/form-data",
-                                        },
-                                      }
-                                    )
-                                    .then((res) => {
-                                      if ((res.respone = 200)) {
-                                        Swal.fire("Club has been updated!", {
-                                          icon: "success",
-                                        });
-                                      } else {
-                                        Swal.fire("Nothing changed !");
-                                      }
-                                    })
-                                    .catch((err) => {
-                                      if (err.response.data === "Clubname or email already taken") {
-                                        Swal.fire(
-                                          "Oops",
-                                          "Clubname or email already taken!",
-                                          "error"
-                                        );
-                                      } else {
-                                        Swal.fire("Something went wrong!");
-                                      }
-                                    });
-                                }
-                                if (result.isDenied) {
-                                  Swal.fire('Changes are not saved', '', 'info')
+                                  if (!clubname || !email || !image) {
+                                    Swal.showValidationMessage('Please fill in all fields');
+                                  }
+                                  if (email && !/\S+@\S+\.\S+/.test(email)) {
+                                    Swal.showValidationMessage('Please enter a valid email address');
+                                  }
+                                  return { clubname: clubname, email: email, image: file };
                                 }
                               })
-                          }
-                        >
-                          Update
-                        </Badge>
+                                .then((result) => {
+                                  if (result.isConfirmed) {
+                                    console.log(result);
+                                    axios
+                                      .put(
+                                        "http://localhost:3000/clubs/update/" + club._id,
+                                        result.value,
+                                        {
+                                          headers: {
+                                            "Content-Type": "multipart/form-data",
+                                          },
+                                        }
+                                      )
+                                      .then((res) => {
+                                        if ((res.respone = 200)) {
+                                          Swal.fire("Club has been updated!", {
+                                            icon: "success",
+                                          });
+                                        } else {
+                                          Swal.fire("Nothing changed !");
+                                        }
+                                      })
+                                      .catch((err) => {
+                                        if (err.response.data === "Clubname or email already taken") {
+                                          Swal.fire(
+                                            "Oops",
+                                            "Clubname or email already taken!",
+                                            "error"
+                                          );
+                                        } else {
+                                          Swal.fire("Something went wrong!");
+                                        }
+                                      });
+                                  }
+                                  if (result.isDenied) {
+                                    Swal.fire('Changes are not saved', '', 'info')
+                                  }
+                                })
+                            }
+                          >
+                            Update
+                          </Badge>
                         </td>
 
 

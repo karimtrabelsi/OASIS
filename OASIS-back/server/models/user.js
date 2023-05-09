@@ -55,6 +55,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    sexe: {
+      type: String,
+      required: false,
+    },
     ip: {
       type: [String],
       required: false,

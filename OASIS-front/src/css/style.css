@@ -30814,5 +30814,8 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
         text-decoration: underline;
         cursor: pointer;
       }
-
+      .powerbi-embed-container {
+        width: 100%;
+        height: 535px;
+      }
 /*# sourceMappingURL=style.css.map */
