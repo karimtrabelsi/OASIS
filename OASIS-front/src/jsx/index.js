@@ -113,6 +113,8 @@ import Client from "./pages/client";
 import useAuthStore from "../utils/zustand";
 import FrontLayout from "./layouts/frontLayout";
 import HomeFront from "./components/frontOffice/home";
+import Donations from "./pages/donations";
+import DonationsTable from "./components/table/DonationsTable";
 
 const Markup = () => {
   const authRoutes = [
@@ -249,6 +251,8 @@ const Markup = () => {
       <Route path="/new-password" element={<NewPassword />} />
       <Route path="/twofactor-auth" element={<TwoFactorAuth />} />
       <Route path="/client" element={<Client />}>
+        {/* <Route path="donations" element={<Donations />} /> */}
+        <Route path="donations" element={<DonationsTable />} />
         <Route path="home" element={<Home />} />
         <Route path="profile" element={<FrontProfile />} />
         <Route path="users" element={<BootstrapTable />} />
