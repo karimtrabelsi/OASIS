@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import useAuthStore from "../../utils/zustand";
 
 const Login = () => {
+  console.log(process.env.REACT_APP_SERVER_URL);
   const navigate = useNavigate();
 
   const imgStyle = {
@@ -30,21 +31,21 @@ const Login = () => {
         username: values.username,
         password: values.password,
       };
-      
+
       axios
         .post(`${process.env.REACT_APP_SERVER_URL}/login`, user)
         .then((res) => {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("connectedUser", res.data.user);
           useAuthStore.setState({ user: res.data.user });
-          JSON.parse(res.data.user).role === "SuperAdmin"
-            && navigate("/client/home")
-            JSON.parse(res.data.user).role === "Member"
-            && navigate("/client/home")
-            JSON.parse(res.data.user).role === "President"
-            && navigate("/client/home")
-            JSON.parse(res.data.user).role === "Governor"
-            && navigate("/client/home")
+          JSON.parse(res.data.user).role === "SuperAdmin" &&
+            navigate("/client/home");
+          JSON.parse(res.data.user).role === "Member" &&
+            navigate("/client/home");
+          JSON.parse(res.data.user).role === "President" &&
+            navigate("/client/home");
+          JSON.parse(res.data.user).role === "Governor" &&
+            navigate("/client/home");
         })
         .catch((err) => {
           console.log(err);
@@ -64,9 +65,12 @@ const Login = () => {
             "User is not allowed to login from this IP"
           ) {
             axios
-              .post(`${process.env.REACT_APP_SERVER_URL}/users/twoFactorAuth/send`, {
-                number: err.response.data.number,
-              })
+              .post(
+                `${process.env.REACT_APP_SERVER_URL}/users/twoFactorAuth/send`,
+                {
+                  number: err.response.data.number,
+                }
+              )
               .then((res) => {
                 swal(
                   "Please verify yourself",
@@ -170,23 +174,21 @@ const Login = () => {
                     <div className="mt-3">
                       <p className="mb-0  text-center">
                         Don't have an account ?{" "}
-                        <Link
-                          to="/register"
-                          className="text-primary fw-bold"
-                        >
+                        <Link to="/register" className="text-primary fw-bold">
                           Signup Here !
-                        </Link> 
-                        </p>
-                        </div>
-                        <div className="mt-3">
-                        <p className="mb-0  text-center">
+                        </Link>
+                      </p>
+                    </div>
+                    <div className="mt-3">
+                      <p className="mb-0  text-center">
                         Would you like to join us as a member?{" "}
                         <Link
                           to="/recrutement"
                           className="text-primary fw-bold"
                         >
-                         Join Us!
-                        </Link> <br/>
+                          Join Us!
+                        </Link>{" "}
+                        <br />
                       </p>
                     </div>
                   </div>
