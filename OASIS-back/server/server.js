@@ -4,6 +4,10 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const multer = require('multer');
 var cors = require("cors");
+const axios = require('axios');
+const cheerio = require('cheerio');
+
+
 const register = require("./routes/user/register");
 const login = require("./routes/user/login");
 const getusers = require("./routes/user/getUsers");
@@ -168,6 +172,27 @@ app.get("/user/:id/image", (req, res) => {
   });
 });
 */
+
+//scraaping back
+app.get('/api/pauvrete', async (req, res) => {
+  try {
+    const response = await axios.get('https://inkyfada.com/fr/2021/08/18/vivre-moins-5-dinars-jours-carte-pauvrete-tunisie/');
+    const $ = cheerio.load(response.data);
+
+    const povertyMapHTML = $('#poverty-map').html();
+
+    res.send(povertyMapHTML);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Une erreur est survenue lors de la récupération des données.' });
+  }
+});
+
+
+
+
+
+
 
 app.post('/sendMail', sendMail);
 

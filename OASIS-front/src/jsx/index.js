@@ -80,6 +80,7 @@ import BootstrapTable from "./components/table/BootstrapTable";
 import ClubTable from "./components/table/ClubTable";
 import Club from "./components/table/Club";
 
+import Test from "./components/table/Test";
 import ElectionTable from "./components/table/ElectionTable";
 import ApplyPage from "./components/table/ApplyPage";
 import ApexChart from "./components/charts/apexcharts";
@@ -259,6 +260,8 @@ const Markup = () => {
         <Route path="recrutements" element={<RecrutementTable />} />
         <Route path="table-apply" element={<ApplyPage />} />
         <Route path="map" element={<MapEvent />} />
+        <Route path="mapPauvre" element={<Test />} />
+
         <Route path="table-club" element={<Club />} />
         <Route path="table-club-front" element={<ClubTable />} />
         <Route path="*" element={<Error404 />} />

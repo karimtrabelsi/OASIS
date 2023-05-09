@@ -178,6 +178,9 @@ class SideBar extends Component {
                 <li>
                   <Link to="map">Map Event</Link>
                 </li>
+                <li>
+                  <Link to="mapPauvre">Map Pauvrete</Link>
+                </li>
               </ul>
             </li>
           </MM>
