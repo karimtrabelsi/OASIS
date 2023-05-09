@@ -2,12 +2,12 @@ import React, { Fragment } from "react";
 
 /// Components
 import Markup from "./jsx";
-
 /// Style
 import "./vendor/bootstrap-select/dist/css/bootstrap-select.min.css";
 import "./css/style.css";
 
 import { withResizeDetector } from "react-resize-detector";
+import toast, { Toaster } from "react-hot-toast";
 
 const App = ({ width }) => {
   const body = document.querySelector("body");
@@ -19,10 +19,13 @@ const App = ({ width }) => {
     : body.setAttribute("data-sidebar-style", "overlay");
 
   return (
-    <Fragment>
-      {/* <Auth /> */}
-      <Markup />
-    </Fragment>
+    <>
+      <Toaster position="bottom-center" reverseOrder={false} />
+      <Fragment>
+        {/* <Auth /> */}
+        <Markup />
+      </Fragment>
+    </>
   );
 };
 

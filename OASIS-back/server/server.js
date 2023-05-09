@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const multer = require('multer');
+const multer = require("multer");
 var cors = require("cors");
 const register = require("./routes/user/register");
 const login = require("./routes/user/login");
@@ -34,14 +34,13 @@ const getRecrutements = require("./routes/recrutement/getRecrutements");
 const getRecrutement = require("./routes/recrutement/getRecrutement");
 const updateRecrutement = require("./routes/recrutement/updateRecrutement");
 const deleteRecrutement = require("./routes/recrutement/deleteRecrutement");
-const acceptCandidate= require("./routes/recrutement/acceptCandidate");
+const acceptCandidate = require("./routes/recrutement/acceptCandidate");
 const financialManagement = require("./routes/event/financialManagement");
-const sendMail= require("./utils/sendMail");
+const sendMail = require("./utils/sendMail");
 
 const checkUser = require("./routes/candidacy/checkUser");
 
 // const financialManagement = require("./routes/event/financialManagement");
-
 
 const app = express();
 const club = require("./routes/club/club");
@@ -62,7 +61,8 @@ app.post("/chat", async (req, res) => {
   if (response.answer) {
     res.json({ message: response.answer });
   } else {
-    const defaultResponse = "I'm sorry, I didn't understand. Can you please rephrase your question?";
+    const defaultResponse =
+      "I'm sorry, I didn't understand. Can you please rephrase your question?";
     res.json({ message: defaultResponse });
   }
 });
@@ -129,15 +129,13 @@ app.get("/uploads/:filename", (req, res) => {
   res.sendFile(file);
 });
 
-app.post('/recrutements/accept',acceptCandidate)
-app.post('/recrutements', createRecrutement);
-app.get('/recrutements', getRecrutements);
-app.get('/recrutements/:id', getRecrutement);
-app.put('/recrutements/:id', updateRecrutement);
-app.delete('/recrutements/:id', deleteRecrutement);
-
-app.post('/sendMail', sendMail);
-
+app.post("/recrutements/accept", acceptCandidate);
+app.post("/recrutements", createRecrutement);
+app.get("/recrutements", getRecrutements);
+app.get("/recrutements/:id", getRecrutement);
+app.put("/recrutements/:id", updateRecrutement);
+app.delete("/recrutements/:id", deleteRecrutement);
+app.post("/sendMail", sendMail);
 
 app.post("/register", upload.single("image"), register);
 
@@ -187,14 +185,18 @@ const eventStorage = multer.diskStorage({
 
 const uploads = multer({ storage: eventStorage });
 
-app.post("/event", uploads.single('file'), creatEvent);
+app.post("/event", uploads.single("file"), creatEvent);
 app.put("/updateEvent/:id", updatedEvent);
 app.delete("/deletEvent/:id", deletEvent);
 app.get("/getEvent", getEvent);
 
 app.post("/candidacy/newCandidacy", uploadFile.single("file"), newCandidacy);
 
-app.put("/candidacy/updateCandidacy/:id", uploadFile.single("file") , updateCandidacy);
+app.put(
+  "/candidacy/updateCandidacy/:id",
+  uploadFile.single("file"),
+  updateCandidacy
+);
 app.post("/candidacy/vote", voteCandidacy);
 
 app.delete("/candidacy/deleteCandidacy/:id", deleteCandidacy);
