@@ -53,7 +53,7 @@ const BootstrapTable = () => {
   // Determine if the logged-in user has the role "Member"
   
   const fetchData = useCallback(async () => {
-    const response = await axios.get("http://localhost:3000/users");
+    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/users`);
     if (isMounted.current) {
       setUsers(response.data);
     }
@@ -61,7 +61,7 @@ const BootstrapTable = () => {
   useEffect(() => {
     const userr = JSON.parse(localStorage.getItem("connectedUser"));
 
-    axios.get("http://localhost:3000/users").then((res) => {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/users`).then((res) => {
     setUsers(res.data);
     }).catch((err) => {
       console.log(err);
@@ -77,13 +77,13 @@ const BootstrapTable = () => {
   }, [users]);
 
   const handleApprove = (id) => {
-    axios.post("http://localhost:3000/users/approve/" + id).catch((err) => {
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/users/approve/` + id).catch((err) => {
       console.log(err);
     });
   };
   const handleBan = (id) => {
     axios
-      .post("http://localhost:3000/users/ban/" + id)
+      .post(`${process.env.REACT_APP_SERVER_URL}/users/ban/` + id)
       .then((res) => {
         console.log(res);
       })
@@ -223,7 +223,7 @@ const BootstrapTable = () => {
                                 }).then(() =>
                                   axios
                                     .post(
-                                      "http://localhost:3000/users/approve/" +
+                                      `${process.env.REACT_APP_SERVER_URL}/users/approve/` +
                                         user._id
                                     )
                                     .then((res) => {
@@ -274,7 +274,7 @@ const BootstrapTable = () => {
                                     if (willBan) {
                                       axios
                                         .post(
-                                          "http://localhost:3000/users/ban/" +
+                                          `${process.env.REACT_APP_SERVER_URL}/users/ban/` +
                                             user._id
                                         )
                                         .then((res) => {

@@ -30815,4 +30815,20 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
         cursor: pointer;
       }
 
+      .pagination {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        padding: 0;
+      }
+      
+      .pagination li {
+        cursor: pointer;
+        margin: 0 10px;
+      }
+      
+      .pagination li.active {
+        font-weight: bold;
+      }
+
 /*# sourceMappingURL=style.css.map */

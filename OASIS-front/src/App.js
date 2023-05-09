@@ -9,6 +9,7 @@ import "./css/style.css";
 import { withResizeDetector } from "react-resize-detector";
 import toast, { Toaster } from "react-hot-toast";
 
+
 const App = ({ width }) => {
   const body = document.querySelector("body");
 

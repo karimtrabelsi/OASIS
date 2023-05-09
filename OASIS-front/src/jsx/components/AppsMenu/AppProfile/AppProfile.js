@@ -49,8 +49,7 @@ const AppProfile = (props) => {
 
   useEffect(() => {
     const userr = JSON.parse(localStorage.getItem("connectedUser"));
-    console.log(userr);
-    axios.get("http://localhost:3000/users/" + userr._id).then((res) => {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/users/` + userr._id).then((res) => {
       setuser(res.data);
     });
   }, []);
@@ -69,9 +68,8 @@ const AppProfile = (props) => {
       club: form.club.value,
       image: form.image.files[0],
     };
-    console.log(formUser);
     axios
-      .post("http://localhost:3000/users/" + user._id, formUser, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/users/` + user._id, formUser, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -125,10 +123,8 @@ const AppProfile = (props) => {
         file: values.file,
         image: values.image,
       };
-      console.log(post);
-
       axios
-        .post("http://localhost:3000/posts/addPost", post, {
+        .post(`${process.env.REACT_APP_SERVER_URL}/posts/addPost`, post, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -681,7 +677,6 @@ const AppProfile = (props) => {
                                     "image",
                                     e.currentTarget.files[0]
                                   );
-                                  console.log(e.currentTarget.files[0]);
                                 }}
                                 style={{ display: "none" }}
                               />

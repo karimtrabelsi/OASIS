@@ -45,7 +45,6 @@ const Home = () => {
       draggable: true,
     });
   };
-  console.log(location.state);
   location.state && swal("Oops", "Already Logged in !", "error");
 
   function SampleNextArrow(props) {

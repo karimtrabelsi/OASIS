@@ -49,8 +49,6 @@ class SideBar extends Component {
     var aaa = document.querySelector("#main-wrapper");
     const user = JSON.parse(localStorage.getItem("connecedUser"));
 
-    console.log(this.state);
-
     function toggleFunc() {
       return aaa.classList.toggle("menu-toggle");
     }

@@ -11,7 +11,7 @@ const CommentWidget = ({ post, handleRefetch }) => {
     const postId = e.target.postId.value;
     const userId = JSON.parse(user)._id;
     await axios
-      .post("http://localhost:3000/posts/addComment", {
+      .post(`${process.env.REACT_APP_SERVER_URL}/posts/addComment`, {
         content,
         userId,
         postId,
@@ -81,7 +81,7 @@ const CommentWidget = ({ post, handleRefetch }) => {
                       class="fa fa-heart"
                       onClick={() => {
                         axios
-                          .post("http://localhost:3000/posts/addLikeComment", {
+                          .post(`${process.env.REACT_APP_SERVER_URL}/posts/addLikeComment`, {
                             postId: post._id,
                             userId: JSON.parse(user)._id,
                             commentId: comment.uuid,

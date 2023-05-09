@@ -38,7 +38,7 @@ const BootstrapTable = () => {
   const userr = JSON.parse(localStorage.getItem("connectedUser"));
   useEffect(() => {
     axios
-      .get("http://localhost:3000/users")
+      .get(`${process.env.REACT_APP_SERVER_URL}/users`)
       .then((res) => {
         setUsers(res.data);
       })
@@ -139,7 +139,7 @@ const BootstrapTable = () => {
                                 }).then(() =>
                                   axios
                                     .post(
-                                      "http://localhost:3000/users/approve/" +
+                                      `${process.env.REACT_APP_SERVER_URL}/users/approve/` +
                                         users._id
                                     )
                                     .then((res) => {
@@ -190,7 +190,7 @@ const BootstrapTable = () => {
                                     if (willBan) {
                                       axios
                                         .post(
-                                          "http://localhost:3000/users/ban/" +
+                                          `${process.env.REACT_APP_SERVER_URL}/users/ban/` +
                                             users._id
                                         )
                                         .then((res) => {

@@ -15,7 +15,7 @@ const RecrutementTable = () =>{
 
   useEffect(() => {
     axios
-       .get("http://localhost:3000/recrutements")
+       .get(`${process.env.REACT_APP_SERVER_URL}/recrutements`)
        .then((res) => {
         setCandidatures(res.data);
        })
@@ -26,7 +26,7 @@ const RecrutementTable = () =>{
        
        
        setCandidatures(candidatures.filter((candidature) => candidature.clubSouhaite.includes(JSON.parse(user).club)));
-   }, [candidatures]);
+   }, []);
 
 
 
@@ -40,8 +40,7 @@ const RecrutementTable = () =>{
 
   const accepterCandidature = async (candidat) => {
     try {
-      console.log('-DEBUG-', candidat)
-      await axios.post('http://localhost:3000/recrutements/accept', {
+      await axios.post(`${process.env.REACT_APP_SERVER_URL}/recrutements/accept`, {
         email: candidat.mail,
         subject: "Félicitations, vous êtes accepté(e) au club " + candidat.clubSouhaite,
         text: "Cher/Chère " +
@@ -67,7 +66,7 @@ const RecrutementTable = () =>{
     const text = `Bonjour ${candidat.nom},\n\nNous regrettons de vous informer que votre candidature pour rejoindre le club ${candidat.clubSouhaite} n'a pas été retenue.\n\nCordialement,\nL'équipe du club`;
   
     try {
-      await axios.post('http://localhost:3000/recrutements/accept', {
+      await axios.post(`${process.env.REACT_APP_SERVER_URL}/recrutements/accept`, {
         email: candidat.mail,
         subject: subject,
         text: text
@@ -88,7 +87,7 @@ const RecrutementTable = () =>{
 
   return (
 <div>
-      <Typography variant="h4" component="h1" gutterBottom>Liste des candidatures</Typography>
+      <Typography variant="h4" component="h1" gutterBottom>Recruitment List</Typography>
       <List>
         {candidatures.map(candidat => (
           <ListItem key={candidat._id} onClick={() => afficherDetailsCandidat(candidat)} button>
@@ -99,11 +98,11 @@ const RecrutementTable = () =>{
             <Button color="primary" onClick={(e) => {
               e.stopPropagation();
               accepterCandidature(candidat);
-            }}>Accepter</Button>
+            }}>Accept</Button>
             <Button color="secondary" onClick={(e) => {
               e.stopPropagation();
               refuserCandidature(candidat);
-            }}>Refuser</Button>
+            }}>Decline</Button>
           </ListItem>
         ))}
       </List>

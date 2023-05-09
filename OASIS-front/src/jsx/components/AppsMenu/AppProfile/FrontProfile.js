@@ -53,7 +53,7 @@ const AppProfile = () => {
   };
 
   const fetchPosts = async () => {
-    return await axios.get("http://localhost:3000/posts/myPosts/" + userr._id);
+    return await axios.get(`${process.env.REACT_APP_SERVER_URL}/posts/myPosts/` + userr._id);
   };
 
   const { status, data, error, refetch, isLoading, isRefetching, isSuccess } =
@@ -64,7 +64,6 @@ const AppProfile = () => {
   const handleRefetch = () => {
     refetch();
   };
-  console.log("isSuccess : ", isSuccess);
 
   function handleRegister(e) {
     e.preventDefault();
@@ -80,9 +79,8 @@ const AppProfile = () => {
       club: form.club.value,
       image: form.image.files[0],
     };
-    console.log(formUser);
     axios
-      .post("http://localhost:3000/users/" + uuser._id, formUser, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/users/` + uuser._id, formUser, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -135,10 +133,9 @@ const AppProfile = () => {
         file: values.file,
         image: values.image,
       };
-      console.log(post);
 
       axios
-        .post("http://localhost:3000/posts/addPost", post, {
+        .post(`${process.env.REACT_APP_SERVER_URL}/posts/addPost`, post, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -164,7 +161,7 @@ const AppProfile = () => {
     const postId = e.target.postId.value;
     const userId = userr._id;
     await axios
-      .post("http://localhost:3000/posts/addComment", {
+      .post(`${process.env.REACT_APP_SERVER_URL}/posts/addComment`, {
         content,
         userId,
         postId,
@@ -178,12 +175,10 @@ const AppProfile = () => {
   };
 
   if (isLoading) {
-    console.log("loading");
     return <span>Loading...</span>;
   }
 
   if (isRefetching) {
-    console.log("refetching");
   }
 
   return (
@@ -719,7 +714,6 @@ const AppProfile = () => {
                                     "image",
                                     e.currentTarget.files[0]
                                   );
-                                  console.log(e.currentTarget.files[0]);
                                 }}
                                 style={{ display: "none" }}
                               />

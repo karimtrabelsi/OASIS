@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import useAuthStore from "../../../utils/zustand";
 import CommentWidget from "./commentWidget";
+import moment from "moment";
 
 const PostWidget = ({
   uuid,
@@ -38,7 +39,7 @@ const PostWidget = ({
         <img class="post-image" src={imagee} />
         <div class="article-details">
           <h4 class="post-category">Club : {userr.club}</h4>
-          <h3 class="post-title">How to become a badass programmer</h3>
+          <h3 class="post-title">{moment(post.date).format('MM/DD/YYYY')}</h3>
           <p class="post-description">{content}</p>
           <p class="post-author">
             By {userr.firstname} {userr.lastname}
@@ -48,7 +49,7 @@ const PostWidget = ({
               className="btn  mr-2"
               onClick={() =>
                 axios
-                  .post("http://localhost:3000/posts/addLike", {
+                  .post(`${process.env.REACT_APP_SERVER_URL}/posts/addLike`, {
                     postId: post._id,
                     userId: JSON.parse(user)._id,
                   })

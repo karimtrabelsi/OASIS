@@ -25,10 +25,12 @@ import avatar2 from "../../../images/avatar/2.jpg";
 import avatar3 from "../../../images/avatar/3.jpg";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import ReactPaginate from 'react-paginate';
 import { toast } from "react-hot-toast";
 import Web3 from "web3";
 import { ethers } from "ethers";
 import useAuthStore from "../../../utils/zustand";
+
 
 const ClubTable = () => {
   const web3 = new Web3(window.ethereum);
@@ -56,12 +58,18 @@ const ClubTable = () => {
   const [searchE, setSearchE] = useState("");
   const [amount, setAmount] = useState(0);
   const [balance, setBalance] = useState(0);
+ const [currentPage, setCurrentPage] = useState(0);
+   const [itemsPerPage, setItemsPerPage] = useState(3);
+   const indexOfLastItem = (currentPage + 1) * itemsPerPage;
+   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+   const currentItems = clubs.slice(currentPage * 3, currentPage * 3 + 3);
 
   const getBalance = async () => {
     const accounts = await web3.eth.getAccounts();
     const balance = await web3.eth.getBalance(accounts[0]);
     setBalance(ethers.utils.formatEther(balance));
   };
+
 
   const getDonationId = async (clubAddress) => {
     const contractAddress = "0x0dD931Dae44Cc79C098CEA6F6fE1d3a3E38d59C3";
@@ -78,7 +86,7 @@ const ClubTable = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/clubs/getclubs")
+     .get(`${process.env.REACT_APP_SERVER_URL}/clubs/getclubs`)
       .then((res) => {
         setClubs(res.data);
       })
@@ -136,7 +144,7 @@ const ClubTable = () => {
               </div>
             </Card.Header>
             <Card.Body>
-              {clubs
+               {currentItems
 
                 .reduce((accumulator, club, index) => {
                   if (index % 3 === 0) {
@@ -314,17 +322,25 @@ const ClubTable = () => {
                       </Card.Body>
                     </Card>
                   );
-                  return accumulator;
-                }, [])
-                .map((cardDeck, index) => (
-                  <CardDeck key={index}>{cardDeck}</CardDeck>
-                ))}
+                   return accumulator;
+                        }, [])
+                        .map((cardDeck, index) => <CardDeck key={index}>{cardDeck}</CardDeck>)
+                     }
+                     <ReactPaginate
+                        previousLabel={'Previous'}
+                        nextLabel={'Next'}
+                        pageCount={Math.ceil(clubs.length / 3)}
+                        onPageChange={({ selected }) => setCurrentPage(selected)}
+                        containerClassName={'pagination'}
+                        activeClassName={'active'}
+                     />
             </Card.Body>
           </Card>
         </Col>
       </Row>
     </Fragment>
   );
+
 };
 
 export default ClubTable;

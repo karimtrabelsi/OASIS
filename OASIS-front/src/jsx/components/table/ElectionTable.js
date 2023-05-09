@@ -27,6 +27,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../../../utils/zustand";
 import useAuthStore from "../../../utils/zustand";
+import ReactPaginate from 'react-paginate';
+
 
 const ElectionTable = () => {
    const svg1 = (
@@ -50,6 +52,12 @@ const ElectionTable = () => {
    const [search, setSearch] = useState("");
    const [searchS, setSearchS] = useState("");
    const [searchE, setSearchE] = useState("");
+   const [currentPage, setCurrentPage] = useState(0);
+   const [itemsPerPage, setItemsPerPage] = useState(3);
+   const indexOfLastItem = (currentPage + 1) * itemsPerPage;
+   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+   const currentItems = elections.slice(currentPage * 2, currentPage * 2 + 2);
+
 
    const startDate = document.getElementById("startDate");
    const endDate = document.getElementById("endDate");
@@ -76,7 +84,7 @@ const ElectionTable = () => {
    const userr = JSON.parse(localStorage.getItem("connectedUser"));
    useEffect(() => {
       axios
-         .get("http://localhost:3000/election")
+         .get(`${process.env.REACT_APP_SERVER_URL}/election`)
          .then((res) => {
             setElections(res.data);
          })
@@ -94,7 +102,7 @@ const ElectionTable = () => {
 
    function getClubs() {
        axios
-         .get("http://localhost:3000/clubs/getclubs")
+         .get(`${process.env.REACT_APP_SERVER_URL}/clubs/getclubs`)
          .then((res) => {
             setClubs(res.data);
          })
@@ -181,8 +189,7 @@ const ElectionTable = () => {
                                  }
                               }).then(result => {
                                  if (result.isConfirmed) {
-                                    console.log(result.value);
-                                    fetch('http://localhost:3000/election/newElection', {
+                                    fetch(`${process.env.REACT_APP_SERVER_URL}/election/newElection`, {
                                        method: 'POST',
                                        headers: {
                                           'Content-Type': 'application/json'
@@ -219,7 +226,7 @@ const ElectionTable = () => {
 
                   </Card.Header>
                   <Card.Body>
-                     {elections
+                     {currentItems
                         .filter((election) => election.club.clubname === userr.club)
                         .reduce((accumulator, election, index) => {
                            if (index % 3 === 0) {
@@ -243,7 +250,7 @@ const ElectionTable = () => {
                                              if (willDelete) {
                                                 axios
                                                    .delete(
-                                                      "http://localhost:3000/election/deleteElection/" +
+                                                      `${process.env.REACT_APP_SERVER_URL}/election/deleteElection/` +
                                                       election._id
                                                    )
                                                    .then((res) => {
@@ -325,7 +332,6 @@ const ElectionTable = () => {
                                                 }
                                              }).then(result => {
                                                 if (result.isConfirmed) {
-                                                   console.log(result.value);
                                                    const updateData = {
                                                       name: result.value.name,
                                                       club: result.value.club,
@@ -335,7 +341,7 @@ const ElectionTable = () => {
                                                       endDate: result.value.endDate,
                                                       candidates: result.value.candidates
                                                    }
-                                                   axios.put(`http://localhost:3000/election/updateElection/${election._id}`, updateData, {
+                                                   axios.put(`${process.env.REACT_APP_SERVER_URL}/election/updateElection/${election._id}`, updateData, {
                                                       headers: {
                                                          'Content-Type': 'application/json'
                                                       }
@@ -378,6 +384,14 @@ const ElectionTable = () => {
                         }, [])
                         .map((cardDeck, index) => <CardDeck key={index}>{cardDeck}</CardDeck>)
                      }
+                     <ReactPaginate
+                        previousLabel={'Previous'}
+                        nextLabel={'Next'}
+                        pageCount={Math.ceil(elections.length / 2)}
+                        onPageChange={({ selected }) => setCurrentPage(selected)}
+                        containerClassName={'pagination'}
+                        activeClassName={'active'}
+                     />
                   </Card.Body>
                </Card>
             </Col>

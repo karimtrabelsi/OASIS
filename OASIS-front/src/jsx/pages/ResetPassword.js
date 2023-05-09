@@ -8,7 +8,7 @@ const ResetPassword = () => {
     const form = e.target;
     const email = form.email.value;
     axios
-      .post("http://localhost:3000/password-reset", { email: email })
+      .post(`${process.env.REACT_APP_SERVER_URL}/password-reset`, { email: email })
       .then((res) => {
         console.log(res);
       })

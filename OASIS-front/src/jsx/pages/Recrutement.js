@@ -23,7 +23,7 @@ function Recrutement() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await fetch("http://localhost:3000/recrutements", {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/recrutements`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,7 +41,6 @@ function Recrutement() {
       }),
     });
     const data = await response.json();
-    console.log(data);
   };
 
   return (

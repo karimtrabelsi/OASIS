@@ -11,7 +11,7 @@ const TwoFactorAuth = () => {
     const code = form.code.value;
     const phonenumber = JSON.parse(localStorage.getItem("number"));
     axios
-      .post("http://localhost:3000/users/twoFactorAuth/verify", {
+      .post(`${process.env.REACT_APP_SERVER_URL}/users/twoFactorAuth/verify`, {
         code: code,
         number: phonenumber,
       })
@@ -19,11 +19,9 @@ const TwoFactorAuth = () => {
         if (res.data === "Code is not correct") {
           swal("Oops", "Code is not correct !", "error");
         } else {
-          console.log(res);
           const user = localStorage.getItem("userLogginIn");
-          console.log(JSON.parse(user));
           axios
-            .post("http://localhost:3000/login", JSON.parse(user))
+            .post(`${process.env.REACT_APP_SERVER_URL}/login`, JSON.parse(user))
             .then((res) => {
               localStorage.setItem("token", res.data.token);
               localStorage.setItem("connectedUser", res.data.user);
@@ -33,8 +31,6 @@ const TwoFactorAuth = () => {
         }
       })
       .catch((err) => {
-        console.log(phonenumber);
-        console.log(code);
         console.log(err);
       });
   };

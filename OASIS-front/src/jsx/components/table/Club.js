@@ -26,6 +26,8 @@ import avatar2 from "../../../images/avatar/2.jpg";
 import avatar3 from "../../../images/avatar/3.jpg";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import ReactPaginate from 'react-paginate';
+
 
 const Club = () => {
   const svg1 = (
@@ -44,8 +46,14 @@ const Club = () => {
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState([]);
   const isMounted = useRef(true);
+  const [perPage, setPerPage] = useState(3);
+  const [currentPage, setCurrentPage] = useState(0);
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
   const fetchData = useCallback(async () => {
-    const response = await axios.get("http://localhost:3000/clubs/getclubs");
+    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/clubs/getclubs`);
     if (isMounted.current) {
       setClubs(response.data);
     }
@@ -53,7 +61,7 @@ const Club = () => {
   useEffect(() => {
     const userr = JSON.parse(localStorage.getItem("connectedUser"));
 
-    axios.get("http://localhost:3000/clubs/getclubs").then((res) => {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/clubs/getclubs`).then((res) => {
       setClubs(res.data);
     }).catch((err) => {
       console.log(err);
@@ -68,7 +76,7 @@ const Club = () => {
 
   function getUsers() {
     axios
-      .get("http://localhost:3000/users")
+      .get(`${process.env.REACT_APP_SERVER_URL}/users`)
       .then((res) => {
         setUsers(res.data);
       })
@@ -82,7 +90,7 @@ const Club = () => {
   }, []);
 
   const handleApprove = (id) => {
-    axios.post("http://localhost:3000/clubs/approveclub" + id).catch((err) => {
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/clubs/approveclub` + id).catch((err) => {
       console.log(err);
     });
   };
@@ -207,10 +215,9 @@ const Club = () => {
                     }
 
                   }).then((result) => {
-                    console.log(result)
                     axios
                       .post(
-                        "http://localhost:3000/clubs/create",
+                        `${process.env.REACT_APP_SERVER_URL}/clubs/create`,
                         result.value, {
                         headers: {
                           'Content-Type': 'multipart/form-data',
@@ -304,6 +311,7 @@ const Club = () => {
                 <tbody>
                   {clubs
                     .filter((club) => club.type !== "SuperAdmin")
+                    .slice(currentPage * perPage, currentPage * perPage + perPage) // Add this line to filter by page
                     .map((club, index) => (
                       <tr key={club._id}>
 
@@ -337,7 +345,6 @@ const Club = () => {
                               onClick={() =>
                                 swal({
                                   title: "Are you sure?",
-                                  text: "Once Approved, user will be able to login !",
                                   icon: "warning",
                                   buttons: true,
                                   dangerMode: true,
@@ -345,7 +352,7 @@ const Club = () => {
                                   if (willApprove) {
                                     axios
                                       .put(
-                                        "http://localhost:3000/clubs/approveclub/" +
+                                        `${process.env.REACT_APP_SERVER_URL}/clubs/approveclub/` +
                                         club._id
                                       )
                                       .then((res) => {
@@ -378,104 +385,115 @@ const Club = () => {
                         <td></td>
                         <td>{club.club}</td>
                         <td>
-                        <Badge
-                          variant="warning light"
-                          onClick={() =>
-                            Swal.fire({
-                              title: "Update",
-                              html:
-                                '<br></br>' +
-                                '<div class="input_wrap">' +
-                                '<input type="text" required value=' + club.clubname + ' class="form-control" name="clubname">' +
-                                '<label>Club name</label>' +
-                                '</div>' +
-                                '<br></br>' +
-                                '<div class="input_wrap">' +
-                                '<input type="text" required value=' + club.email + ' class="form-control" name="email">' +
-                                '<label>Email</label>' +
-                                '</div>' +
-                                '<br></br>' +
-                                '<div class="input_wrap">' +
-                                '<input type="file"  value=' + club.image + ' class="form-control" name="image">' +
-                                '<label>image</label>' +
-                                '</div>',
-                              icon: "info",
-                              buttons: false,
-                              dangerMode: true,
-                              showDenyButton: true,
-                              denyButtonText: `Don't save`,
-                              cancelButtonText:
-                                '<i class="fa fa-thumbs-down">Cancel</i>',
-                              cancelButtonAriaLabel: 'Thumbs down',
+                          <Badge
+                            variant="warning light"
+                            onClick={() =>
+                              Swal.fire({
+                                title: "Update",
+                                html:
+                                  '<br></br>' +
+                                  '<div class="input_wrap">' +
+                                  '<input type="text" required value=' + club.clubname + ' class="form-control" name="clubname">' +
+                                  '<label>Club name</label>' +
+                                  '</div>' +
+                                  '<br></br>' +
+                                  '<div class="input_wrap">' +
+                                  '<input type="text" required value=' + club.email + ' class="form-control" name="email">' +
+                                  '<label>Email</label>' +
+                                  '</div>' +
+                                  '<br></br>' +
+                                  '<div class="input_wrap">' +
+                                  '<input type="file"  value=' + club.image + ' class="form-control" name="image">' +
+                                  '<label>image</label>' +
+                                  '</div>',
+                                icon: "info",
+                                buttons: false,
+                                dangerMode: true,
+                                showDenyButton: true,
+                                denyButtonText: `Don't save`,
+                                cancelButtonText:
+                                  '<i class="fa fa-thumbs-down">Cancel</i>',
+                                cancelButtonAriaLabel: 'Thumbs down',
 
-                              preConfirm: () => {
-                                const clubname = Swal.getPopup().querySelector(
-                                  'input[name="clubname"]'
-                                ).value;
-                                const email = Swal.getPopup().querySelector(
-                                  'input[name="email"]'
-                                ).value;
-                                const image = Swal.getPopup().querySelector(
-                                  'input[name="image"]'
-                                )
-                                const file = image.files[0]
+                                preConfirm: () => {
+                                  const clubname = Swal.getPopup().querySelector(
+                                    'input[name="clubname"]'
+                                  ).value;
+                                  const email = Swal.getPopup().querySelector(
+                                    'input[name="email"]'
+                                  ).value;
+                                  const image = Swal.getPopup().querySelector(
+                                    'input[name="image"]'
+                                  )
+                                  const file = image.files[0]
 
-                                if (!clubname || !email || !image) {
-                                  Swal.showValidationMessage('Please fill in all fields');
-                                }
-                                if (email && !/\S+@\S+\.\S+/.test(email)) {
-                                  Swal.showValidationMessage('Please enter a valid email address');
-                                }
-                                return { clubname: clubname, email: email, image: file };
-                              }
-                            })
-                              .then((result) => {
-                                if (result.isConfirmed) {
-                                  console.log(result);
-                                  axios
-                                    .put(
-                                      "http://localhost:3000/clubs/update/" + club._id,
-                                      result.value,
-                                      {
-                                        headers: {
-                                          "Content-Type": "multipart/form-data",
-                                        },
-                                      }
-                                    )
-                                    .then((res) => {
-                                      if ((res.respone = 200)) {
-                                        Swal.fire("Club has been updated!", {
-                                          icon: "success",
-                                        });
-                                      } else {
-                                        Swal.fire("Nothing changed !");
-                                      }
-                                    })
-                                    .catch((err) => {
-                                      if (err.response.data === "Clubname or email already taken") {
-                                        Swal.fire(
-                                          "Oops",
-                                          "Clubname or email already taken!",
-                                          "error"
-                                        );
-                                      } else {
-                                        Swal.fire("Something went wrong!");
-                                      }
-                                    });
-                                }
-                                if (result.isDenied) {
-                                  Swal.fire('Changes are not saved', '', 'info')
+                                  if (!clubname || !email || !image) {
+                                    Swal.showValidationMessage('Please fill in all fields');
+                                  }
+                                  if (email && !/\S+@\S+\.\S+/.test(email)) {
+                                    Swal.showValidationMessage('Please enter a valid email address');
+                                  }
+                                  return { clubname: clubname, email: email, image: file };
                                 }
                               })
-                          }
-                        >
-                          Update
-                        </Badge>
+                                .then((result) => {
+                                  if (result.isConfirmed) {
+                                    console.log(result);
+                                    axios
+                                      .put(
+                                        `${process.env.REACT_APP_SERVER_URL}/clubs/update/` + club._id,
+                                        result.value,
+                                        {
+                                          headers: {
+                                            "Content-Type": "multipart/form-data",
+                                          },
+                                        }
+                                      )
+                                      .then((res) => {
+                                        if ((res.respone = 200)) {
+                                          Swal.fire("Club has been updated!", {
+                                            icon: "success",
+                                          });
+                                        } else {
+                                          Swal.fire("Nothing changed !");
+                                        }
+                                      })
+                                      .catch((err) => {
+                                        if (err.response.data === "Clubname or email already taken") {
+                                          Swal.fire(
+                                            "Oops",
+                                            "Clubname or email already taken!",
+                                            "error"
+                                          );
+                                        } else {
+                                          Swal.fire("Something went wrong!");
+                                        }
+                                      });
+                                  }
+                                  if (result.isDenied) {
+                                    Swal.fire('Changes are not saved', '', 'info')
+                                  }
+                                })
+                            }
+                          >
+                            Update
+                          </Badge>
                         </td>
 
 
                       </tr>
                     ))}
+                  <ReactPaginate
+                    previousLabel={'Previous'}
+                    nextLabel={'Next'}
+                    breakLabel={'...'}
+                    pageCount={Math.ceil(clubs.filter((club) => club.type !== "SuperAdmin").length / perPage)}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={handlePageClick}
+                    containerClassName={'pagination'}
+                    activeClassName={'active'}
+                  />
                 </tbody>
               </Table>
             </Card.Body>

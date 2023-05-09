@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 /// Images
 import avatar1 from "../../../images/avatar/1.jpg";
@@ -7,21 +7,35 @@ import avatar3 from "../../../images/avatar/3.jpg";
 import avatar4 from "../../../images/avatar/4.jpg";
 import avatar5 from "../../../images/avatar/5.jpg";
 import MsgBox from "./MsgBox";
+import MsgBoxChat from "./MsgBoxChat";
+import axios from "axios";
+import { set } from "date-fns";
 
 const Chat = ({ PerfectScrollbar, toggleChatBox, toggleTab }) => {
    const [openMsg, setOpenMsg] = useState(false);
+   const [openMsgC, setOpenMsgC] = useState(false);
+   const [user, setuser] = useState([]);
+   const [users, setUsers] = useState([]);
+   const [selectedUser, setSelectedUser] = useState(null);
+   const userr = JSON.parse(localStorage.getItem("connectedUser"));
+
+
+   useEffect(() => {
+      axios.get(`${process.env.REACT_APP_SERVER_URL}/users`).then((res) => {
+         setUsers(res.data);
+      });
+   }, []);
+
    return (
       <div
-         className={`tab-pane fade  ${
-            toggleTab === "chat" ? "active show" : ""
-         }`}
+         className={`tab-pane fade  ${toggleTab === "chat" ? "active show" : ""
+            }`}
          id="chat"
          role="tabpanel"
       >
          <div
-            className={`card mb-sm-3 mb-md-0 contacts_card dz-chat-user-box ${
-               openMsg ? "d-none" : ""
-            }`}
+            className={`card mb-sm-3 mb-md-0 contacts_card dz-chat-user-box ${openMsg || openMsgC ? "d-none" : ""}`}
+            
          >
             <div className="card-header chat-list-header text-center">
                <a href="#">
@@ -88,16 +102,14 @@ const Chat = ({ PerfectScrollbar, toggleChatBox, toggleTab }) => {
                </a>
             </div>
             <PerfectScrollbar
-               className={`card-body contacts_body p-0 dz-scroll  ${
-                  toggleChatBox ? "ps ps--active-y" : ""
-               }`}
+               className={`card-body contacts_body p-0 dz-scroll  ${toggleChatBox ? "ps ps--active-y" : ""
+                  }`}
                id="DZ_W_Contacts_Body"
             >
                <ul className="contacts">
-                  <li className="name-first-letter">A</li>
                   <li
                      className="active dz-chat-user"
-                     onClick={() => setOpenMsg(true)}
+                     onClick={() => { setOpenMsg(true); setOpenMsgC(false);}}
                   >
                      <div className="d-flex bd-highlight">
                         <div className="img_cont">
@@ -114,8 +126,34 @@ const Chat = ({ PerfectScrollbar, toggleChatBox, toggleTab }) => {
                         </div>
                      </div>
                   </li>
-                  
-                 
+                  {users
+                     .filter((user) => user.club == userr.club)
+                     .map((user, index) => (
+                        <li
+                           className="active dz-chat-user"
+                           onClick={() => {
+                              setOpenMsgC(true);
+                              setOpenMsg(false);
+                              setSelectedUser(user);
+                           }}
+                           key={user._id}
+                        >
+                           <div className="d-flex bd-highlight">
+                              <div className="img_cont">
+                                 <img
+                                    src={require("../../../images/users/" + user.image)}
+                                    className="rounded-circle user_img"
+                                    alt=""
+                                 />
+                                 <span className="online_icon"></span>
+                              </div>
+                              <div className="user_info">
+                                 <span>{user.firstname} {user.lastname}</span>
+                                 <p>{user.firstname} is online</p>
+                              </div>
+                           </div>
+                        </li>
+                     ))}
                </ul>
             </PerfectScrollbar>
          </div>
@@ -125,6 +163,12 @@ const Chat = ({ PerfectScrollbar, toggleChatBox, toggleTab }) => {
             openMsg={openMsg}
             PerfectScrollbar={PerfectScrollbar}
             offMsg={() => setOpenMsg(false)}
+         />
+         <MsgBoxChat
+            PerfectScrollbar={PerfectScrollbar}
+            openMsgC={openMsgC}
+            offMsg={() => setOpenMsgC(false)}
+            userSelected={selectedUser}
          />
       </div>
    );
