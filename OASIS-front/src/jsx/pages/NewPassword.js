@@ -13,11 +13,10 @@ const NewPassword = () => {
     const id = searchParams.get("id");
     const token = searchParams.get("token");
     axios
-      .post("http://localhost:3000/password-reset/" + id + "/" + token, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/password-reset/` + id + "/" + token, {
         password: password,
       })
       .then((res) => {
-        console.log(res);
         navigate("/page-login");
       })
       .catch((err) => {

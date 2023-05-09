@@ -19,7 +19,7 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
    const [chat, setChat] = useState([])
    const [isTyping, setIsTyping] = useState(false);
    useEffect(() => {
-      axios.get("http://localhost:3000/users").then((res) => {
+      axios.get(`${process.env.REACT_APP_SERVER_URL}/users`).then((res) => {
          setuser(res.data);
       });
    }, []);
@@ -27,7 +27,7 @@ const MsgBox = ({ avatar1, avatar2, openMsg, PerfectScrollbar, offMsg }) => {
    const handleSubmit = async (event) => {
       event.preventDefault();
       const m = event.target.elements.message.value;
-      const res = await axios.post('http://localhost:3000/chatBot', { message: m });
+      const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/chatBot`, { message: m });
       setNewMessage(m);
       setNewResponse(res.data.message);
       setResponse([...response, res.data.message]);

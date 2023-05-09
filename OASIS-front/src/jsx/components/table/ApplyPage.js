@@ -57,7 +57,7 @@ const ApplyPage = () => {
       }).then((result) => {
          if (result.isConfirmed) {
             axios
-               .post("http://localhost:3000/candidacy/vote", {
+               .post(`${process.env.REACT_APP_SERVER_URL}/candidacy/vote`, {
                   position: candidacy.position,
                   user: userr._id,
                   electionSelected: idelection,
@@ -92,7 +92,7 @@ const ApplyPage = () => {
                         });
                   } else if (error.response.data.message === "Election is not active.") {
                      axios
-                        .get(`http://localhost:3000/election/${idelection}`)
+                        .get(`${process.env.REACT_APP_SERVER_URL}/election/${idelection}`)
                         .then((response) => {
                            const election = response.data;
                            Swal.fire({
@@ -135,12 +135,13 @@ const ApplyPage = () => {
    const [itemsPerPage, setItemsPerPage] = useState(3);
    const indexOfLastItem = (currentPage + 1) * itemsPerPage;
    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-   const currentItems = candidacies.slice(currentPage * 3, currentPage * 3 + 3);
-
+   const currentItems = candidacies
+   .filter(candidacy => candidacy.electionSelected  === idelection)
+   .slice(currentPage * 3, currentPage * 3 + 3);
 
    useEffect(() => {
       axios
-         .get("http://localhost:3000/candidacy")
+         .get(`${process.env.REACT_APP_SERVER_URL}/candidacy`)
          .then((res) => {
             setCandidacies(res.data);
          })
@@ -149,7 +150,7 @@ const ApplyPage = () => {
          });
 
       axios
-         .get(`http://localhost:3000/election/${idelection}`)
+         .get(`${process.env.REACT_APP_SERVER_URL}/election/${idelection}`)
          .then((res) => {
             const selectedType = res.data.type;
             setSelectedType(selectedType);
@@ -199,7 +200,7 @@ const ApplyPage = () => {
                         type="button"
                         className="btn btn-info btn-rounded"
                         onClick={() =>
-                           axios.get(`http://localhost:3000/candidacy/${userr._id}/${idelection}`)
+                           axios.get(`${process.env.REACT_APP_SERVER_URL}/candidacy/${userr._id}/${idelection}`)
                               .then((response) => {
                                  if (response.status === 200) {
                                     // User already applied
@@ -255,7 +256,7 @@ const ApplyPage = () => {
                                        },
                                     }).then((result) => {
                                        if (!result.dismiss) {
-                                          axios.post("http://localhost:3000/candidacy/newCandidacy", result.value, {
+                                          axios.post(`${process.env.REACT_APP_SERVER_URL}/candidacy/newCandidacy`, result.value, {
                                              headers: {
                                                 "Content-Type": "multipart/form-data",
                                              },
@@ -328,7 +329,7 @@ const ApplyPage = () => {
                                           if (willDelete) {
                                              axios
                                                 .delete(
-                                                   "http://localhost:3000/candidacy/deleteCandidacy/" +
+                                                   `${process.env.REACT_APP_SERVER_URL}/candidacy/deleteCandidacy/` +
                                                    candidacy._id
                                                 )
                                                 .then((res) => {
@@ -361,7 +362,7 @@ const ApplyPage = () => {
                                  <Card.Body>
                                     <Card.Title>Name : {candidacy.user.firstname}</Card.Title>
                                     <Card.Text>Description : {candidacy.description}</Card.Text>
-                                    <Card.Text className="card-text-link" onClick={() => window.open(`http://localhost:3000/uploads/${candidacy.file}`, '_blank')}>Presentation: {candidacy.file}</Card.Text>
+                                    <Card.Text className="card-text-link" onClick={() => window.open(`${process.env.REACT_APP_SERVER_URL}/uploads/${candidacy.file}`, '_blank')}>Presentation: {candidacy.file}</Card.Text>
                                     <Card.Text>Votes : {candidacy.vote}</Card.Text>
                                     <div className="d-flex justify-content-between">
                                        <button type="button" className="btn btn-outline-info btn-rounded" onClick={() => handleVote(candidacy)} variant="primary" disabled={hasVoted}>
@@ -452,7 +453,7 @@ const ApplyPage = () => {
                                                    }
 
                                                    axios
-                                                      .put(`http://localhost:3000/candidacy/updateCandidacy/${candidacy._id}`, data, {
+                                                      .put(`${process.env.REACT_APP_SERVER_URL}/candidacy/updateCandidacy/${candidacy._id}`, data, {
                                                          headers: {
                                                             "Content-Type": "multipart/form-data",
                                                          },

@@ -33,12 +33,12 @@ const MsgBoxChat = ({ avatar1, avatar2, openMsgC, PerfectScrollbar, offMsg, user
                ":" +
                new Date(Date.now()).getMinutes(),
          };
-         console.log(messageData);
 
 
          await socket.emit("send_message", messageData);
          setMessageList((list) => [...list, messageData]);
          setCurrentMessage("");
+         console.log(socket)
       }
    };
 
@@ -219,7 +219,6 @@ const MsgBoxChat = ({ avatar1, avatar2, openMsgC, PerfectScrollbar, offMsg, user
                }}
                onKeyPress={(event) => {
                   event.key === "Enter" && sendMessage();
-                  console.log(socket);
                }}
             />
             <button onClick={sendMessage}>&#9658;</button>

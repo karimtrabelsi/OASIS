@@ -49,7 +49,7 @@ const PostWidget = ({
               className="btn  mr-2"
               onClick={() =>
                 axios
-                  .post("http://localhost:3000/posts/addLike", {
+                  .post(`${process.env.REACT_APP_SERVER_URL}/posts/addLike`, {
                     postId: post._id,
                     userId: JSON.parse(user)._id,
                   })

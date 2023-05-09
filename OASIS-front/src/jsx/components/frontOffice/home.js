@@ -13,7 +13,7 @@ const HomeFront = () => {
   const { user } = useAuthStore();
 
   const fetchPosts = async () => {
-    return await axios.get("http://localhost:3000/posts/allPosts");
+    return await axios.get(`${process.env.REACT_APP_SERVER_URL}/posts/allPosts`);
   };
 
   const { status, data, error, refetch, isLoading, isRefetching, isSuccess } =
@@ -59,10 +59,9 @@ const HomeFront = () => {
         file: values.file,
         image: values.image,
       };
-      console.log(post);
 
       axios
-        .post("http://localhost:3000/posts/addPost", post, {
+        .post(`${process.env.REACT_APP_SERVER_URL}/posts/addPost`, post, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -152,7 +151,6 @@ const HomeFront = () => {
                   ref={hiddenImageInput}
                   onChange={(e) => {
                     formik.setFieldValue("image", e.currentTarget.files[0]);
-                    console.log(e.currentTarget.files[0]);
                   }}
                   style={{ display: "none" }}
                 />

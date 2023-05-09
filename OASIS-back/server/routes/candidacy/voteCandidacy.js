@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
      }
 
     // Call the face recognition script
-    const pythonProcess = spawn('C:/Users/MSI/AppData/Local/Programs/Python/Python311/python.exe', ['server/server.py']);
+    const pythonProcess = spawn(process.env.PYTHON_PATH, ['server/server.py']);
     const timeout = setTimeout(() => {
       pythonProcess.kill();
       res.status(401).json({ message: 'Unauthorized. Face recognition timeout.' });

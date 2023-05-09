@@ -92,7 +92,7 @@ const Register = () => {
       };
 
       axios
-        .post("http://localhost:3000/register", formUser, {
+        .post(`${process.env.REACT_APP_SERVER_URL}/register`, formUser, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -116,7 +116,7 @@ const Register = () => {
 
   function getClubs() {
     axios
-      .get("http://localhost:3000/clubs/getclubs")
+      .get(`${process.env.REACT_APP_SERVER_URL}/clubs/getclubs`)
       .then((res) => {
         setClubs(res.data);
       })
@@ -403,7 +403,7 @@ const Register = () => {
                     <div className="mt-3">
                       <p className="mb-0  text-center">
                         Already have an account??{" "}
-                        <Link to="/page-login" className="text-primary fw-bold">
+                        <Link to="/login" className="text-primary fw-bold">
                           Sign in
                         </Link>
                       </p>

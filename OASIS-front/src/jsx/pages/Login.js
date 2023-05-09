@@ -30,10 +30,9 @@ const Login = () => {
         username: values.username,
         password: values.password,
       };
-
-      console.log(user);
+      
       axios
-        .post("http://localhost:3000/login", user)
+        .post(`${process.env.REACT_APP_SERVER_URL}/login`, user)
         .then((res) => {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("connectedUser", res.data.user);
@@ -65,7 +64,7 @@ const Login = () => {
             "User is not allowed to login from this IP"
           ) {
             axios
-              .post("http://localhost:3000/users/twoFactorAuth/send", {
+              .post(`${process.env.REACT_APP_SERVER_URL}/users/twoFactorAuth/send`, {
                 number: err.response.data.number,
               })
               .then((res) => {

@@ -3,7 +3,7 @@ import cv2
 import face_recognition
 
 # Set the directory where the faces are stored
-faces_directory = 'C:\\Users\\MSI\\Desktop\\images'
+faces_directory = 'C:\\Users\\MSI\\Desktop\\oasisproject\\OASISGIT\\OASIS\\OASIS\\OASIS-front\\src\\images\\users'
 
 # Load the known faces and their names
 known_face_encodings = []

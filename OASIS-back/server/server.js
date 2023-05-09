@@ -71,33 +71,16 @@ app.post("/chatBot", async (req, res) => {
 
 
 const http = require("http");
-const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3001",
-    methods: ["GET", "POST"],
-  },
-});
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
-io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id}`);
 
-  socket.on("join_room", (data) => {
-    socket.join(data);
-    console.log(`User with ID: ${socket.id} joined room: ${data}`);
-  });
+/* Setup Express */
+app.get('/', function (req, res) {});
 
-  socket.on("send_message", (data) => {
-    
-    console.log(data)
-    socket.to(data.room).emit("receive_message", data);
-    
-  });
-
-  socket.on("disconnect", () => {
-    console.log("User Disconnected", socket.id);
-  });
+/* Setup Socket.io */
+io.on('connection', function (socket) {
+  console.log('connected');
 });
 
 mongoose

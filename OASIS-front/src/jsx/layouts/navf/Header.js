@@ -26,20 +26,17 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
 
 
   useEffect(() => {
-    axios.get("http://localhost:3000/clubs/getnotifications").then((res) => {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/clubs/getnotifications`).then((res) => {
       setNotifications(res.data);
       console.log(res.data);
     }).catch((err) => {
-      console.log("aaa")
       console.log(err);
     });
   }, []);
   useEffect(() => {
-    axios.get("http://localhost:3000/clubs/getunreadnotifications").then((res) => {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/clubs/getunreadnotifications`).then((res) => {
       setCount(res.data.length);
-      console.log(res.data);
     }).catch((err) => {
-      console.log("aaa")
       console.log(err);
     });
   }, []);
@@ -98,7 +95,7 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onBox }) => {
                   data-toggle="dropdown"
                   onClick={() => {
                     onNotification()
-                    axios.put("http://localhost:3000/clubs/updateallnotifications").then((res) => {
+                    axios.put(`${process.env.REACT_APP_SERVER_URL}/clubs/updateallnotifications`).then((res) => {
                       setCount(0);
                     }).catch((err) => {
                       console.log(err);

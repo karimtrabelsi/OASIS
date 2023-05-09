@@ -8,6 +8,7 @@ import swalMessage from "@sweetalert/with-react";
 import PageTitle from "../../layouts/PageTitle";
 import ReactStars from "react-rating-stars-component";
 import useAuthStore from "../../../utils/zustand";
+import ReactPaginate from 'react-paginate';
 
 
 
@@ -32,6 +33,11 @@ const FeesCollection = () => {
   const [search, setSearch] = useState("");
   const [showDetails, setShowDetails] = useState(false);
   const { user } = useAuthStore();
+  const [currentPage, setCurrentPage] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
+  const indexOfLastItem = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = events.slice(currentPage * 3, currentPage * 3 + 3);
 
   // Determine if the logged-in user has the role "Member"
   const isMember = user && JSON.parse(user).role === "Member";
@@ -40,7 +46,7 @@ const FeesCollection = () => {
   const setUserr = JSON.parse(localStorage.getItem("connectedUser"));
   useEffect(() => {
     axios
-      .get("http://localhost:3000/getEvent")
+      .get(`${process.env.REACT_APP_SERVER_URL}/getEvent`)
       .then(async (res) => {
         await setEvents(res.data);
         search && setEvents(events.filter((event) => event.eventname.includes(search)));
@@ -53,7 +59,7 @@ const FeesCollection = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios("http://localhost:3000/getEvent");
+      const result = await axios(`${process.env.REACT_APP_SERVER_URL}/getEvent`);
       setEvents(result.data);
       // setUserr({ axes: "some_axes" }); // Remplacez "some_axes" par l'axe de l'utilisateur
     };
@@ -199,7 +205,6 @@ const FeesCollection = () => {
                   confirmButtonText: 'Submit',
                   preConfirm: () => {
                     const file = document.getElementById("image").files[0];
-                    console.log(file)
                     const eventname = document.getElementById("eventname").value;
                     const startdateInput = document.querySelector("#startDate");
                     const startdate = startdateInput ? startdateInput.value : "";
@@ -233,7 +238,7 @@ const FeesCollection = () => {
                       console.log(value);
                     }
 
-                    axios.post('http://localhost:3000/event', formData, {
+                    axios.post(`${process.env.REACT_APP_SERVER_URL}/event`, formData, {
                       headers: {
                         'Content-Type': 'multipart/form-data'
                       }
@@ -264,7 +269,7 @@ const FeesCollection = () => {
 
             </Card.Header>
             <Card.Body>
-              {events.reduce((accumulator, event, index) => {
+              {currentItems.reduce((accumulator, event, index) => {
                 if (index % 3 === 0) {
                   accumulator.push([]);
                 }
@@ -330,7 +335,7 @@ const FeesCollection = () => {
                                 dangerMode: true,
                               }).then((willDelete) => {
                                 if (willDelete) {
-                                  axios.delete("http://localhost:3000/deletEvent/" + event._id) // fixed typo
+                                  axios.delete(`${process.env.REACT_APP_SERVER_URL}/deletEvent/` + event._id) // fixed typo
                                     .then((res) => {
                                       if (res.status === 200) {
                                         swal(event.eventname + " deleted!", { icon: "success" });
@@ -406,7 +411,6 @@ const FeesCollection = () => {
                               }
                             }).then(result => {
                               if (result.isConfirmed) {
-                                console.log(result.value);
                                 const updateData = {
                                   eventname: result.value.eventname,
                                   startdate: result.value.startdate,
@@ -420,7 +424,7 @@ const FeesCollection = () => {
                                 // for (const value of formData.values()) {
                                 //   console.log(value);
                                 // }
-                                axios.put(`http://localhost:3000/updateEvent/${event._id}`, updateData, {
+                                axios.put(`${process.env.REACT_APP_SERVER_URL}/updateEvent/${event._id}`, updateData, {
                                   headers: {
                                     'Content-Type': 'application/json'
                                   }
@@ -475,6 +479,14 @@ const FeesCollection = () => {
               }, []).map((cardDeck, index) => (
                 <CardDeck key={index}>{cardDeck}</CardDeck>
               ))}
+              <ReactPaginate
+                        previousLabel={'Previous'}
+                        nextLabel={'Next'}
+                        pageCount={Math.ceil(events.length / 3)}
+                        onPageChange={({ selected }) => setCurrentPage(selected)}
+                        containerClassName={'pagination'}
+                        activeClassName={'active'}
+                     />
             </Card.Body>
 
           </Card>

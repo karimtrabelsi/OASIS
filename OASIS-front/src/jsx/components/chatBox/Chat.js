@@ -21,7 +21,7 @@ const Chat = ({ PerfectScrollbar, toggleChatBox, toggleTab }) => {
 
 
    useEffect(() => {
-      axios.get("http://localhost:3000/users").then((res) => {
+      axios.get(`${process.env.REACT_APP_SERVER_URL}/users`).then((res) => {
          setUsers(res.data);
       });
    }, []);
