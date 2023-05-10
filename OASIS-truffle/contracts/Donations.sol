@@ -62,10 +62,4 @@ address payable public club;
    
 
 
-
-
-  
-
-
-
 }

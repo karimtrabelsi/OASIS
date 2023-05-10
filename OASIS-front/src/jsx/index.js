@@ -251,8 +251,8 @@ const Markup = () => {
       <Route path="/new-password" element={<NewPassword />} />
       <Route path="/twofactor-auth" element={<TwoFactorAuth />} />
       <Route path="/client" element={<Client />}>
-        {/* <Route path="donations" element={<Donations />} /> */}
-        <Route path="donations" element={<DonationsTable />} />
+        <Route path="donations" element={<Donations />} />
+        {/* <Route path="donations" element={<DonationsTable />} /> */}
         <Route path="home" element={<Home />} />
         <Route path="profile" element={<FrontProfile />} />
         <Route path="users" element={<BootstrapTable />} />
