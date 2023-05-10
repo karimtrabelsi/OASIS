@@ -9,7 +9,6 @@ import * as Yup from "yup";
 import useAuthStore from "../../utils/zustand";
 
 const Login = () => {
-  console.log(process.env.REACT_APP_SERVER_URL);
   const navigate = useNavigate();
 
   const imgStyle = {

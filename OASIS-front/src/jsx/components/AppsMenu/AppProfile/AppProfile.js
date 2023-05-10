@@ -69,7 +69,7 @@ const AppProfile = (props) => {
       image: form.image.files[0],
     };
     axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/users/` + user._id, formUser, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/users/` + userr._id, formUser, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

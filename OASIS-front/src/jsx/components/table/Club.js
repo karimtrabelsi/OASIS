@@ -48,6 +48,8 @@ const Club = () => {
   const isMounted = useRef(true);
   const [perPage, setPerPage] = useState(3);
   const [currentPage, setCurrentPage] = useState(0);
+  const [info, setInfo] = useState();
+
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
   };
@@ -118,6 +120,12 @@ const Club = () => {
                 </Badge>
                 <Button onClick={() => {
                   getUsers();
+                  axios.get('https://api.ipgeolocation.io/ipgeo?apiKey=ef9cdfeb5f2740b9b4a55a6789df2e88').then((res) => {
+                    setInfo(res.data);
+                    console.log(info.city);
+                  }).catch((err) => {
+                    console.log(err);
+                  });
                   Swal.fire({
                     title: "Add Club",
                     html:
@@ -137,7 +145,8 @@ const Club = () => {
                    </div>
                    <br />
                    <div class="input_wrap">
-                     <input type="text" required class="form-control" name="city" />
+                     <input type="text" required value=` + info.city + `
+                     class="form-control" name="city" />
                      <label>City</label>
                    </div>
                    <br />

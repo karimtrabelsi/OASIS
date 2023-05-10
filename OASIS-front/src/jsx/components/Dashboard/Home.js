@@ -2,10 +2,22 @@ import React from "react";
 import Nav from "../../layouts/nav";
 import { PowerBIEmbed } from "powerbi-client-react";
 import { models } from "powerbi-client";
-import { Card, Col, Row } from "react-bootstrap";
+
+import {
+  Row,
+  Col,
+  Card,
+  Table,
+  Badge,
+  Dropdown,
+  ProgressBar,
+  Button,
+} from "react-bootstrap";
 
 const PowerBI = () => {
   return (
+    <Card>
+  <Card.Body>
     <Row>
       <Col lg={12}>
         <PowerBIEmbed
@@ -29,19 +41,16 @@ const PowerBI = () => {
               [
                 "loaded",
                 function () {
-                  console.log("Report loaded");
                 },
               ],
               [
                 "rendered",
                 function () {
-                  console.log("Report rendered");
                 },
               ],
               [
                 "error",
                 function (event) {
-                  console.log(event.detail);
                 },
               ],
             ])
@@ -54,6 +63,8 @@ const PowerBI = () => {
         />
       </Col>
     </Row>
+  </Card.Body>
+</Card> 
   );
 };
 
