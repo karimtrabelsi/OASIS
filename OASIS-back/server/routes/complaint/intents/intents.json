@@ -108,9 +108,12 @@
             "Do I need to register to vote in an election?",
             "How do I know if my vote has been counted in an election?"
         ],
-        "answers": [
-            "In order to vote in an election, you may need to go on the Election page. The requirements for registration may vary depending on the election."
-        ]
+        "answers":[
+          "To vote for a club, please go to the candidacies list and select the vote button. You will be prompted to verify your identity using face recognition technology, which ensures that your vote is secure and accurate.",
+          "If you wish to cast your vote for a candidacy, simply click the vote button on the candidacies list and follow the instructions. Your vote will be secured using face recognition technology, which ensures its accuracy and legitimacy.",
+          "When you're ready to vote for a candidacy, head to the candidacies list and select the vote button. You will then be prompted to verify your identity using face recognition technology, which guarantees that your vote is secure and cannot be tampered with.",
+          "If you want to cast your vote for a candidacy, go to the candidacies list and click on the vote button. Your vote will be secured using face recognition technology, which makes sure that your vote is authentic and cannot be altered."
+          ]
     },
     {
         "name": "Event Management",
@@ -142,5 +145,20 @@
         "answers": [
           "I'm sorry, I don't understand. Can you please rephrase your question?"
         ]
+      },
+      {
+        "name": "Club Donation",
+        "questions": [
+        "How can I donate to a club?",
+        "What is the process for making a donation to a club?",
+        "Can you guide me on how to donate to a club?",
+        "I want to make a donation to a club, how can I do that?"
+        ],
+        "answers":[
+        "You can donate to a club by going to the club list and selecting the donate button. Donations are processed using blockchain Ethereum.",
+        "To donate to a club, you can find the donate button on the club list and follow the instructions. The donations are processed using blockchain Ethereum.",
+        "If you wish to donate to a club, please go to the club list and select the donate button. Donations are processed using blockchain Ethereum.",
+        "Donating to a club is easy! Simply go to the club list and click on the donate button. Follow the instructions provided to complete the donation process. The donations are processed using blockchain Ethereum, ensuring a secure and transparent transaction."
+      ]
       }
 ]

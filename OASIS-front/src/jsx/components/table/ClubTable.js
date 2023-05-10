@@ -214,7 +214,7 @@ const ClubTable = () => {
                               }).then((result) => {
                                 if (result.isConfirmed) {
                                   const contractAddress =
-                                    "0xE1402692C768dE0B3C4F706f6cD8217e40286999";
+                                    "0x3479783715bF75b013E5f960be964a03f748c767";
                                   const contract = new ethers.Contract(
                                     contractAddress,
                                     ABI,
@@ -242,7 +242,7 @@ const ClubTable = () => {
                                       club.clubname,
                                       JSON.parse(user).email,
                                       amount,
-                                      "0xcE2147aAA1f1D302DB1eFaF4834D6A4cAf68c8F1",
+                                      "0xCCc8B800B8d40862aa88ADbCf4B8CA0aE4e22CB2",
                                       options
                                     )
                                     .then((res) => {
@@ -285,7 +285,7 @@ const ClubTable = () => {
                                                       {
                                                         gasPrice:
                                                           ethers.utils.parseUnits(
-                                                            "10000000",
+                                                            "1000000000",
                                                             "wei"
                                                           ),
                                                         gasLimit:
