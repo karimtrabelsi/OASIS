@@ -1,69 +1,42 @@
 const mongoose = require("mongoose");
-const TypeEvent = {
-  CharityEvent: "CharityEvent",
-  TeamBuilding: "TeamBuilding",
-  ProTraining: "ProTraining",
-};
 
-const Axes = {
-    Diabetes: "Diabetes",
-    Vision: "Vision",
-    Hunger: "Hunger",
-    Environment:"Environment",
-    ChildhoodCancer:"ChildhoodCancer",
-  };
+const EventtSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 25,
+  },
+  description: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 5000,
+  },
+  photo: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 100,
+    unique: true, // Make sure that each email is unique
+  },
 
-const eventSchema = new mongoose.Schema(
-    {
-      
-      eventname: {
-        type: String,
-        required: false,
-      },
-      image: {
-        type: String,
-        required: false,
-      },
-      startdate: {
-        type: Date,
-        required: false,
-      },
-      enddate: {
-        type: Date,
-        required: false,
-      },
-      place: {
-        type: String,
-        required: false,
-      },
-      collaborateur: {
-        type: String,
-        required: false,
-      },
-      cotisation: {
-        type: Number,
-      },
-      typeEvent: {
-        type: String,
-        enum: Object.values(TypeEvent),
-      },
-      axes: {
-        type: String,
-        enum: Object.values(Axes),
-      },
-      latitude: {
-        type: Number,
-        default: 0,
-      },
-      longitude: {
-        type: Number,
-        default: 0,
-      },
-      
-    },
-    { timestamps: true }
-  );
-  
-  const Event = mongoose.model("Event", eventSchema);
-  module.exports = Event;
-  
+  budget: {
+    type: Number,
+    default: null,
+  },
+
+  latitude: {
+    type: Number,
+    default: 0,
+  },
+  longitude: {
+    type: Number,
+    default: 0,
+  },
+  created_at: { type: Date, default: Date.now },
+});
+
+const Eventt = mongoose.model("Eventt", EventtSchema);
+
+module.exports = Eventt;

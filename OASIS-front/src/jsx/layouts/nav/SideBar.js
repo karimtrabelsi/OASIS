@@ -176,10 +176,7 @@ class SideBar extends Component {
                   <Link to="table-club">Clubs Management</Link>
                 </li>
                 <li>
-                  <Link to="map">Map Event</Link>
-                </li>
-                <li>
-                  <Link to="mapPauvre">Map Pauvrete</Link>
+                  <Link to="addEvent">Map Event</Link>
                 </li>
               </ul>
             </li>

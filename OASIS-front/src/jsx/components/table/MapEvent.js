@@ -1,41 +1,93 @@
-import React, { useState } from "react";
-import "mapbox-gl/dist/mapbox-gl.css";
-import Map, {
+import React, { useEffect, useState } from "react";
+import MapGL, {
   Marker,
   NavigationControl,
-  Popup,
   FullscreenControl,
   GeolocateControl,
-ZoomControl
 } from "react-map-gl";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const MapEvent = () => {
-  const [lng, setLng] = useState(11.065337331154353);
-  const [lat, setLat] = useState(35.50205837313591);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { id } = useParams();
+  const location = useLocation();
+
+  const lt = new URLSearchParams(location.search).get("lat");
+  const lo = new URLSearchParams(location.search).get("log");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await axios.get("http://localhost:5000/api/events");
+        setData(result.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/getEventById/${id}`)
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div>
-      <Map
+
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+    <div style={{ width: '500px', height: '500px', borderRadius: '15px', border: '2px solid red' }}>
+      <div style={{ marginTop: '20px', padding: '10px' }}>
+        {data.map((event) => (
+          <div key={event._id}>
+            <h1 style={{ fontSize: '24px', marginBottom: '10px', color: 'red', fontWeight: 'bold' }}>
+              Title: {event.title}
+            </h1>
+            <p style={{ fontSize: '16px', color: 'red', fontWeight: 'bold' }}>
+              Description: {event.description}
+            </p>
+            <img
+              src={`http://localhost:3000/uploads/${event.photo}`}
+              alt={event.title}
+              style={{ width: '100%', height: 'auto' }}
+            />
+          </div>
+        ))}
+      </div>
+      <MapGL
         mapboxAccessToken="pk.eyJ1IjoiZW1uYTEyMzQiLCJhIjoiY2xoZmI5NzYwMTR1MjNkcGNyd2lodTlpcCJ9.x8fLgt1E8GboTvveDRBfhw"
-        style={{
-          width: "500px",
-          height: "500px",
-          borderRadius: "15px",
-          border: "2px solid red",
-        }}
-        initialViewState={{
-          longitude: lng,
-          latitude: lat,
-          zoom:10
-        }}
+        style={{ width: '100%', height: '100%' }}
+        longitude={lo}
+        latitude={lt}
+        zoom={7}
         mapStyle="mapbox://styles/mapbox/streets-v12"
       >
-        <Marker longitude={lng} latitude={lat} />
+        <Marker longitude={lo} latitude={lt} />
         <NavigationControl position="bottom-right" />
         <FullscreenControl />
         <GeolocateControl />
-      </Map>
+      </MapGL>
     </div>
+  </div>
+  
+  
   );
 };
 

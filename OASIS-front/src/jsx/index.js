@@ -80,14 +80,15 @@ import BootstrapTable from "./components/table/BootstrapTable";
 import ClubTable from "./components/table/ClubTable";
 import Club from "./components/table/Club";
 
-import Test from "./components/table/Test";
 import ElectionTable from "./components/table/ElectionTable";
 import ApplyPage from "./components/table/ApplyPage";
 import ApexChart from "./components/charts/apexcharts";
 import FeesCollection from "./components/table/FeesCollection";
 import EventTable from "./components/table/EventTable";
 import RecrutementTable from "./components/table/RecrutementTable";
-import MapEvent from "./components/table/MapEvent"
+import MapEvent from "./components/table/MapEvent";
+import AddEvent from "./components/table/AddEvent";
+
 /// Form
 import Element from "./components/Forms/Element/Element";
 import Wizard from "./components/Forms/Wizard/Wizard";
@@ -115,6 +116,7 @@ import Client from "./pages/client";
 import useAuthStore from "../utils/zustand";
 import FrontLayout from "./layouts/frontLayout";
 import HomeFront from "./components/frontOffice/home";
+import ListeEvent from "./components/table/ListeEvent";
 
 const Markup = () => {
   const authRoutes = [
@@ -244,6 +246,11 @@ const Markup = () => {
     );
   return (
     <Routes>
+      <Route path="map/:id" element={<MapEvent />} />
+      <Route path="/ListeEvent" element={<ListeEvent />} />
+
+      <Route path="/addEvent" element={<AddEvent />} />
+
       <Route path="/login" element={<Login />} />
       <Route path="/recrutement" element={<Recrutement />} />
       <Route path="/register" element={<Registration />} />
@@ -260,8 +267,6 @@ const Markup = () => {
         <Route path="recrutements" element={<RecrutementTable />} />
         <Route path="table-apply" element={<ApplyPage />} />
         <Route path="map" element={<MapEvent />} />
-        <Route path="mapPauvre" element={<Test />} />
-
         <Route path="table-club" element={<Club />} />
         <Route path="table-club-front" element={<ClubTable />} />
         <Route path="*" element={<Error404 />} />
