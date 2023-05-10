@@ -1,0 +1,146 @@
+[
+    {
+        "name": "Greetings",
+        "questions": [
+            "Hi",
+            "Hello",
+            "Hey",
+            "Good morning",
+            "Good afternoon",
+            "Good evening"
+        ],
+        "answers":[ 
+            "Hello! How can I assist you?",
+            "Hi there! How can I help you today?",
+            "Hey! What can I do for you?",
+            "Good morning! How may I assist you?",
+            "Good afternoon! How can I help you today?",
+            "Good evening! How may I assist you?"
+        ]
+    },
+    {
+        "name": "Goodbye",
+        "questions": [
+            "Bye",
+            "Goodbye",
+            "See you later",
+            "See ya",
+            "Take care"
+        ],
+        "answers":[ 
+            "Goodbye! Have a great day!",
+            "Bye! Hope to see you soon!",
+            "See you later! Take care!",
+            "See ya! Have a good one!",
+            "Take care! See you soon!"
+        ]
+    },
+    {
+        "name": "Club Join",
+        "questions": [
+            "How can I join a club?",
+            "What is the process for joining a club?",
+            "Can you tell me how to become a member of a club?",
+            "I'm interested in joining a club, what do I need to do?"
+        ],
+        "answers":[ "You can join a club by going to the clubs page and clicking the join button."]
+    },
+    {
+        "name": "Club Creation",
+        "questions": [
+            "How do I create a new club?",
+            "What are the steps for creating a club?",
+            "Can you guide me on how to start a new club?",
+            "I have an idea for a club, how can I make it happen?"
+        ],
+        "answers":[ "To create a new club, go to the Clubs page and fill out the required information." ]
+    },
+    {
+        "name": "Club Leaving",
+        "questions": [
+            "How do I leave a club?",
+            "What is the process for leaving a club?",
+            "Can you tell me how to end my membership in a club?",
+            "I want to leave a club, what do I need to do?"
+        ],
+        "answers":[ "To leave a club, go to the club page and click the leave button." ]
+    },
+    {
+        "name": "Club Interests",
+        "questions": [
+            "How do I find clubs that match my interests?",
+            "Can you suggest clubs based on my interests?",
+            "I want to join a club that matches my interests, what do you recommend?",
+            "Are there any clubs that align with my interests?"
+        ],
+        "answers":[ "You can find clubs that match your interests by using the search function on the club page or browsing the categories." ]
+    },
+    {
+        "name": "Election Management",
+        "questions": [
+          "How do I create an election?",
+          "What is the process for creating an election?",
+          "Can you guide me on how to start an election?",
+          "I have an idea for an election, how can I make it happen?"
+        ],
+        "answers": [
+          "To create a new election, go to the Election Management page and fill out the required information."
+        ]
+      },
+      {
+        "name": "Election Results",
+        "questions": [
+          "How can I view the results of an election?",
+          "What is the process for viewing election results?",
+          "Can you tell me how to see the results of an election?",
+          "I'm interested in seeing the results of an election, what do I need to do?"
+        ],
+        "answers": [
+          "You can view the results of an election by going to the Election Results page and selecting the election you want to see."
+        ]
+      },
+      {
+        "name": "Election Votes",
+        "questions": [
+            "Can I vote online for an election?",
+            "When is the deadline for voting in an election?",
+            "What happens if I don't vote in an election?",
+            "Do I need to register to vote in an election?",
+            "How do I know if my vote has been counted in an election?"
+        ],
+        "answers": [
+            "In order to vote in an election, you may need to go on the Election page. The requirements for registration may vary depending on the election."
+        ]
+    },
+    {
+        "name": "Event Management",
+        "questions": [
+          "How do I create a new event?",
+          "What is the process for creating an event?",
+          "Can you guide me on how to start an event?",
+          "I have an idea for an event, how can I make it happen?"
+        ],
+        "answers": [
+          "To create a new event, go to the Event Management page and fill out the required information."
+        ]
+      },
+      {
+        "name": "Post Management",
+        "questions": [
+          "How do I create a new post?",
+          "What is the process for creating a post?",
+          "Can you guide me on how to make a new post?",
+          "I have something to share, how can I create a new post?"
+        ],
+        "answers": [
+          "To create a new post, go to the hompe page and post with filling out the required information and you can add some files or photos."
+        ]
+      },
+      {
+        "name": "Unknown",
+        "questions": [],
+        "answers": [
+          "I'm sorry, I don't understand. Can you please rephrase your question?"
+        ]
+      }
+]
